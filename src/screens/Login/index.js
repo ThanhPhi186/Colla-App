@@ -50,12 +50,15 @@ const LoginScreen = ({navigation}) => {
         }, 500);
       }
     } catch (error) {
+      SimpleToast.show('Chưa gửi được mã OTP! Vui lòng thử lại sau.', SimpleToast.LONG);
+      console.log(error);
       setLoading(false);
     }
   };
 
   const confirmOTP = async () => {
     try {
+      setLoading(true);
       const confirmResult = await confirm.confirm(code);
       if (confirmResult) {
         auth().onAuthStateChanged(user => {
@@ -64,6 +67,7 @@ const LoginScreen = ({navigation}) => {
               post(Const.API.baseURL + Const.API.VerifyPhone, {token}).then(
                 res => {
                   if (res.ok) {
+                    setLoading(false);
                     setToken(res.data.data.access_token);
                     dispatch(
                       AuthenOverallRedux.Actions.setToken(
@@ -74,15 +78,20 @@ const LoginScreen = ({navigation}) => {
                       AuthenOverallRedux.Actions.loginSuccess(res.data.data),
                     );
                   } else {
+                    setLoading(false);
                     SimpleToast.show(res.error, SimpleToast.SHORT);
                   }
                 },
               );
             });
+          } else {
+            SimpleToast.show('Không lấy được thông tin tài khoản!', SimpleToast.LONG);
+            setLoading(false);
           }
         });
       }
     } catch (error) {
+      setLoading(false);
       console.log('error', error);
       SimpleToast.show(error, SimpleToast.LONG);
       // SimpleToast.show('Mã OTP không khớp', SimpleToast.LONG);
