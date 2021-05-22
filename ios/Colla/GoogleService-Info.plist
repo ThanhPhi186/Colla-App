@@ -3,9 +3,11 @@
 <plist version="1.0">
 <dict>
 	<key>CLIENT_ID</key>
-	<string>611783936450-l13ijbpd3k68ac3gtb7c23beu1etc51f.apps.googleusercontent.com</string>
+	<string>611783936450-mvh3647r6flm12h0noi720puis0kemjp.apps.googleusercontent.com</string>
 	<key>REVERSED_CLIENT_ID</key>
-	<string>com.googleusercontent.apps.611783936450-l13ijbpd3k68ac3gtb7c23beu1etc51f</string>
+	<string>com.googleusercontent.apps.611783936450-mvh3647r6flm12h0noi720puis0kemjp</string>
+	<key>ANDROID_CLIENT_ID</key>
+	<string>611783936450-drrpmjb6gk751jhpkihsi3dcnamks85j.apps.googleusercontent.com</string>
 	<key>API_KEY</key>
 	<string>AIzaSyAGyudvyAY-WWPDtyCy_wt-hBIJLONadNE</string>
 	<key>GCM_SENDER_ID</key>
@@ -13,7 +15,7 @@
 	<key>PLIST_VERSION</key>
 	<string>1</string>
 	<key>BUNDLE_ID</key>
-	<string>com.colla</string>
+	<string>com.colla.app</string>
 	<key>PROJECT_ID</key>
 	<string>colla-b45ca</string>
 	<key>STORAGE_BUCKET</key>
@@ -29,6 +31,6 @@
 	<key>IS_SIGNIN_ENABLED</key>
 	<true></true>
 	<key>GOOGLE_APP_ID</key>
-	<string>1:611783936450:ios:ee09097a774b90ed27ee5b</string>
+	<string>1:611783936450:ios:ca28866cd38cba6a27ee5b</string>
 </dict>
 </plist>
