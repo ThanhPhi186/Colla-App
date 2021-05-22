@@ -1,10 +1,5 @@
-import {LoginScreen, OTPLogin} from './Login';
-import {
-  IntroductionCode,
-  NameRegister,
-  OTPRegister,
-  RegisterScreen,
-} from './Register';
+import LoginScreen from './Login';
+import {IntroductionCode, NameRegister, RegisterScreen} from './Register';
 import StartLogin from './StartLogin';
 import HomeScreen from './HomeScreen';
 import ShareScreen from './ShareScreen';
@@ -21,10 +16,8 @@ import {
 
 export {
   LoginScreen,
-  OTPLogin,
   IntroductionCode,
   NameRegister,
-  OTPRegister,
   RegisterScreen,
   StartLogin,
   HomeScreen,

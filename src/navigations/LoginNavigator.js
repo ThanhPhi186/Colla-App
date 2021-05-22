@@ -8,7 +8,6 @@ import {
   LoginScreen,
   NameRegister,
   OTPLogin,
-  OTPRegister,
   RegisterScreen,
   StartLogin,
 } from '../screens';
@@ -25,7 +24,6 @@ const LoginNavigator = () => {
         }}
         initialRouteName="LoginScreen">
         <Stack.Screen name="LoginScreen" component={LoginScreen} />
-        <Stack.Screen name="OTPLogin" component={OTPLogin} />
       </Stack.Navigator>
     );
   };
@@ -41,8 +39,8 @@ const LoginNavigator = () => {
         initialRouteName="RegisterScreen">
         <Stack.Screen name={'RegisterScreen'} component={RegisterScreen} />
         <Stack.Screen name={'NameRegister'} component={NameRegister} />
-        <Stack.Screen name={'OTPRegister'} component={OTPRegister} />
-        {/* <Stack.Screen name={'IntroductionCode'} component={IntroductionCode} /> */}
+
+        <Stack.Screen name={'IntroductionCode'} component={IntroductionCode} />
       </Stack.Navigator>
     );
   };
@@ -54,7 +52,7 @@ const LoginNavigator = () => {
         gestureEnabled: false,
         animationEnabled: true,
       }}>
-      <Stack.Screen name={'IntroScreen'} component={IntroScreen} />
+      {/* <Stack.Screen name={'IntroScreen'} component={IntroScreen} /> */}
       <Stack.Screen name={'StartLogin'} component={StartLogin} />
       <Stack.Screen name={'LoginStack'} component={LoginStack} />
       <Stack.Screen name={'RegisterStack'} component={RegisterStack} />

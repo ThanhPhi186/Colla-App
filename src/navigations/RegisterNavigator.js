@@ -1,12 +1,7 @@
 import * as React from 'react';
 
 import {createStackNavigator} from '@react-navigation/stack';
-import {
-  IntroductionCode,
-  NameRegister,
-  OTPRegister,
-  RegisterScreen,
-} from '../screens';
+import {IntroductionCode, NameRegister, RegisterScreen} from '../screens';
 
 const Stack = createStackNavigator();
 const RegisterNavigator = () => {
@@ -19,7 +14,7 @@ const RegisterNavigator = () => {
       }}>
       <Stack.Screen name={'RegisterScreen'} component={RegisterScreen} />
       <Stack.Screen name={'NameRegister'} component={NameRegister} />
-      <Stack.Screen name={'OTPRegister'} component={OTPRegister} />
+
       <Stack.Screen name={'IntroductionCode'} component={IntroductionCode} />
     </Stack.Navigator>
   );
