@@ -11,4 +11,5 @@ export const images = {
   intro4: require('./images/intro4.png'),
   logoIntro: require('./images/logoIntro.png'),
   testProduct: require('./images/testProduct.png'),
+  ic_Background: require('./images/ic_background.jpg'),
 };

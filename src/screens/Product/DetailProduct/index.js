@@ -17,14 +17,15 @@ import {CartRedux} from '../../../redux';
 import IconCart from '../../../components/molecules/IconCart';
 
 const DetailProduct = ({navigation, route}) => {
+  const dispatch = useDispatch();
   const {item} = route.params;
   const dataCart = useSelector(state => state.CartReducer.listProductCart);
 
   const [visibleModal, setVisibleModal] = useState(false);
 
-  const dispatch = useDispatch();
-
   const [count, setCount] = useState(1);
+
+  const [type, setType] = useState('');
 
   const addQuantity = () => {
     if (count < 10) {
@@ -44,13 +45,14 @@ const DetailProduct = ({navigation, route}) => {
 
   const addToCart = () => {
     const dataProduct = {...item, ...{quantity: count}};
-
     const convertData = [...dataCart];
     convertData.push(dataProduct);
-
     dispatch(CartRedux.Actions.setListProductCart(convertData));
     dispatch(CartRedux.Actions.setNumberProductCart(1));
     setVisibleModal(false);
+    if (type === 'buyNow') {
+      navigation.navigate('CartScreen');
+    }
   };
 
   return (
@@ -90,7 +92,10 @@ const DetailProduct = ({navigation, route}) => {
       </View>
       <ButtonBottom
         goCart={() => setVisibleModal(true)}
-        goBuyNow={() => setVisibleModal(true)}
+        goBuyNow={() => {
+          setVisibleModal(true);
+          setType('buyNow');
+        }}
       />
       <ModalChangeQuantity
         //ref

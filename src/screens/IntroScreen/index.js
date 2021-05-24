@@ -72,6 +72,8 @@ const IntroScreen = ({navigation}) => {
         renderItem={renderItem}
         data={data}
         onDone={onDone}
+        showSkipButton
+        onSkip={() => navigation.navigate('StartLogin')}
       />
     </View>
   );

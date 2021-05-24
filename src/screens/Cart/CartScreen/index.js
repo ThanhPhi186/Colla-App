@@ -11,18 +11,28 @@ import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import {Button} from '../../../components/molecules';
 import ProductCartItem from '../Component/ProductCartItem';
 import {CartRedux} from '../../../redux';
+import numeral from 'numeral';
+import {isEmpty, sum} from 'lodash';
+import SimpleToast from 'react-native-simple-toast';
 
 const CartScreen = ({navigation}) => {
-  const dataCart = useSelector(state => state.CartReducer.listProductCart);
   const dispatch = useDispatch();
+  const dataCart = useSelector(state => state.CartReducer.listProductCart);
+  const totalPrice = sum(dataCart.map(elm => elm.price * elm.quantity));
 
   const removeCartItem = item => {
     const convertData = dataCart.filter(elm => elm.id !== item.id);
-    console.log('xxxxxxx', convertData);
     dispatch(CartRedux.Actions.setListProductCart(convertData));
     dispatch(CartRedux.Actions.setNumberProductCart(-1));
   };
 
+  const goPayment = () => {
+    if (!isEmpty(dataCart)) {
+      navigation.navigate('PaymentScreen');
+    } else {
+      SimpleToast.show('Giỏ hàng trống');
+    }
+  };
   const renderItem = item => {
     return (
       <ProductCartItem
@@ -47,12 +57,14 @@ const CartScreen = ({navigation}) => {
       </View>
       <View style={styles.showPrice}>
         <AppText style={styles.textPay}>{trans('totalPayment')}</AppText>
-        <AppText style={styles.textPrice}>10000</AppText>
+        <AppText style={styles.textPrice}>
+          {numeral(totalPrice).format()} đ
+        </AppText>
       </View>
       <Button
         containerStyle={styles.btnPurchase}
         title={trans('purchase')}
-        onPress={() => navigation.navigate('PaymentScreen')}
+        onPress={goPayment}
       />
     </View>
   );

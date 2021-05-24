@@ -1,17 +1,42 @@
 import React, {useState} from 'react';
 import {Keyboard, TouchableWithoutFeedback, View} from 'react-native';
 import {Appbar, Switch, TextInput} from 'react-native-paper';
+import SimpleToast from 'react-native-simple-toast';
+import {useDispatch} from 'react-redux';
 import {AppText} from '../../../components/atoms';
 import {Button} from '../../../components/molecules';
+import {AuthenOverallRedux} from '../../../redux';
+import {get, post} from '../../../services/ServiceHandle';
 import {Colors} from '../../../styles';
 import {container} from '../../../styles/GlobalStyles';
-import {trans} from '../../../utils';
+import {Const, trans} from '../../../utils';
 
 const AddNewAddress = ({navigation}) => {
-  const [name, setName] = useState('');
+  const dispatch = useDispatch();
+  const [fullname, setFullName] = useState('');
   const [phone, setPhone] = useState('');
   const [address, setAddress] = useState('');
   const [valueSwitch, setValueSwitch] = useState(false);
+
+  const saveAddress = () => {
+    const params = {
+      phone,
+      fullname,
+      address,
+      is_default: valueSwitch,
+    };
+    post(Const.API.baseURL + Const.API.Useraddress, params).then(res => {
+      if (res.ok) {
+        get(Const.API.baseURL + Const.API.CheckAuth).then(res1 => {
+          if (res1.ok) {
+            dispatch(AuthenOverallRedux.Actions.loginSuccess(res1.data.data));
+            SimpleToast.show('thêm mới địa chỉ thành công', SimpleToast.SHORT);
+            navigation.goBack();
+          }
+        });
+      }
+    });
+  };
 
   return (
     <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
@@ -25,10 +50,13 @@ const AddNewAddress = ({navigation}) => {
         </Appbar.Header>
 
         <TextInput
-          style={{backgroundColor: Colors.WHITE, marginVertical: 16}}
+          style={{
+            backgroundColor: Colors.WHITE,
+            marginVertical: 16,
+          }}
           label={trans('recipientName')}
-          value={name}
-          onChangeText={setName}
+          value={fullname}
+          onChangeText={setFullName}
         />
         <TextInput
           style={{backgroundColor: Colors.WHITE, marginVertical: 16}}
@@ -62,7 +90,7 @@ const AddNewAddress = ({navigation}) => {
             />
           </View>
 
-          <Button title={trans('save').toUpperCase()} />
+          <Button title={trans('save').toUpperCase()} onPress={saveAddress} />
         </View>
       </View>
     </TouchableWithoutFeedback>

@@ -2,24 +2,67 @@ import React, {useState} from 'react';
 import {FlatList, ScrollView, TouchableOpacity, View} from 'react-native';
 import FastImage from 'react-native-fast-image';
 import {Appbar} from 'react-native-paper';
-import {useSelector} from 'react-redux';
+import SimpleToast from 'react-native-simple-toast';
+import {useDispatch, useSelector} from 'react-redux';
 import {images} from '../../../assets';
 import {AppText} from '../../../components/atoms';
 import {Button} from '../../../components/molecules';
+import {CartRedux} from '../../../redux';
+import {post} from '../../../services/ServiceHandle';
 import {container} from '../../../styles/GlobalStyles';
-import {trans} from '../../../utils';
+import {Const, trans} from '../../../utils';
 import ProductPaymentItem from '../Component/ProductPaymentItem';
 import styles from './styles';
+import numeral from 'numeral';
+import {sum} from 'lodash';
+import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
+import {Colors} from '../../../styles';
 
 const PaymentScreen = ({navigation}) => {
   const dataCart = useSelector(state => state.CartReducer.listProductCart);
 
-  const [shipAddress, setShipAddress] = useState('');
-  const [phone, setPhone] = useState('');
-  const [name, setName] = useState('');
+  const userInfo = useSelector(state => state.AuthenOverallReducer.userAuthen);
 
-  const renderItem = (item, index) => {
-    return <ProductPaymentItem key={index} item={item} />;
+  const numberProductCart = useSelector(
+    state => state.CartReducer.numberProductCart,
+  );
+
+  const dataAddress = userInfo?.addresses?.filter(elm => elm.is_default)[0];
+
+  const totalPrice = sum(dataCart.map(elm => elm.price * elm.quantity));
+
+  const dispatch = useDispatch();
+
+  const orderPayment = () => {
+    if (!dataAddress) {
+      return SimpleToast.show('Chưa có địa chỉ nhận hàng', SimpleToast.SHORT);
+    }
+    const products = dataCart.map(elm => {
+      return {
+        product_id: elm.id,
+        amount: elm.quantity,
+      };
+    });
+    const params = {
+      phone: dataAddress.phone,
+      address_ship: dataAddress.address,
+      fullname: dataAddress.fullname,
+      payment_method: 'cod',
+      ship_method: '',
+      products,
+    };
+    post(Const.API.baseURL + Const.API.Order, params).then(res => {
+      if (res.ok) {
+        dispatch(CartRedux.Actions.setListProductCart([]));
+        dispatch(CartRedux.Actions.setNumberProductCart(-numberProductCart));
+        SimpleToast.show('Đặt hàng thành công', SimpleToast.SHORT);
+        navigation.popToTop();
+      }
+    });
+  };
+
+  const renderItem = item => {
+    return <ProductPaymentItem item={item} />;
   };
 
   return (
@@ -29,12 +72,14 @@ const PaymentScreen = ({navigation}) => {
         <Appbar.Content color="white" title={trans('purchase')} />
       </Appbar.Header>
 
-      <ScrollView style={{flex: 1}}>
+      <View style={{flex: 1}}>
         <View style={styles.locationArea}>
           <View style={{width: '9%', alignItems: 'center'}}>
-            <FastImage
-              source={images.avatar}
-              style={{width: '70%', aspectRatio: 1 / 1, marginTop: 10}}
+            <Icon
+              name="map-marker"
+              size={24}
+              style={{marginTop: 10}}
+              color={Colors.GRAY}
             />
           </View>
 
@@ -52,30 +97,33 @@ const PaymentScreen = ({navigation}) => {
               <TouchableOpacity
                 style={{width: 30, aspectRatio: 1 / 1}}
                 onPress={() => navigation.navigate('DeliveryAddressScreen')}>
-                <FastImage
-                  style={{width: 24, height: 24}}
-                  source={images.avatar}
+                <Icon
+                  name="square-edit-outline"
+                  size={24}
+                  color={Colors.GRAY}
                 />
               </TouchableOpacity>
             </View>
 
             <AppText style={{marginRight: 10, marginTop: 3}}>
-              Nguyen Thanh Phi
+              {dataAddress?.fullname}
             </AppText>
             <AppText style={{marginRight: 10, marginTop: 3}}>
-              0376871280
+              {dataAddress?.phone}
             </AppText>
             <AppText style={{marginRight: 10, marginTop: 3}}>
-              211 Khuong Trung
+              {dataAddress?.address}
             </AppText>
           </View>
         </View>
 
         <View style={styles.vitien}>
           <View style={{width: '9%', alignItems: 'center'}}>
-            <FastImage
-              source={images.avatar}
-              style={{width: '65%', aspectRatio: 1 / 1, marginTop: 10}}
+            <Icon
+              name="credit-card"
+              size={24}
+              style={{marginTop: 10}}
+              color={Colors.GRAY}
             />
           </View>
 
@@ -100,22 +148,22 @@ const PaymentScreen = ({navigation}) => {
           </TouchableOpacity>
         </View>
 
-        {dataCart.map((elm, index) => renderItem(elm, index))}
-
-        {/* <FlatList
+        <FlatList
           data={dataCart}
           renderItem={({item}) => renderItem(item)}
           keyExtractor={(item, index) => index.toString()}
-        /> */}
-      </ScrollView>
+        />
+      </View>
       <View style={styles.showPrice}>
         <AppText style={styles.textPay}>{trans('totalPayment')}</AppText>
-        <AppText style={styles.textPrice}>10000</AppText>
+        <AppText style={styles.textPrice}>
+          {numeral(totalPrice).format()} đ
+        </AppText>
       </View>
       <Button
         containerStyle={styles.btnOrdered}
         title={trans('ordered')}
-        // onPress={() => navigation.navigate('PaymentScreen')}
+        onPress={orderPayment}
       />
     </View>
   );

@@ -11,8 +11,7 @@ import styles from './styles';
 import SimpleToast from 'react-native-simple-toast';
 import {statusBar} from '../../styles/Mixin';
 import auth from '@react-native-firebase/auth';
-import {post} from '../../services/ServiceHandle';
-import {setToken} from '../../redux/authen/action';
+import {get, post, setToken} from '../../services/ServiceHandle';
 import {useDispatch} from 'react-redux';
 import {AuthenOverallRedux} from '../../redux';
 
@@ -27,76 +26,116 @@ const LoginScreen = ({navigation}) => {
 
   const dispatch = useDispatch();
 
-  const getOTP = async () => {
-    try {
-      const regex =
-        /^(0?)(3[2-9]|5[6|8|9]|7[0|6-9]|8[0-6|8|9]|9[0-4|6-9])[0-9]{7}$/;
-      if (!regex.test(phoneNumber)) {
-        return SimpleToast.show(
-          'Số điện thoại không đúng định dạng',
-          SimpleToast.LONG,
-        );
-      }
-      setLoading(true);
-      const convertPhone = `+84${Number(phoneNumber)}`;
-      const confirmation = await auth().signInWithPhoneNumber(convertPhone);
-      if (confirmation) {
-        setLoading(false);
-        setConfirm(confirmation);
-      } else {
-        setLoading(false);
-        setTimeout(() => {
-          SimpleToast.show(confirmation, SimpleToast.SHORT);
-        }, 500);
-      }
-    } catch (error) {
-      SimpleToast.show('Chưa gửi được mã OTP! Vui lòng thử lại sau.', SimpleToast.LONG);
-      console.log(error);
-      setLoading(false);
-    }
-  };
+  // const getOTP = async () => {
+  //   try {
+  //     const regex =
+  //       /^(0?)(3[2-9]|5[6|8|9]|7[0|6-9]|8[0-6|8|9]|9[0-4|6-9])[0-9]{7}$/;
+  //     if (!regex.test(phoneNumber)) {
+  //       return SimpleToast.show(
+  //         'Số điện thoại không đúng định dạng',
+  //         SimpleToast.LONG,
+  //       );
+  //     }
+  //     setLoading(true);
+  //     const convertPhone = `+84${Number(phoneNumber)}`;
+  //     const confirmation = await auth().signInWithPhoneNumber(convertPhone);
+  //     if (confirmation) {
+  //       setLoading(false);
+  //       setConfirm(confirmation);
+  //     } else {
+  //       setLoading(false);
+  //       setTimeout(() => {
+  //         SimpleToast.show(confirmation, SimpleToast.SHORT);
+  //       }, 500);
+  //     }
+  //   } catch (error) {
+  //     SimpleToast.show(
+  //       'Chưa gửi được mã OTP! Vui lòng thử lại sau.',
+  //       SimpleToast.LONG,
+  //     );
+  //     console.log(error);
+  //     setLoading(false);
+  //   }
+  // };
+
+  // const confirmOTP = async () => {
+  //   try {
+  //     setLoading(true);
+  //     const confirmResult = await confirm.confirm(code);
+  //     if (confirmResult) {
+  //       auth().onAuthStateChanged(user => {
+  //         if (user) {
+  //           user.getIdToken().then(token => {
+  //             post(Const.API.baseURL + Const.API.VerifyPhone, {token}).then(
+  //               res => {
+  //                 if (res.ok) {
+  //                   setLoading(false);
+  //                   setToken(res.data.data.access_token);
+  //                   dispatch(
+  //                     AuthenOverallRedux.Actions.setToken(
+  //                       res.data.data.access_token,
+  //                     ),
+  //                   );
+  //                   dispatch(
+  //                     AuthenOverallRedux.Actions.loginSuccess(res.data.data),
+  //                   );
+  //                 } else {
+  //                   setLoading(false);
+  //                   SimpleToast.show(res.error, SimpleToast.SHORT);
+  //                 }
+  //               },
+  //             );
+  //           });
+  //         } else {
+  //           SimpleToast.show(
+  //             'Không lấy được thông tin tài khoản!',
+  //             SimpleToast.LONG,
+  //           );
+  //           setLoading(false);
+  //         }
+  //       });
+  //     }
+  //   } catch (error) {
+  //     setLoading(false);
+  //     console.log('error', error);
+  //     SimpleToast.show(error, SimpleToast.LONG);
+  //     // SimpleToast.show('Mã OTP không khớp', SimpleToast.LONG);
+  //   }
+  // };
 
   const confirmOTP = async () => {
-    try {
-      setLoading(true);
-      const confirmResult = await confirm.confirm(code);
-      if (confirmResult) {
-        auth().onAuthStateChanged(user => {
-          if (user) {
-            user.getIdToken().then(token => {
-              post(Const.API.baseURL + Const.API.VerifyPhone, {token}).then(
-                res => {
-                  if (res.ok) {
-                    setLoading(false);
-                    setToken(res.data.data.access_token);
-                    dispatch(
-                      AuthenOverallRedux.Actions.setToken(
-                        res.data.data.access_token,
-                      ),
-                    );
-                    dispatch(
-                      AuthenOverallRedux.Actions.loginSuccess(res.data.data),
-                    );
-                  } else {
-                    setLoading(false);
-                    SimpleToast.show(res.error, SimpleToast.SHORT);
-                  }
-                },
-              );
-            });
-          } else {
-            SimpleToast.show('Không lấy được thông tin tài khoản!', SimpleToast.LONG);
-            setLoading(false);
-          }
-        });
+    const params = {
+      phoneNumber: `+84${Number(phoneNumber)}`,
+      otp: code,
+    };
+    post(Const.API.baseURL + Const.API.SignInPhone, params).then(res => {
+      if (res.ok) {
+        setLoading(false);
+        setToken(res.data.data.access_token);
+        dispatch(
+          AuthenOverallRedux.Actions.setToken(res.data.data.access_token),
+        );
+        dispatch(AuthenOverallRedux.Actions.loginSuccess(res.data.data));
+      } else {
+        setLoading(false);
+        SimpleToast.show(res.error, SimpleToast.SHORT);
       }
-    } catch (error) {
-      setLoading(false);
-      console.log('error', error);
-      SimpleToast.show(error, SimpleToast.LONG);
-      // SimpleToast.show('Mã OTP không khớp', SimpleToast.LONG);
-    }
+    });
   };
+
+  const checkPhone = () => {
+    const params = {phoneNumber: `+84${Number(phoneNumber)}`};
+    post(Const.API.baseURL + Const.API.CheckPhone, params).then(res => {
+      if (res.ok) {
+        setConfirm('123456');
+      } else {
+        SimpleToast.show(
+          'Tài khoản này không tồn tại, vui lòng đăng ký tài khoản',
+        );
+      }
+    });
+  };
+
   return (
     <View style={container}>
       <AppLoading isVisible={loading} />
@@ -151,7 +190,7 @@ const LoginScreen = ({navigation}) => {
       <Button
         containerStyle={styles.btnContinue}
         title={trans('continue').toUpperCase()}
-        onPress={!confirm ? getOTP : confirmOTP}
+        onPress={!confirm ? checkPhone : confirmOTP}
       />
     </View>
   );

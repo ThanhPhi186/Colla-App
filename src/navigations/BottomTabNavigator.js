@@ -89,13 +89,13 @@ const BottomTabNavigator = () => {
           ),
         }}
       />
-      <Tab.Screen
+      {/* <Tab.Screen
         name="Middle"
         component={HomeScreen}
         options={{
           tabBarButton: props => <CustomButtonTab {...props} />,
         }}
-      />
+      /> */}
       <Tab.Screen
         name={trans('share')}
         options={{
