@@ -13,6 +13,7 @@ import {
   DeliveryAddressScreen,
   AddNewAddress,
 } from './Cart';
+import RootView from './RootView';
 
 export {
   LoginScreen,
@@ -31,4 +32,5 @@ export {
   PaymentScreen,
   DeliveryAddressScreen,
   AddNewAddress,
+  RootView,
 };

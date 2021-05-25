@@ -124,7 +124,17 @@ const LoginScreen = ({navigation}) => {
   };
 
   const checkPhone = () => {
-    const params = {phoneNumber: `+84${Number(phoneNumber)}`};
+    const regex =
+      /^(0?)(3[2-9]|5[6|8|9]|7[0|6-9]|8[0-6|8|9]|9[0-4|6-9])[0-9]{7}$/;
+    if (!regex.test(phoneNumber)) {
+      return SimpleToast.show(
+        'Số điện thoại không đúng định dạng',
+        SimpleToast.LONG,
+      );
+    }
+
+    const convertPhone = `+84${Number(phoneNumber)}`;
+    const params = {phoneNumber: convertPhone};
     post(Const.API.baseURL + Const.API.CheckPhone, params).then(res => {
       if (res.ok) {
         setConfirm('123456');

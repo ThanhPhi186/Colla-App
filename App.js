@@ -1,10 +1,10 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import {Provider as PaperProvider, DefaultTheme} from 'react-native-paper';
 import {Provider} from 'react-redux';
 import {PersistGate} from 'redux-persist/integration/react';
 import configureStore from './src/config/store/configureStore';
 import MainNavigator from './src/navigations/MainNavigator';
-// import {RootView} from './src/screens';
+import {RootView} from './src/screens';
 
 import {Colors} from './src/styles';
 
@@ -20,17 +20,13 @@ const theme = {
 };
 
 const App = () => {
-  // useEffect(() => {
-  //   RNBootSplash.hide({duration: 250});
-  // }, []);
-
   return (
     <Provider store={store}>
       <PaperProvider theme={theme}>
         <PersistGate persistor={persistor}>
-          {/* <RootView> */}
-          <MainNavigator />
-          {/* </RootView> */}
+          <RootView>
+            <MainNavigator />
+          </RootView>
         </PersistGate>
       </PaperProvider>
     </Provider>
