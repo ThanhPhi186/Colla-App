@@ -32,7 +32,6 @@ const MainAccount = () => {
     //     },
     //   );
     dispatch(AuthenOverallRedux.Actions.setToken(''));
-    setToken('');
   };
 
   return (

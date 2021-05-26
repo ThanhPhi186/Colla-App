@@ -21,7 +21,7 @@ const StartLogin = ({navigation}) => {
       <Button
         containerStyle={{marginTop: 40}}
         title="Đăng nhập bằng số điện thoại"
-        onPress={() => navigation.navigate('LoginStack')}
+        onPress={() => navigation.navigate('LoginScreen')}
       />
 
       <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>

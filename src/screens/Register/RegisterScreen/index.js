@@ -96,7 +96,6 @@ const RegisterScreen = ({navigation}) => {
     };
     post(Const.API.baseURL + Const.API.SignInPhone, params).then(res => {
       if (res.ok) {
-        setToken(res.data.data.access_token);
         dispatch(AuthenOverallRedux.Actions.loginSuccess(res.data.data));
         navigation.navigate('NameRegister', {
           tokenState: res.data.data.access_token,
@@ -135,7 +134,7 @@ const RegisterScreen = ({navigation}) => {
   return (
     <View style={container}>
       <AppLoading isVisible={loading} />
-      <Appbar.Header statusBarHeight={statusBar}>
+      <Appbar.Header>
         <Appbar.BackAction color="white" onPress={() => navigation.goBack()} />
         <Appbar.Content color="white" title={trans('register')} />
       </Appbar.Header>

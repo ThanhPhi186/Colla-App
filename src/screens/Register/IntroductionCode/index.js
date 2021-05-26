@@ -55,7 +55,7 @@ const IntroductionCode = ({navigation, route}) => {
   };
   return (
     <View style={container}>
-      <Appbar.Header statusBarHeight={statusBar}>
+      <Appbar.Header>
         <Appbar.BackAction color="white" onPress={() => navigation.goBack()} />
         <Appbar.Content color="white" title={trans('register')} />
       </Appbar.Header>

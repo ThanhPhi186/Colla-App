@@ -5,6 +5,8 @@ import createSagaMiddleware from 'redux-saga';
 import rootReducers from './rootReducer';
 import sagas from './rootSagas';
 import AsyncStorage from '@react-native-community/async-storage';
+import {setToken} from '../../services/ServiceHandle';
+import {AuthenOverallRedux} from '../../redux';
 
 const config = {
   key: 'root',
@@ -16,7 +18,14 @@ const config = {
 
 const middleware = [];
 const sagaMiddleware = createSagaMiddleware();
-middleware.push(sagaMiddleware);
+
+const handleAuthTokenMiddleware = store => next => action => {
+  if (action.type === AuthenOverallRedux.Actions.LOGIN_SUCCESS) {
+    setToken(action.payload.access_token);
+  }
+  next(action);
+};
+middleware.push(sagaMiddleware, handleAuthTokenMiddleware);
 
 if (__DEV__) {
   middleware.push(createLogger());
@@ -27,7 +36,13 @@ const enhancers = [applyMiddleware(...middleware)];
 const persistConfig = {enhancers};
 
 const store = createStore(reducers, undefined, compose(...enhancers));
-const persistor = persistStore(store, persistConfig, () => {});
+const persistor = persistStore(store, persistConfig, () => {
+  const stateData = store.getState();
+
+  if (stateData.AuthenOverallReducer.idToken) {
+    setToken(stateData.AuthenOverallReducer.idToken);
+  }
+});
 
 const configureStore = () => {
   return {persistor, store};

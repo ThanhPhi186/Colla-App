@@ -1,16 +1,17 @@
 import React, {useEffect} from 'react';
 import {View} from 'react-native';
-import {useSelector} from 'react-redux';
-import {setToken} from '../../services/ServiceHandle';
 
+import {SafeAreaProvider, SafeAreaView} from 'react-native-safe-area-context';
+import {Colors} from '../../styles';
 const RootView = props => {
-  const idToken = useSelector(state => state.AuthenOverallReducer.idToken);
-
-  useEffect(() => {
-    setToken(idToken);
-  }, [idToken]);
-
-  return <View style={{flex: 1}}>{props.children}</View>;
+  return (
+    <SafeAreaProvider>
+      {/* <SafeAreaView style={{flex: 1, backgroundColor: Colors.PRIMARY}}>
+        {props.children}
+      </SafeAreaView> */}
+      <View style={{flex: 1}}>{props.children}</View>
+    </SafeAreaProvider>
+  );
 };
 
 export default RootView;

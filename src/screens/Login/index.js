@@ -11,7 +11,7 @@ import styles from './styles';
 import SimpleToast from 'react-native-simple-toast';
 import {statusBar} from '../../styles/Mixin';
 import auth from '@react-native-firebase/auth';
-import {get, post, setToken} from '../../services/ServiceHandle';
+import {get, post} from '../../services/ServiceHandle';
 import {useDispatch} from 'react-redux';
 import {AuthenOverallRedux} from '../../redux';
 
@@ -111,7 +111,7 @@ const LoginScreen = ({navigation}) => {
     post(Const.API.baseURL + Const.API.SignInPhone, params).then(res => {
       if (res.ok) {
         setLoading(false);
-        setToken(res.data.data.access_token);
+        // setToken(res.data.data.access_token);
         dispatch(
           AuthenOverallRedux.Actions.setToken(res.data.data.access_token),
         );
@@ -149,7 +149,7 @@ const LoginScreen = ({navigation}) => {
   return (
     <View style={container}>
       <AppLoading isVisible={loading} />
-      <Appbar.Header statusBarHeight={statusBar}>
+      <Appbar.Header>
         <Appbar.BackAction color="white" onPress={() => navigation.goBack()} />
         <Appbar.Content color="white" title={trans('login')} />
       </Appbar.Header>
