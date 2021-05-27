@@ -1,7 +1,7 @@
 import React from 'react';
 import {ScrollView, TouchableOpacity, View} from 'react-native';
 import {Appbar} from 'react-native-paper';
-import {useDispatch} from 'react-redux';
+import {useDispatch, useSelector} from 'react-redux';
 import {AppText} from '../../../components/atoms';
 import {Button} from '../../../components/molecules';
 import {AuthenOverallRedux} from '../../../redux';
@@ -9,7 +9,7 @@ import {setToken} from '../../../services/ServiceHandle';
 import {container} from '../../../styles/GlobalStyles';
 import {trans} from '../../../utils';
 import auth from '@react-native-firebase/auth';
-import {Colors} from '../../../styles';
+import {Colors, Mixin} from '../../../styles';
 import {device_height, device_width} from '../../../styles/Mixin';
 import FastImage from 'react-native-fast-image';
 import ItemAccount from '../component/ItemAccount';
@@ -17,8 +17,12 @@ import BannerBehind from '../component/BannerBehind';
 import {images} from '../../../assets';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 
-const MainAccount = () => {
+const MainAccount = ({navigation}) => {
   const dispatch = useDispatch();
+
+  const userInfo = useSelector(state => state.AuthenOverallReducer.userAuthen);
+
+  console.log('userInfo', userInfo);
 
   const logout = () => {
     // auth()
@@ -41,16 +45,24 @@ const MainAccount = () => {
           backGround={images.ic_Background}
           avatar={images.avatar}
         />
-
+        <View style={styles.viewInfo}>
+          <AppText title style={styles.txtName}>
+            {userInfo.fullname}
+          </AppText>
+          <AppText style={styles.txtInfo}>{userInfo.username}</AppText>
+          <AppText style={styles.txtInfo}>{userInfo.member_type}</AppText>
+        </View>
         <View style={{flex: 1}}>
           <View>
+            <View style={styles.largeIndicate} />
+            <ItemAccount point="50000" />
             <View style={styles.largeIndicate} />
             <ItemAccount
               icon="file"
               title="Lịch sử tích điểm"
               onPress={() => {}}
             />
-            <View style={styles.largeIndicate} />
+            <View style={styles.smallIndicate} />
             <ItemAccount
               icon="hand-heart"
               title="Doanh số bán hàng"
@@ -60,7 +72,7 @@ const MainAccount = () => {
             <ItemAccount
               icon="clock-outline"
               title="Lịch sử nhập hàng"
-              onPress={() => {}}
+              onPress={() => navigation.navigate('HistoryOrder')}
             />
             <View style={styles.smallIndicate} />
             <ItemAccount
@@ -72,9 +84,9 @@ const MainAccount = () => {
             <ItemAccount
               icon="card-account-details-outline"
               title="Danh sách Khách Hàng"
-              onPress={() => {}}
+              onPress={() => navigation.navigate('ListCustomer')}
             />
-            <View style={styles.largeIndicate} />
+            <View style={styles.smallIndicate} />
             <ItemAccount
               icon="message-reply-text"
               title="Chính sách Đại Lý"
@@ -203,7 +215,22 @@ const styles = {
 
     fontWeight: '400',
   },
-  picker: {height: 50, width: 145},
+  picker: {
+    height: 50,
+    width: 145,
+  },
+  txtName: {
+    fontWeight: '600',
+  },
+  viewInfo: {
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginTop: Mixin.moderateSize(8),
+    paddingBottom: Mixin.moderateSize(8),
+  },
+  txtInfo: {
+    marginTop: Mixin.moderateSize(4),
+  },
 };
 
 export default MainAccount;

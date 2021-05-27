@@ -11,8 +11,8 @@ const MainNavigator = () => {
 
   return (
     <NavigationContainer>
-      {/* {idToken ? <BottomTabNavigator /> : <LoginNavigator />} */}
-      <BottomTabNavigator />
+      {idToken ? <BottomTabNavigator /> : <LoginNavigator />}
+      {/* <BottomTabNavigator /> */}
     </NavigationContainer>
   );
 };

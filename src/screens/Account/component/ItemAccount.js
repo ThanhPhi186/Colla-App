@@ -1,14 +1,37 @@
 import React, {Component} from 'react';
-import {View, TouchableOpacity} from 'react-native';
+import {View, TouchableOpacity, Text} from 'react-native';
 
 import FastImage from 'react-native-fast-image';
 import {AppText} from '../../../components/atoms';
 import {images} from '../../../assets';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import {Colors} from '../../../styles';
+import numeral from 'numeral';
 
 const ItemAccount = props => {
-  const {icon, title, onPress} = props;
+  const {icon, title, onPress, point} = props;
+  if (point) {
+    return (
+      <View style={styles.container}>
+        <View
+          style={{
+            width: '90%',
+            flexDirection: 'row',
+            alignItems: 'center',
+            justifyContent: 'space-between',
+          }}>
+          <FastImage
+            source={images.logoTransparent}
+            resizeMode="contain"
+            style={{width: 130, height: 36}}
+          />
+          <Text style={styles.txtPoint}>
+            {numeral(point).format()} <Text style={styles.textTitle}>điểm</Text>
+          </Text>
+        </View>
+      </View>
+    );
+  }
   return (
     <TouchableOpacity style={styles.container} onPress={onPress}>
       <View style={{width: '80%', flexDirection: 'row', alignItems: 'center'}}>
@@ -33,10 +56,16 @@ const styles = {
   textTitle: {
     fontSize: 17,
     fontWeight: '400',
+    color: Colors.BLACK,
   },
   arrow: {
     width: '2.5%',
     aspectRatio: 1.2 / 2,
+  },
+  txtPoint: {
+    fontSize: 17,
+    fontWeight: 'bold',
+    color: Colors.ORANGE,
   },
 };
 

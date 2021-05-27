@@ -4,7 +4,7 @@ import StartLogin from './StartLogin';
 import HomeScreen from './HomeScreen';
 import ShareScreen from './ShareScreen';
 import ContactScreen from './ContactScreen';
-import {MainAccount} from './Account';
+import {MainAccount, HistoryOrder, ListCustomer} from './Account';
 import IntroScreen from './IntroScreen';
 import {ListProduct, DetailProduct} from './Product';
 import {
@@ -33,4 +33,6 @@ export {
   DeliveryAddressScreen,
   AddNewAddress,
   RootView,
+  HistoryOrder,
+  ListCustomer,
 };

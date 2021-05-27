@@ -14,6 +14,8 @@ import {
   PaymentScreen,
   DeliveryAddressScreen,
   AddNewAddress,
+  HistoryOrder,
+  ListCustomer,
 } from '../screens';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import {CustomButtonTab} from '../components/molecules';
@@ -64,8 +66,24 @@ const BottomTabNavigator = () => {
     );
   };
 
+  const AccountStack = () => {
+    return (
+      <Stack.Navigator
+        screenOptions={{
+          headerShown: false,
+          gestureEnabled: false,
+          animationEnabled: true,
+        }}
+        initialRouteName="MainAccount">
+        <Stack.Screen name="MainAccount" component={MainAccount} />
+        <Stack.Screen name="HistoryOrder" component={HistoryOrder} />
+        <Stack.Screen name="ListCustomer" component={ListCustomer} />
+      </Stack.Navigator>
+    );
+  };
+
   return (
-    <Tab.Navigator>
+    <Tab.Navigator initialRouteName={trans('personal')}>
       <Tab.Screen
         name={trans('home')}
         component={HomeStack}
@@ -111,7 +129,7 @@ const BottomTabNavigator = () => {
       />
       <Tab.Screen
         name={trans('personal')}
-        component={MainAccount}
+        component={AccountStack}
         options={{
           tabBarIcon: ({color, size}) => (
             <MaterialCommunityIcons name="account" color={color} size={size} />

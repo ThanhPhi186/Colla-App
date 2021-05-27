@@ -32,4 +32,6 @@ export default {
   addNewAddress: 'Thêm mới địa chỉ',
   setDefault: 'Đặt làm mặc định',
   edited: 'Chỉnh sửa',
+  historyOrder: 'Lịch sử nhập hàng',
+  listCustomer: 'Danh sách khách hàng',
 };
