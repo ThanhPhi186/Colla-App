@@ -20,6 +20,7 @@ import {
   AddNewAddress,
 } from './Cart';
 import RootView from './RootView';
+import NotificationScreen from './Notification';
 
 export {
   LoginScreen,
@@ -43,4 +44,5 @@ export {
   ListCustomer,
   HistoryPoint,
   ReportScreen,
+  NotificationScreen,
 };

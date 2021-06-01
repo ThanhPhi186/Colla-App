@@ -42,4 +42,5 @@ export default {
   report: 'Báo cáo',
   inventory: 'Tồn kho',
   revenue: 'Doanh thu',
+  notification: 'Thông báo',
 };

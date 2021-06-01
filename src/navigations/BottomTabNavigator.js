@@ -18,6 +18,7 @@ import {
   ListCustomer,
   HistoryPoint,
   ReportScreen,
+  NotificationScreen,
 } from '../screens';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import {CustomButtonTab} from '../components/molecules';
@@ -37,7 +38,8 @@ const BottomTabNavigator = () => {
       routeName === 'CartScreen' ||
       routeName === 'PaymentScreen' ||
       routeName === 'DeliveryAddressScreen' ||
-      routeName === 'AddNewAddress'
+      routeName === 'AddNewAddress' ||
+      routeName === 'NotificationScreen'
     ) {
       return false;
     }
@@ -76,8 +78,11 @@ const BottomTabNavigator = () => {
           name="DeliveryAddressScreen"
           component={DeliveryAddressScreen}
         />
-
         <Stack.Screen name="AddNewAddress" component={AddNewAddress} />
+        <Stack.Screen
+          name="NotificationScreen"
+          component={NotificationScreen}
+        />
       </Stack.Navigator>
     );
   };

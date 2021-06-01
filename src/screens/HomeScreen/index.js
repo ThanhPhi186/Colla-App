@@ -50,7 +50,7 @@ const HomeScreen = ({navigation}) => {
           <View style={{flexDirection: 'row'}}>
             <IconCart onPress={() => navigation.navigate('CartScreen')} />
             <TouchableOpacity
-              // onPress={() => navigation.navigate('CartScreen')}
+              onPress={() => navigation.navigate('NotificationScreen')}
               style={{
                 justifyContent: 'center',
                 alignItems: 'center',
