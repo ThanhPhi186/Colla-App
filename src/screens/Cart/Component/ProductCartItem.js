@@ -5,31 +5,32 @@ import {AppText} from '../../../components/atoms';
 import {Colors} from '../../../styles';
 import {Const, trans} from '../../../utils';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
+import numeral from 'numeral';
 
 const ProductCartItem = props => {
-  const {item, removeCartItem} = props;
+  const {item, removeCartItem, edit} = props;
   return (
     <View style={styles.containerItem}>
       <View style={styles.left}>
         <FastImage
-          source={{uri: Const.API.baseURL + item.photo}}
+          source={{uri: Const.API.baseURL + item.product.photo}}
           style={styles.avt}
         />
       </View>
       <View style={styles.right}>
-        <AppText style={styles.textName}>{item.name}</AppText>
+        <AppText style={styles.textName}>{item.product.name}</AppText>
 
-        <AppText style={styles.textPrice}>{item.price}đ</AppText>
+        <AppText style={styles.textPrice}>
+          {numeral(item.product.price).format()} đ
+        </AppText>
 
         <View style={styles.soluong}>
-          <TouchableOpacity
-          // onPress={edit}
-          >
-            <Icon name="square-edit-outline" size={24} color={Colors.GRAY} />
+          <TouchableOpacity onPress={edit}>
+            {/* <Icon name="square-edit-outline" size={24} color={Colors.GRAY} /> */}
           </TouchableOpacity>
 
           <AppText style={{paddingRight: 8}}>
-            {trans('quantity')}: {item.quantity}
+            {trans('quantity')}: {item.amount}
           </AppText>
         </View>
       </View>

@@ -110,7 +110,7 @@ const HomeScreen = ({navigation}) => {
             />
             <View style={{flexDirection: 'row'}}>
               <AppText style={{color: Colors.ORANGE, fontWeight: 'bold'}}>
-                50,000
+                {userInfo.point}
               </AppText>
               <AppText style={{fontWeight: 'bold'}}> điểm</AppText>
             </View>

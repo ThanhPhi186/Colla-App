@@ -12,4 +12,11 @@ export const images = {
   logoIntro: require('./images/logoIntro.png'),
   testProduct: require('./images/testProduct.png'),
   ic_Background: require('./images/ic_background.jpg'),
+  shareBG: require('./images/shareBG.png'),
+  contactBG: require('./images/contactBG.jpeg'),
+  facebook: require('./images/facebook.png'),
+  insta: require('./images/insta.png'),
+  gmail: require('./images/gmail.png'),
+  message: require('./images/message.png'),
+  zalo: require('./images/zalo.png'),
 };

@@ -5,6 +5,7 @@ import {AppText} from '../../../components/atoms';
 import {Colors} from '../../../styles';
 import {Const, trans} from '../../../utils';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
+import numeral from 'numeral';
 
 const ProductPaymentItem = props => {
   const {item} = props;
@@ -12,20 +13,22 @@ const ProductPaymentItem = props => {
     <View style={styles.containerItem}>
       <View style={styles.left}>
         <FastImage
-          source={{uri: Const.API.baseURL + item.photo}}
+          source={{uri: Const.API.baseURL + item.product.photo}}
           style={styles.avt}
         />
       </View>
       <View style={styles.right}>
-        <AppText style={styles.textName}>{item.name}</AppText>
+        <AppText style={styles.textName}>{item.product.name}</AppText>
         <View
           style={{
             flexDirection: 'row',
             justifyContent: 'space-between',
             paddingRight: 16,
           }}>
-          <AppText style={styles.textPrice}>{item.price}đ</AppText>
-          <AppText style={styles.textPrice}>X{item.quantity}</AppText>
+          <AppText style={styles.textPrice}>
+            {numeral(item.product.price).format()} đ
+          </AppText>
+          <AppText style={styles.textPrice}>X {item.amount}</AppText>
         </View>
       </View>
     </View>

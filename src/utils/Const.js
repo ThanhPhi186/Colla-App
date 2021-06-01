@@ -10,6 +10,11 @@ export default {
     Useraddress: 'api/useraddress',
     Order: 'api/order',
     SignInPhone: 'api/auth/signin-by-phone',
+    SignUp: 'api/auth/signup',
+    SignIn: 'api/auth/signin',
+    SendOtp: 'api/auth/send-otp',
+    VerifyOtp: 'api/auth/verify-otp',
+    Cart: 'api/cart',
   },
   RESPONSE_CODES: {
     SUCCESS: {

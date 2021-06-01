@@ -8,19 +8,46 @@ import {
 } from 'react-native';
 import FastImage from 'react-native-fast-image';
 import {Appbar, Switch, TextInput} from 'react-native-paper';
-import {useSelector} from 'react-redux';
+import SimpleToast from 'react-native-simple-toast';
+import {useDispatch, useSelector} from 'react-redux';
 import {images} from '../../../assets';
 import {AppText} from '../../../components/atoms';
-import {Button} from '../../../components/molecules';
+import {AuthenOverallRedux} from '../../../redux';
+import {get, put} from '../../../services/ServiceHandle';
 import {Colors} from '../../../styles';
 import {container} from '../../../styles/GlobalStyles';
 import {device_width} from '../../../styles/Mixin';
-import {trans} from '../../../utils';
+import {Const, trans} from '../../../utils';
 
 const DeliveryAddressScreen = ({navigation}) => {
+  const dispatch = useDispatch();
   const dataAddress = useSelector(
     state => state.AuthenOverallReducer.userAuthen.addresses,
   );
+
+  const pressDefault = item => {
+    const params = {
+      phone: item.phone,
+      fullname: item.fullname,
+      address: item.address,
+      is_default: true,
+    };
+    put(`${Const.API.baseURL + Const.API.Useraddress}/${item.id}`, params).then(
+      res => {
+        if (res.ok) {
+          get(Const.API.baseURL + Const.API.CheckAuth).then(res1 => {
+            if (res1.ok) {
+              dispatch(AuthenOverallRedux.Actions.loginSuccess(res1.data.data));
+              SimpleToast.show(
+                'Cập nhật địa chỉ thành công',
+                SimpleToast.SHORT,
+              );
+            }
+          });
+        }
+      },
+    );
+  };
 
   const renderItem = ({item}) => {
     return (
@@ -51,8 +78,7 @@ const DeliveryAddressScreen = ({navigation}) => {
             style={
               item.is_default ? styles.buttonChoose : styles.buttonUnchoose
             }
-            // onPress={pressDefault}
-          >
+            onPress={() => pressDefault(item)}>
             <AppText
               style={item.is_default ? styles.textChoose : styles.textUnchoose}>
               {trans('setDefault')}
@@ -61,9 +87,12 @@ const DeliveryAddressScreen = ({navigation}) => {
 
           <TouchableOpacity
             style={styles.buttonEdit}
-
-            //   onPress={goEditPlace}
-          >
+            onPress={() =>
+              navigation.navigate('AddNewAddress', {
+                itemEdit: item,
+                type: 'EDIT',
+              })
+            }>
             <AppText style={styles.textUnchoose}>{trans('edited')}</AppText>
           </TouchableOpacity>
         </View>
@@ -80,7 +109,7 @@ const DeliveryAddressScreen = ({navigation}) => {
           color="white"
           icon="plus"
           size={28}
-          onPress={() => navigation.navigate('AddNewAddress')}
+          onPress={() => navigation.navigate('AddNewAddress', {type: 'NEW'})}
         />
       </Appbar.Header>
 

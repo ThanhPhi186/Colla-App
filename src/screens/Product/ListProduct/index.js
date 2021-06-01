@@ -6,12 +6,15 @@ import {AppText} from '../../../components/atoms';
 import {container} from '../../../styles/GlobalStyles';
 import {Const, trans} from '../../../utils';
 import {images} from '../../../assets';
-import {get} from '../../../services/ServiceHandle';
+import {get, post} from '../../../services/ServiceHandle';
 
 import {ItemProduct} from '../../../components/molecules';
 import IconCart from '../../../components/molecules/IconCart';
+import {useDispatch} from 'react-redux';
+import {CartRedux} from '../../../redux';
 
 const ListProduct = ({navigation}) => {
+  const dispatch = useDispatch();
   const [listProduct, setListProduct] = useState([]);
   useEffect(() => {
     const getListProduct = () => {
@@ -24,11 +27,21 @@ const ListProduct = ({navigation}) => {
     getListProduct();
   }, []);
 
+  const addToCart = item => {
+    const dataProduct = {product_id: item.id, amount: 1};
+    post(Const.API.baseURL + Const.API.Cart, dataProduct).then(res => {
+      if (res.ok) {
+        dispatch(CartRedux.Actions.getCart.request());
+      }
+    });
+  };
+
   const renderItem = item => {
     return (
       <ItemProduct
         item={item}
         onPress={() => navigation.navigate('DetailProduct', {item})}
+        addToCart={() => addToCart(item)}
       />
     );
   };

@@ -14,17 +14,34 @@ import {CartRedux} from '../../../redux';
 import numeral from 'numeral';
 import {isEmpty, sum} from 'lodash';
 import SimpleToast from 'react-native-simple-toast';
+import {useEffect} from 'react';
+import {deleteApi, get, post, put} from '../../../services/ServiceHandle';
+import {useState} from 'react';
 
 const CartScreen = ({navigation}) => {
   const dispatch = useDispatch();
   const dataCart = useSelector(state => state.CartReducer.listProductCart);
-  const totalPrice = sum(dataCart.map(elm => elm.price * elm.quantity));
+  const totalPrice = sum(dataCart?.map(elm => elm.product.price * elm.amount));
 
   const removeCartItem = item => {
-    const convertData = dataCart.filter(elm => elm.id !== item.id);
-    dispatch(CartRedux.Actions.setListProductCart(convertData));
-    dispatch(CartRedux.Actions.setNumberProductCart(-1));
+    deleteApi(`${Const.API.baseURL + Const.API.Cart}/${item.id}`).then(res => {
+      if (res.ok) {
+        dispatch(CartRedux.Actions.getCart.request());
+        SimpleToast.show(
+          'Xóa sản phẩm khỏi giỏ hàng thành công!',
+          SimpleToast.SHORT,
+        );
+      }
+    });
   };
+
+  // const editCartItem = item => {
+  //   put(Const.API.baseURL + Const.API.Cart).then(res => {
+  //     if (res.ok) {
+  //       getCart();
+  //     }
+  //   });
+  // };
 
   const goPayment = () => {
     if (!isEmpty(dataCart)) {
@@ -33,6 +50,7 @@ const CartScreen = ({navigation}) => {
       SimpleToast.show('Giỏ hàng trống');
     }
   };
+
   const renderItem = item => {
     return (
       <ProductCartItem

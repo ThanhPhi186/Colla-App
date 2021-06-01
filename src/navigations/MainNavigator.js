@@ -12,7 +12,6 @@ const MainNavigator = () => {
   return (
     <NavigationContainer>
       {idToken ? <BottomTabNavigator /> : <LoginNavigator />}
-      {/* <BottomTabNavigator /> */}
     </NavigationContainer>
   );
 };

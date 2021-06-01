@@ -44,6 +44,16 @@ const styles = {
     marginBottom: Mixin.moderateSize(20),
     fontStyle: 'italic',
   },
+  viewPhone: {
+    width: '100%',
+    height: 40,
+    marginBottom: 8,
+    borderWidth: 0.5,
+    borderColor: 'gray',
+    paddingHorizontal: 8,
+    borderRadius: 8,
+    justifyContent: 'center',
+  },
 };
 
 export default styles;

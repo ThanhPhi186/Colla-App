@@ -5,9 +5,12 @@ import {Const} from '../../utils';
 import {AppText} from '../atoms';
 import numeral from 'numeral';
 import {device_width} from '../../styles/Mixin';
-import {Colors} from '../../styles';
+import {Colors, Mixin} from '../../styles';
+import Icon from 'react-native-vector-icons/FontAwesome5';
+
 const ItemProduct = props => {
-  const {item} = props;
+  const {item, addToCart} = props;
+
   return (
     <View style={{flex: 1 / 2}}>
       <TouchableOpacity {...props} style={styles.container}>
@@ -17,17 +20,16 @@ const ItemProduct = props => {
           style={styles.image}
         />
         <View style={styles.viewNamePrice}>
-          <AppText
-            numberOfLines={1}
-            containerStyle={{width: '40%'}}
-            style={styles.txtName}>
+          <AppText numberOfLines={1} style={styles.txtName}>
             {item.name}
           </AppText>
-          <AppText containerStyle={{width: '50%'}} style={styles.txtPrice}>
+          <AppText style={styles.txtPrice}>
             {numeral(item.price).format()} đ
           </AppText>
         </View>
-        <AppText style={styles.txtOrigin}>RUSSIA</AppText>
+        <TouchableOpacity style={styles.btnCart} onPress={addToCart}>
+          <Icon name="cart-plus" size={20} color={Colors.WHITE} />
+        </TouchableOpacity>
       </TouchableOpacity>
     </View>
   );
@@ -35,10 +37,10 @@ const ItemProduct = props => {
 const styles = {
   container: {
     backgroundColor: Colors.WHITE,
-    borderRadius: 15,
+    borderRadius: 16,
     width: device_width / 2.4,
     alignSelf: 'center',
-    padding: 4,
+    paddingTop: 4,
     marginVertical: 12,
     shadowColor: '#000',
     shadowOffset: {
@@ -64,10 +66,9 @@ const styles = {
   txtPrice: {
     fontWeight: 'bold',
     color: Colors.GREEN_1,
+    marginTop: Mixin.moderateSize(4),
   },
   viewNamePrice: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
     paddingHorizontal: 10,
     paddingTop: 10,
   },
@@ -76,6 +77,17 @@ const styles = {
     fontWeight: 'bold',
     color: '#b1e5d3',
     paddingTop: 3,
+  },
+  btnCart: {
+    backgroundColor: Colors.GREEN_1,
+    width: Mixin.moderateSize(48),
+    height: Mixin.moderateSize(36),
+    alignSelf: 'flex-end',
+    borderBottomRightRadius: 16,
+    borderTopLeftRadius: 16,
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginTop: Mixin.moderateSize(8),
   },
 };
 export default ItemProduct;

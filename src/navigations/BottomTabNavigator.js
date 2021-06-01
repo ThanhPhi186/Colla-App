@@ -16,6 +16,7 @@ import {
   AddNewAddress,
   HistoryOrder,
   ListCustomer,
+  HistoryPoint,
 } from '../screens';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import {CustomButtonTab} from '../components/molecules';
@@ -36,6 +37,19 @@ const BottomTabNavigator = () => {
       routeName === 'PaymentScreen' ||
       routeName === 'DeliveryAddressScreen' ||
       routeName === 'AddNewAddress'
+    ) {
+      return false;
+    }
+    return true;
+  };
+
+  const getPersonVisibility = route => {
+    const routeName = getFocusedRouteNameFromRoute(route) ?? 'MainAccount';
+
+    if (
+      routeName === 'HistoryOrder' ||
+      routeName === 'ListCustomer' ||
+      routeName === 'HistoryPoint'
     ) {
       return false;
     }
@@ -78,12 +92,13 @@ const BottomTabNavigator = () => {
         <Stack.Screen name="MainAccount" component={MainAccount} />
         <Stack.Screen name="HistoryOrder" component={HistoryOrder} />
         <Stack.Screen name="ListCustomer" component={ListCustomer} />
+        <Stack.Screen name="HistoryPoint" component={HistoryPoint} />
       </Stack.Navigator>
     );
   };
 
   return (
-    <Tab.Navigator initialRouteName={trans('personal')}>
+    <Tab.Navigator initialRouteName={trans('home')}>
       <Tab.Screen
         name={trans('home')}
         component={HomeStack}
@@ -95,7 +110,7 @@ const BottomTabNavigator = () => {
         })}
       />
       <Tab.Screen
-        name={trans('help')}
+        name={trans('contact')}
         component={ContactScreen}
         options={{
           tabBarIcon: ({color, size}) => (
@@ -130,11 +145,12 @@ const BottomTabNavigator = () => {
       <Tab.Screen
         name={trans('personal')}
         component={AccountStack}
-        options={{
+        options={({route}) => ({
+          tabBarVisible: getPersonVisibility(route),
           tabBarIcon: ({color, size}) => (
             <MaterialCommunityIcons name="account" color={color} size={size} />
           ),
-        }}
+        })}
       />
     </Tab.Navigator>
   );

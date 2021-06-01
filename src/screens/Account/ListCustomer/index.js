@@ -37,6 +37,7 @@ const ListCustomer = ({navigation}) => {
           elevation: 5,
           marginTop: 16,
           padding: 20,
+          borderRadius: 12,
         }}>
         <AppText>
           {item.name} - Cấp bậc : {item.rank}
@@ -57,6 +58,7 @@ const ListCustomer = ({navigation}) => {
           data={dataCustomer}
           renderItem={renderItem}
           keyExtractor={(item, index) => index.toString()}
+          contentContainerStyle={{paddingBottom: 16}}
         />
       </View>
     </View>

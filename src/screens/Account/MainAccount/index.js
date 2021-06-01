@@ -22,8 +22,6 @@ const MainAccount = ({navigation}) => {
 
   const userInfo = useSelector(state => state.AuthenOverallReducer.userAuthen);
 
-  console.log('userInfo', userInfo);
-
   const logout = () => {
     // auth()
     //   .signOut()
@@ -39,66 +37,60 @@ const MainAccount = ({navigation}) => {
   };
 
   return (
-    <ScrollView>
-      <View style={styles.container}>
-        <BannerBehind
-          backGround={images.ic_Background}
-          avatar={images.avatar}
-        />
-        <View style={styles.viewInfo}>
-          <AppText title style={styles.txtName}>
-            {userInfo.fullname}
-          </AppText>
-          <AppText style={styles.txtInfo}>{userInfo.username}</AppText>
-          <AppText style={styles.txtInfo}>{userInfo.member_type}</AppText>
-        </View>
-        <View style={{flex: 1}}>
-          <View>
-            <View style={styles.largeIndicate} />
-            <ItemAccount point="50000" />
-            <View style={styles.largeIndicate} />
-            <ItemAccount
-              icon="file"
-              title="Lịch sử tích điểm"
-              onPress={() => {}}
-            />
-            <View style={styles.smallIndicate} />
-            <ItemAccount
-              icon="hand-heart"
-              title="Doanh số bán hàng"
-              onPress={() => {}}
-            />
-            <View style={styles.smallIndicate} />
-            <ItemAccount
-              icon="clock-outline"
-              title="Lịch sử nhập hàng"
-              onPress={() => navigation.navigate('HistoryOrder')}
-            />
-            <View style={styles.smallIndicate} />
-            <ItemAccount
-              icon="gift-outline"
-              title="Ưu đãi của tôi"
-              onPress={() => {}}
-            />
-            <View style={styles.smallIndicate} />
-            <ItemAccount
-              icon="card-account-details-outline"
-              title="Danh sách Khách Hàng"
-              onPress={() => navigation.navigate('ListCustomer')}
-            />
-            <View style={styles.smallIndicate} />
-            <ItemAccount
-              icon="message-reply-text"
-              title="Chính sách Đại Lý"
-              onPress={() => {}}
-            />
-            <View style={styles.smallIndicate} />
-          </View>
-
-          <ItemAccount icon="logout" title="Đăng xuất" onPress={logout} />
-        </View>
+    <View style={styles.container}>
+      <BannerBehind backGround={images.ic_Background} avatar={images.avatar} />
+      <View style={styles.viewInfo}>
+        <AppText title style={styles.txtName}>
+          {userInfo.fullname}
+        </AppText>
+        <AppText style={styles.txtInfo}>{userInfo.username}</AppText>
+        <AppText style={styles.txtInfo}>{userInfo.member_type}</AppText>
       </View>
-    </ScrollView>
+      <View style={{flex: 1}}>
+        <View style={styles.largeIndicate} />
+        <ItemAccount point={userInfo.point} />
+        <View style={styles.largeIndicate} />
+        <ScrollView>
+          <ItemAccount
+            icon="file"
+            title="Lịch sử tích điểm"
+            onPress={() => navigation.navigate('HistoryPoint')}
+          />
+          <View style={styles.smallIndicate} />
+          <ItemAccount
+            icon="hand-heart"
+            title="Doanh số bán hàng"
+            onPress={() => {}}
+          />
+          <View style={styles.smallIndicate} />
+          <ItemAccount
+            icon="clock-outline"
+            title="Lịch sử nhập hàng"
+            onPress={() => navigation.navigate('HistoryOrder')}
+          />
+          <View style={styles.smallIndicate} />
+          <ItemAccount
+            icon="gift-outline"
+            title="Ưu đãi của tôi"
+            onPress={() => {}}
+          />
+          <View style={styles.smallIndicate} />
+          <ItemAccount
+            icon="card-account-details-outline"
+            title="Danh sách Khách Hàng"
+            onPress={() => navigation.navigate('ListCustomer')}
+          />
+          <View style={styles.smallIndicate} />
+          <ItemAccount
+            icon="message-reply-text"
+            title="Chính sách Đại Lý"
+            onPress={() => {}}
+          />
+          <View style={styles.smallIndicate} />
+          <ItemAccount icon="logout" title="Đăng xuất" onPress={logout} />
+        </ScrollView>
+      </View>
+    </View>
   );
 };
 
@@ -220,7 +212,7 @@ const styles = {
     width: 145,
   },
   txtName: {
-    fontWeight: '600',
+    fontWeight: 'bold',
   },
   viewInfo: {
     justifyContent: 'center',

@@ -6,36 +6,75 @@ import {useDispatch} from 'react-redux';
 import {AppText} from '../../../components/atoms';
 import {Button} from '../../../components/molecules';
 import {AuthenOverallRedux} from '../../../redux';
-import {get, post} from '../../../services/ServiceHandle';
+import {get, post, put} from '../../../services/ServiceHandle';
 import {Colors} from '../../../styles';
 import {container} from '../../../styles/GlobalStyles';
 import {Const, trans} from '../../../utils';
 
-const AddNewAddress = ({navigation}) => {
+const AddNewAddress = ({navigation, route}) => {
   const dispatch = useDispatch();
-  const [fullname, setFullName] = useState('');
-  const [phone, setPhone] = useState('');
-  const [address, setAddress] = useState('');
+
+  const {type} = route.params;
+
+  const {itemEdit} = route.params;
+
+  const [fullname, setFullName] = useState(itemEdit?.fullname);
+  const [phone, setPhone] = useState(itemEdit?.phone);
+  const [address, setAddress] = useState(itemEdit?.address);
   const [valueSwitch, setValueSwitch] = useState(false);
+  console.log('fullname', fullname);
+
+  const handelCheckValue = () => {
+    if (!fullname) {
+      SimpleToast.show('Tên người nhận không được để trống', SimpleToast.SHORT);
+      return true;
+    }
+    if (!phone) {
+      SimpleToast.show('Số điện thoại không được để trống', SimpleToast.SHORT);
+      return true;
+    }
+    if (!address) {
+      SimpleToast.show('Địa chỉ không được để trống', SimpleToast.SHORT);
+      return true;
+    }
+
+    return false;
+  };
 
   const saveAddress = () => {
+    if (handelCheckValue()) {
+      return;
+    }
     const params = {
       phone,
       fullname,
       address,
       is_default: valueSwitch,
     };
-    post(Const.API.baseURL + Const.API.Useraddress, params).then(res => {
-      if (res.ok) {
-        get(Const.API.baseURL + Const.API.CheckAuth).then(res1 => {
-          if (res1.ok) {
-            dispatch(AuthenOverallRedux.Actions.loginSuccess(res1.data.data));
-            SimpleToast.show('thêm mới địa chỉ thành công', SimpleToast.SHORT);
-            navigation.goBack();
-          }
-        });
-      }
-    });
+    if (type === 'EDIT') {
+      put(
+        `${Const.API.baseURL + Const.API.Useraddress}/${itemEdit.id}`,
+        params,
+      ).then(res => {
+        if (res.ok) {
+        }
+      });
+    } else {
+      post(Const.API.baseURL + Const.API.Useraddress, params).then(res => {
+        if (res.ok) {
+          get(Const.API.baseURL + Const.API.CheckAuth).then(res1 => {
+            if (res1.ok) {
+              dispatch(AuthenOverallRedux.Actions.loginSuccess(res1.data.data));
+              SimpleToast.show(
+                'thêm mới địa chỉ thành công',
+                SimpleToast.SHORT,
+              );
+              navigation.goBack();
+            }
+          });
+        }
+      });
+    }
   };
 
   return (
@@ -46,7 +85,12 @@ const AddNewAddress = ({navigation}) => {
             color="white"
             onPress={() => navigation.goBack()}
           />
-          <Appbar.Content color="white" title={trans('addNewAddress')} />
+          <Appbar.Content
+            color="white"
+            title={
+              type === 'EDIT' ? trans('editAddress') : trans('addNewAddress')
+            }
+          />
         </Appbar.Header>
 
         <TextInput

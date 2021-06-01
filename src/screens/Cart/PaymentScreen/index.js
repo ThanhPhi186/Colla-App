@@ -23,13 +23,11 @@ const PaymentScreen = ({navigation}) => {
 
   const userInfo = useSelector(state => state.AuthenOverallReducer.userAuthen);
 
-  const numberProductCart = useSelector(
-    state => state.CartReducer.numberProductCart,
-  );
+  console.log('userInfo', userInfo);
 
   const dataAddress = userInfo?.addresses?.filter(elm => elm.is_default)[0];
 
-  const totalPrice = sum(dataCart.map(elm => elm.price * elm.quantity));
+  const totalPrice = sum(dataCart.map(elm => elm.product.price * elm.amount));
 
   const dispatch = useDispatch();
 
@@ -37,24 +35,19 @@ const PaymentScreen = ({navigation}) => {
     if (!dataAddress) {
       return SimpleToast.show('Chưa có địa chỉ nhận hàng', SimpleToast.SHORT);
     }
-    const products = dataCart.map(elm => {
-      return {
-        product_id: elm.id,
-        amount: elm.quantity,
-      };
-    });
+    const carts = dataCart.map(elm => elm.id);
+    console.log('carts', carts);
     const params = {
       phone: dataAddress.phone,
       address_ship: dataAddress.address,
       fullname: dataAddress.fullname,
       payment_method: 'cod',
       ship_method: '',
-      products,
+      carts,
     };
     post(Const.API.baseURL + Const.API.Order, params).then(res => {
       if (res.ok) {
-        dispatch(CartRedux.Actions.setListProductCart([]));
-        dispatch(CartRedux.Actions.setNumberProductCart(-numberProductCart));
+        dispatch(CartRedux.Actions.getCart.request());
         SimpleToast.show('Đặt hàng thành công', SimpleToast.SHORT);
         navigation.popToTop();
       }

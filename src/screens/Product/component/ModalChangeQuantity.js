@@ -73,7 +73,7 @@ const ModalChangeQuantity = props => {
             </View>
 
             <AppText style={styles.textKho}>
-              {trans('quantityInStock')}: {detailProduct.quality || 10}
+              {trans('quantityInStock')}: {detailProduct.quantity}
             </AppText>
           </View>
         </View>
@@ -104,7 +104,7 @@ const styles = {
     borderBottomColor: '#EEEEEE',
     flexDirection: 'row',
     alignItems: 'center',
-    paddingBottom: 15,
+    paddingBottom: 16,
     paddingTop: 10,
   },
   images: {

@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import {View} from 'react-native';
+import {TextInput, View} from 'react-native';
 import {Appbar} from 'react-native-paper';
 import {images} from '../../assets';
 import {AppImage, AppLoading, AppText} from '../../components/atoms';
@@ -23,6 +23,8 @@ const LoginScreen = ({navigation}) => {
   const [confirm, setConfirm] = useState(null);
 
   const [code, setCode] = useState('');
+
+  const [password, setPassword] = useState('');
 
   const dispatch = useDispatch();
 
@@ -103,45 +105,70 @@ const LoginScreen = ({navigation}) => {
   //   }
   // };
 
-  const confirmOTP = async () => {
+  // const confirmOTP = async () => {
+  //   const params = {
+  //     phoneNumber: `+84${Number(phoneNumber)}`,
+  //     otp: code,
+  //   };
+  //   post(Const.API.baseURL + Const.API.SignInPhone, params).then(res => {
+  //     if (res.ok) {
+  //       setLoading(false);
+  //       // setToken(res.data.data.access_token);
+  //       dispatch(
+  //         AuthenOverallRedux.Actions.setToken(res.data.data.access_token),
+  //       );
+  //       dispatch(AuthenOverallRedux.Actions.loginSuccess(res.data.data));
+  //     } else {
+  //       setLoading(false);
+  //       SimpleToast.show(res.error, SimpleToast.SHORT);
+  //     }
+  //   });
+  // };
+
+  const handelCheckValue = () => {
+    const regex =
+      /^(0?)(3[2-9]|5[6|8|9]|7[0|6-9]|8[0-6|8|9]|9[0-4|6-9])[0-9]{7}$/;
+    if (!regex.test(phoneNumber)) {
+      SimpleToast.show('Số điện thoại không đúng định dạng', SimpleToast.LONG);
+      return true;
+    }
+    if (!password) {
+      SimpleToast.show('Mật khẩu không được để trống', SimpleToast.SHORT);
+      return true;
+    }
+    if (password.length < 6) {
+      SimpleToast.show(
+        'Mật khẩu không được nhỏ hơn 6 kí tự',
+        SimpleToast.SHORT,
+      );
+      return true;
+    }
+    return false;
+  };
+
+  const login = () => {
+    if (handelCheckValue()) {
+      return;
+    }
+    setLoading(true);
+
+    const convertPhone = `+84${Number(phoneNumber)}`;
     const params = {
-      phoneNumber: `+84${Number(phoneNumber)}`,
-      otp: code,
+      username: convertPhone,
+      password: password,
     };
-    post(Const.API.baseURL + Const.API.SignInPhone, params).then(res => {
+    post(Const.API.baseURL + Const.API.SignIn, params).then(res => {
       if (res.ok) {
-        setLoading(false);
-        // setToken(res.data.data.access_token);
         dispatch(
           AuthenOverallRedux.Actions.setToken(res.data.data.access_token),
         );
         dispatch(AuthenOverallRedux.Actions.loginSuccess(res.data.data));
+        setLoading(false);
       } else {
         setLoading(false);
-        SimpleToast.show(res.error, SimpleToast.SHORT);
-      }
-    });
-  };
-
-  const checkPhone = () => {
-    const regex =
-      /^(0?)(3[2-9]|5[6|8|9]|7[0|6-9]|8[0-6|8|9]|9[0-4|6-9])[0-9]{7}$/;
-    if (!regex.test(phoneNumber)) {
-      return SimpleToast.show(
-        'Số điện thoại không đúng định dạng',
-        SimpleToast.LONG,
-      );
-    }
-
-    const convertPhone = `+84${Number(phoneNumber)}`;
-    const params = {phoneNumber: convertPhone};
-    post(Const.API.baseURL + Const.API.CheckPhone, params).then(res => {
-      if (res.ok) {
-        setConfirm('123456');
-      } else {
-        SimpleToast.show(
-          'Tài khoản này không tồn tại, vui lòng đăng ký tài khoản',
-        );
+        setTimeout(() => {
+          SimpleToast.show(res.error, SimpleToast.SHORT);
+        }, 500);
       }
     });
   };
@@ -157,7 +184,30 @@ const LoginScreen = ({navigation}) => {
         <View style={styles.viewLogo}>
           <AppImage source={images.logoTransparent} imageStyle={styles.img} />
         </View>
-        {!confirm ? (
+        <View style={styles.viewText}>
+          <AppText title style={styles.textHello}>
+            Xin chào!
+          </AppText>
+          <AppText>Xin vui lòng đăng nhập bằng số điện thoại của bạn</AppText>
+        </View>
+        <View style={styles.viewInput}>
+          <View style={styles.viewPhone}>
+            <TextInput
+              value={phoneNumber}
+              onChangeText={setPhoneNumber}
+              placeholder="Số điện thoại của bạn"
+              keyboardType="numeric"
+            />
+          </View>
+          <View style={styles.viewPhone}>
+            <TextInput
+              value={password}
+              onChangeText={setPassword}
+              placeholder="Mật khẩu"
+            />
+          </View>
+        </View>
+        {/* {!confirm ? (
           <>
             <View style={styles.viewText}>
               <AppText title style={styles.textHello}>
@@ -195,12 +245,12 @@ const LoginScreen = ({navigation}) => {
               />
             </View>
           </>
-        )}
+        )} */}
       </View>
       <Button
         containerStyle={styles.btnContinue}
         title={trans('continue').toUpperCase()}
-        onPress={!confirm ? checkPhone : confirmOTP}
+        onPress={login}
       />
     </View>
   );

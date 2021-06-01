@@ -34,4 +34,9 @@ export default {
   edited: 'Chỉnh sửa',
   historyOrder: 'Lịch sử nhập hàng',
   listCustomer: 'Danh sách khách hàng',
+  copy: 'Sao chép',
+  contact: 'Liên hệ',
+  contactAkini: 'Liên hệ với Akini',
+  historyPoint: 'Lịch sử tích điểm',
+  editAddress: 'Chỉnh sửa địa chỉ',
 };

@@ -12,3 +12,4 @@ export const LIGHT_GREY = '#D3D3D3';
 export const PLACE_HOLDER = '#a1afc3';
 export const ORANGE = '#FF5C22';
 export const GREEN_1 = '#00A46C';
+export const GREEN_2 = '#CEDC8F';

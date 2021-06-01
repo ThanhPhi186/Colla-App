@@ -15,6 +15,7 @@ import ModalChangeQuantity from '../component/ModalChangeQuantity';
 import {useDispatch, useSelector} from 'react-redux';
 import {CartRedux} from '../../../redux';
 import IconCart from '../../../components/molecules/IconCart';
+import {post} from '../../../services/ServiceHandle';
 
 const DetailProduct = ({navigation, route}) => {
   const dispatch = useDispatch();
@@ -44,11 +45,13 @@ const DetailProduct = ({navigation, route}) => {
   };
 
   const addToCart = () => {
-    const dataProduct = {...item, ...{quantity: count}};
-    const convertData = [...dataCart];
-    convertData.push(dataProduct);
-    dispatch(CartRedux.Actions.setListProductCart(convertData));
-    dispatch(CartRedux.Actions.setNumberProductCart(1));
+    const dataProduct = {product_id: item.id, amount: count};
+    post(Const.API.baseURL + Const.API.Cart, dataProduct).then(res => {
+      if (res.ok) {
+        dispatch(CartRedux.Actions.getCart.request());
+      }
+    });
+
     setVisibleModal(false);
     if (type === 'buyNow') {
       navigation.navigate('CartScreen');
