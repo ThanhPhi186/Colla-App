@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import {
   View,
   Text,
@@ -18,11 +18,18 @@ import IconMaterialCommunityIcons from 'react-native-vector-icons/MaterialCommun
 import styles from './styles';
 import {Colors} from '../../styles';
 import FastImage from 'react-native-fast-image';
-import {useSelector} from 'react-redux';
+import {useDispatch, useSelector} from 'react-redux';
 import IconCart from '../../components/molecules/IconCart';
+import numeral from 'numeral';
+import {CartRedux} from '../../redux';
 
 const HomeScreen = ({navigation}) => {
   const userInfo = useSelector(state => state.AuthenOverallReducer.userAuthen);
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    dispatch(CartRedux.Actions.getCart.request());
+  }, [dispatch]);
 
   return (
     <View style={container}>
@@ -110,7 +117,7 @@ const HomeScreen = ({navigation}) => {
             />
             <View style={{flexDirection: 'row'}}>
               <AppText style={{color: Colors.ORANGE, fontWeight: 'bold'}}>
-                {userInfo.point}
+                {numeral(userInfo.point).format()}
               </AppText>
               <AppText style={{fontWeight: 'bold'}}> điểm</AppText>
             </View>

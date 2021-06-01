@@ -17,6 +17,7 @@ import {
   HistoryOrder,
   ListCustomer,
   HistoryPoint,
+  ReportScreen,
 } from '../screens';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import {CustomButtonTab} from '../components/molecules';
@@ -49,7 +50,8 @@ const BottomTabNavigator = () => {
     if (
       routeName === 'HistoryOrder' ||
       routeName === 'ListCustomer' ||
-      routeName === 'HistoryPoint'
+      routeName === 'HistoryPoint' ||
+      routeName === 'ReportScreen'
     ) {
       return false;
     }
@@ -93,6 +95,7 @@ const BottomTabNavigator = () => {
         <Stack.Screen name="HistoryOrder" component={HistoryOrder} />
         <Stack.Screen name="ListCustomer" component={ListCustomer} />
         <Stack.Screen name="HistoryPoint" component={HistoryPoint} />
+        <Stack.Screen name="ReportScreen" component={ReportScreen} />
       </Stack.Navigator>
     );
   };

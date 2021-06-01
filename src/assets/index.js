@@ -19,4 +19,5 @@ export const images = {
   gmail: require('./images/gmail.png'),
   message: require('./images/message.png'),
   zalo: require('./images/zalo.png'),
+  box: require('./images/box.png'),
 };

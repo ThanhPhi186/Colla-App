@@ -12,6 +12,7 @@
 		13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB51A68108700A75B9A /* Images.xcassets */; };
 		13B07FC11A68108700A75B9A /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB71A68108700A75B9A /* main.m */; };
 		185481F7265374A000C53E45 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 185481F6265374A000C53E45 /* GoogleService-Info.plist */; };
+		18D085BD266611BA00D110EB /* File.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18D085BC266611BA00D110EB /* File.swift */; };
 		1E70A5274A54AEE9601D03EC /* libPods-Colla-CollaTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 6D3AED9662322BC9B5EB9787 /* libPods-Colla-CollaTests.a */; };
 		81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */; };
 		A743EE07E9751FECF724F027 /* libPods-Colla.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 0822F5B3DECAF90A1A430B4B /* libPods-Colla.a */; };
@@ -40,6 +41,7 @@
 		13B07FB61A68108700A75B9A /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = Info.plist; path = Colla/Info.plist; sourceTree = "<group>"; };
 		13B07FB71A68108700A75B9A /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = main.m; path = Colla/main.m; sourceTree = "<group>"; };
 		185481F6265374A000C53E45 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = "GoogleService-Info.plist"; path = "Colla/GoogleService-Info.plist"; sourceTree = "<group>"; };
+		18D085BC266611BA00D110EB /* File.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = File.swift; sourceTree = "<group>"; };
 		18EDC50E264CC1E6008695F6 /* Ionicons.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = Ionicons.ttf; path = "../node_modules/react-native-vector-icons/Fonts/Ionicons.ttf"; sourceTree = "<group>"; };
 		18EDC50F264CC1E6008695F6 /* MaterialCommunityIcons.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = MaterialCommunityIcons.ttf; path = "../node_modules/react-native-vector-icons/Fonts/MaterialCommunityIcons.ttf"; sourceTree = "<group>"; };
 		18EDC510264CC1E6008695F6 /* FontAwesome5_Brands.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = FontAwesome5_Brands.ttf; path = "../node_modules/react-native-vector-icons/Fonts/FontAwesome5_Brands.ttf"; sourceTree = "<group>"; };
@@ -170,6 +172,7 @@
 		83CBB9F61A601CBA00E9B192 = {
 			isa = PBXGroup;
 			children = (
+				18D085BC266611BA00D110EB /* File.swift */,
 				13B07FAE1A68108700A75B9A /* Colla */,
 				832341AE1AAA6A7D00B99B32 /* Libraries */,
 				00E356EF1AD99517003FC87E /* CollaTests */,
@@ -251,7 +254,7 @@
 						TestTargetID = 13B07F861A680F5B00A75B9A;
 					};
 					13B07F861A680F5B00A75B9A = {
-						LastSwiftMigration = 1120;
+						LastSwiftMigration = 1200;
 					};
 				};
 			};
@@ -469,6 +472,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				13B07FBC1A68108700A75B9A /* AppDelegate.m in Sources */,
+				18D085BD266611BA00D110EB /* File.swift in Sources */,
 				13B07FC11A68108700A75B9A /* main.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -488,6 +492,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = F8C02549F4BF699346E6AEFA /* Pods-Colla-CollaTests.debug.xcconfig */;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"DEBUG=1",
@@ -515,6 +520,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 026FDA78BC116C308AAF4B5E /* Pods-Colla-CollaTests.release.xcconfig */;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				COPY_PHASE_STRIP = NO;
 				INFOPLIST_FILE = CollaTests/Info.plist;
@@ -556,6 +562,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.colla.app;
 				PRODUCT_NAME = Colla;
+				SWIFT_OBJC_BRIDGING_HEADER = "Colla-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
 				VERSIONING_SYSTEM = "apple-generic";
@@ -582,6 +589,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.colla.app;
 				PRODUCT_NAME = Colla;
+				SWIFT_OBJC_BRIDGING_HEADER = "Colla-Bridging-Header.h";
 				SWIFT_VERSION = 5.0;
 				VERSIONING_SYSTEM = "apple-generic";
 			};

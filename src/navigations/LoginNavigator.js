@@ -36,7 +36,7 @@ const LoginNavigator = () => {
         gestureEnabled: false,
         animationEnabled: true,
       }}>
-      <Stack.Screen name={'IntroScreen'} component={IntroScreen} />
+      {/* <Stack.Screen name={'IntroScreen'} component={IntroScreen} /> */}
       <Stack.Screen name={'StartLogin'} component={StartLogin} />
       <Stack.Screen name="LoginScreen" component={LoginScreen} />
       <Stack.Screen name={'RegisterStack'} component={RegisterStack} />

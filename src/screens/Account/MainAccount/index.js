@@ -60,7 +60,7 @@ const MainAccount = ({navigation}) => {
           <ItemAccount
             icon="hand-heart"
             title="Doanh số bán hàng"
-            onPress={() => {}}
+            onPress={() => navigation.navigate('ReportScreen')}
           />
           <View style={styles.smallIndicate} />
           <ItemAccount

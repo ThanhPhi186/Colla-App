@@ -22,15 +22,8 @@ const IntroductionCode = ({navigation, route}) => {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    const updateProfile = () => {
-      get(Const.API.baseURL + Const.API.CheckAuth).then(res => {
-        if (res.ok) {
-          dispatch(AuthenOverallRedux.Actions.loginSuccess(res.data.data));
-        }
-      });
-    };
-    updateProfile();
-  }, []);
+    dispatch(AuthenOverallRedux.Actions.getProfile.request());
+  }, [dispatch]);
 
   const sendPhoneNumber = () => {
     const regex =

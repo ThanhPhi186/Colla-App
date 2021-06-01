@@ -17,39 +17,13 @@ const initialState = {
 };
 
 const overallReducer = createReducer(initialState, {
-  //getDomain
-  [Actions.getDomain.request]: (state, action) => {
-    state.errorMessage = '';
-    state.type = action.type;
-  },
-  [Actions.getDomain.success]: (state, action) => {
-    state.domain = `https://${action.payload}/bod-apis/control`;
-    state.errorMessage = '';
-    state.type = action.type;
-  },
-  [Actions.getDomain.failed]: (state, action) => {
-    state.errorMessage = action.payload;
-    state.type = action.type;
-  },
-
-  //login
-  // [Actions.login.request]: (state, action) => {
-  //   state.loading = true;
-  //   state.errorMessage = '';
-  // },
-  // [Actions.login.success]: (state, action) => {
-  //   state.loading = false;
-  //   state.userAuthen = action.payload;
-  //   state.errorMessage = '';
-  // },
-  // [Actions.login.failed]: (state, action) => {
-  //   state.loading = false;
-  //   state.userAuthen = initialState;
-  //   state.errorMessage = action.payload;
-  // },
-
   [Actions.loginSuccess]: (state, action) => {
     state.loading = false;
+    state.userAuthen = action.payload;
+  },
+
+  [Actions.getProfile.success]: (state, action) => {
+    state.errorMessage = '';
     state.userAuthen = action.payload;
   },
 

@@ -62,16 +62,9 @@ const AddNewAddress = ({navigation, route}) => {
     } else {
       post(Const.API.baseURL + Const.API.Useraddress, params).then(res => {
         if (res.ok) {
-          get(Const.API.baseURL + Const.API.CheckAuth).then(res1 => {
-            if (res1.ok) {
-              dispatch(AuthenOverallRedux.Actions.loginSuccess(res1.data.data));
-              SimpleToast.show(
-                'thêm mới địa chỉ thành công',
-                SimpleToast.SHORT,
-              );
-              navigation.goBack();
-            }
-          });
+          dispatch(AuthenOverallRedux.Actions.getProfile.request());
+          SimpleToast.show('thêm mới địa chỉ thành công', SimpleToast.SHORT);
+          navigation.goBack();
         }
       });
     }

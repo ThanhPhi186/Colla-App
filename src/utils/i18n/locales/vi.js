@@ -39,4 +39,7 @@ export default {
   contactAkini: 'Liên hệ với Akini',
   historyPoint: 'Lịch sử tích điểm',
   editAddress: 'Chỉnh sửa địa chỉ',
+  report: 'Báo cáo',
+  inventory: 'Tồn kho',
+  revenue: 'Doanh thu',
 };

@@ -35,15 +35,8 @@ const DeliveryAddressScreen = ({navigation}) => {
     put(`${Const.API.baseURL + Const.API.Useraddress}/${item.id}`, params).then(
       res => {
         if (res.ok) {
-          get(Const.API.baseURL + Const.API.CheckAuth).then(res1 => {
-            if (res1.ok) {
-              dispatch(AuthenOverallRedux.Actions.loginSuccess(res1.data.data));
-              SimpleToast.show(
-                'Cập nhật địa chỉ thành công',
-                SimpleToast.SHORT,
-              );
-            }
-          });
+          dispatch(AuthenOverallRedux.Actions.getProfile.request());
+          SimpleToast.show('Cập nhật địa chỉ thành công', SimpleToast.SHORT);
         }
       },
     );
