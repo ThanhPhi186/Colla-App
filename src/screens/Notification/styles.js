@@ -1,20 +1,20 @@
+import {Colors, Mixin} from '../../styles';
 import {device_width} from '../../styles/Mixin';
+import {FONT_SIZE_14} from '../../styles/Typography';
 
 const styles = {
   container: {
     flex: 1,
     backgroundColor: '#fff',
   },
-  content_text: {
-    fontSize: 15,
-  },
+
   title_text: {
-    fontSize: 15,
+    fontSize: FONT_SIZE_14,
     fontWeight: 'bold',
   },
   time_text: {
-    fontSize: 14,
-    marginTop: 10,
+    marginTop: Mixin.moderateSize(8),
+    color: Colors.GRAY,
   },
   avatar: {
     width: 48,
@@ -22,17 +22,17 @@ const styles = {
     borderRadius: 48 / 2,
     borderWidth: 1,
     borderColor: 'gray',
-    marginLeft: 10,
+    marginLeft: Mixin.moderateSize(8),
   },
   item: {
     flexDirection: 'row',
     width: device_width,
     justifyContent: 'center',
-    paddingVertical: 10,
+    paddingVertical: Mixin.moderateSize(8),
   },
   box: {
     marginLeft: 6,
-    marginRight: 10,
+    marginRight: Mixin.moderateSize(8),
     flex: 5,
   },
 };

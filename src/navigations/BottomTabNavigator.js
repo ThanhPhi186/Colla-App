@@ -19,6 +19,7 @@ import {
   HistoryPoint,
   ReportScreen,
   NotificationScreen,
+  PromotionScreen,
 } from '../screens';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import {CustomButtonTab} from '../components/molecules';
@@ -53,7 +54,8 @@ const BottomTabNavigator = () => {
       routeName === 'HistoryOrder' ||
       routeName === 'ListCustomer' ||
       routeName === 'HistoryPoint' ||
-      routeName === 'ReportScreen'
+      routeName === 'ReportScreen' ||
+      routeName === 'PromotionScreen'
     ) {
       return false;
     }
@@ -68,7 +70,7 @@ const BottomTabNavigator = () => {
           gestureEnabled: false,
           animationEnabled: true,
         }}
-        initialRouteName="HomeScreen">
+        initialRouteName="NotificationScreen">
         <Stack.Screen name="HomeScreen" component={HomeScreen} />
         <Stack.Screen name="ListProduct" component={ListProduct} />
         <Stack.Screen name="DetailProduct" component={DetailProduct} />
@@ -95,18 +97,19 @@ const BottomTabNavigator = () => {
           gestureEnabled: false,
           animationEnabled: true,
         }}
-        initialRouteName="MainAccount">
+        initialRouteName="PromotionScreen">
         <Stack.Screen name="MainAccount" component={MainAccount} />
         <Stack.Screen name="HistoryOrder" component={HistoryOrder} />
         <Stack.Screen name="ListCustomer" component={ListCustomer} />
         <Stack.Screen name="HistoryPoint" component={HistoryPoint} />
         <Stack.Screen name="ReportScreen" component={ReportScreen} />
+        <Stack.Screen name="PromotionScreen" component={PromotionScreen} />
       </Stack.Navigator>
     );
   };
 
   return (
-    <Tab.Navigator initialRouteName={trans('home')}>
+    <Tab.Navigator initialRouteName={trans('personal')}>
       <Tab.Screen
         name={trans('home')}
         component={HomeStack}

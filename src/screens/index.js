@@ -10,6 +10,7 @@ import {
   ListCustomer,
   HistoryPoint,
   ReportScreen,
+  PromotionScreen,
 } from './Account';
 import IntroScreen from './IntroScreen';
 import {ListProduct, DetailProduct} from './Product';
@@ -45,4 +46,5 @@ export {
   HistoryPoint,
   ReportScreen,
   NotificationScreen,
+  PromotionScreen,
 };

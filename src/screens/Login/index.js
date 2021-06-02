@@ -168,7 +168,7 @@ const LoginScreen = ({navigation}) => {
         setLoading(false);
         setTimeout(() => {
           SimpleToast.show(res.error, SimpleToast.SHORT);
-        }, 500);
+        }, 700);
       }
     });
   };

@@ -20,4 +20,5 @@ export const images = {
   message: require('./images/message.png'),
   zalo: require('./images/zalo.png'),
   box: require('./images/box.png'),
+  noti: require('./images/noti.png'),
 };

@@ -43,4 +43,5 @@ export default {
   inventory: 'Tồn kho',
   revenue: 'Doanh thu',
   notification: 'Thông báo',
+  myOffer: 'Ưu đãi của tôi',
 };

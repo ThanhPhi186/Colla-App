@@ -72,7 +72,7 @@ const MainAccount = ({navigation}) => {
           <ItemAccount
             icon="gift-outline"
             title="Ưu đãi của tôi"
-            onPress={() => {}}
+            onPress={() => navigation.navigate('PromotionScreen')}
           />
           <View style={styles.smallIndicate} />
           <ItemAccount
