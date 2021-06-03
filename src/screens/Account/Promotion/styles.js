@@ -3,9 +3,16 @@ import {FONT_SIZE_14} from '../../../styles/Typography';
 
 const styles = {
   containerItem: {
-    paddingVertical: 10,
+    padding: 12,
     flexDirection: 'row',
-    paddingHorizontal: 10,
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 3,
+    },
+    shadowOpacity: 0.27,
+    shadowRadius: 4.65,
+    elevation: 6,
   },
   icon: {width: 64, height: 64},
   boxIcon: {
@@ -23,7 +30,10 @@ const styles = {
     lineHeight: 20,
     fontWeight: 'bold',
   },
-  textPrice: {color: 'gray', fontSize: 13, fontWeight: 'normal'},
+  textPrice: {
+    color: 'gray',
+    marginTop: 8,
+  },
   textQuatity: {
     color: '#555555',
     fontSize: 14,
@@ -42,12 +52,13 @@ const styles = {
   },
   textAgent: {fontSize: 10, color: Colors.WHITE},
   left: {
-    flex: 3,
+    flex: 5,
+    flexDirection: 'row',
+    alignItems: 'center',
     backgroundColor: Colors.WHITE,
-    padding: Mixin.moderateSize(16),
-    paddingVertical: 10,
     borderBottomRightRadius: Mixin.moderateSize(8),
     borderTopRightRadius: Mixin.moderateSize(8),
+    paddingHorizontal: 12,
   },
   right: {
     flex: 1,

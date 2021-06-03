@@ -70,7 +70,7 @@ const BottomTabNavigator = () => {
           gestureEnabled: false,
           animationEnabled: true,
         }}
-        initialRouteName="NotificationScreen">
+        initialRouteName="HomeScreen">
         <Stack.Screen name="HomeScreen" component={HomeScreen} />
         <Stack.Screen name="ListProduct" component={ListProduct} />
         <Stack.Screen name="DetailProduct" component={DetailProduct} />
@@ -97,7 +97,7 @@ const BottomTabNavigator = () => {
           gestureEnabled: false,
           animationEnabled: true,
         }}
-        initialRouteName="PromotionScreen">
+        initialRouteName="MainAccount">
         <Stack.Screen name="MainAccount" component={MainAccount} />
         <Stack.Screen name="HistoryOrder" component={HistoryOrder} />
         <Stack.Screen name="ListCustomer" component={ListCustomer} />
@@ -109,7 +109,7 @@ const BottomTabNavigator = () => {
   };
 
   return (
-    <Tab.Navigator initialRouteName={trans('personal')}>
+    <Tab.Navigator initialRouteName={trans('home')}>
       <Tab.Screen
         name={trans('home')}
         component={HomeStack}

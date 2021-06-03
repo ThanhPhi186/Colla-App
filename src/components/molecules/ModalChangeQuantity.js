@@ -1,31 +1,45 @@
-import React, {useState} from 'react';
+import React, {forwardRef, useEffect, useState} from 'react';
 import {TextInput, TouchableOpacity, View} from 'react-native';
-import {AppText} from '../../../components/atoms';
+import {AppText} from '../atoms';
 import Modal from 'react-native-modal';
 import FastImage from 'react-native-fast-image';
-import {Const, trans} from '../../../utils';
-import {Colors} from '../../../styles';
+import {Const, trans} from '../../utils';
+import {Colors} from '../../styles';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
-import {device_width} from '../../../styles/Mixin';
-import {Button} from '../../../components/molecules';
-import {useDispatch} from 'react-redux';
+import {device_width} from '../../styles/Mixin';
+import {Button} from '.';
 
-const ModalChangeQuantity = props => {
-  const {
-    closePress,
-    detailProduct,
-    addToCart,
-    addQuantity,
-    onChangeQuantity,
-    count,
-    lessQuantity,
-  } = props;
+const ModalChangeQuantity = forwardRef((props, ref) => {
+  const {detailProduct, addToCart} = props;
+
+  const [count, setCount] = useState(detailProduct.amount || 1);
+
+  console.log('detailProduct', detailProduct.amount);
+
+  useEffect(() => {
+    ref.current = count;
+  }, [count, ref]);
+
+  const addQuantity = () => {
+    if (count < 10) {
+      setCount(count + 1);
+    }
+  };
+
+  const lessQuantity = () => {
+    if (count > 1) {
+      setCount(count - 1);
+    }
+  };
+
+  const onChangeQuantity = txt => {
+    setCount(Number(txt));
+  };
 
   const viewChangeQuantity = () => {
     return (
       <View style={styles.container}>
         <AppText style={styles.textTitle}>{trans('quantity')} :</AppText>
-
         <View
           style={{
             flexDirection: 'row',
@@ -55,25 +69,30 @@ const ModalChangeQuantity = props => {
     <Modal
       style={{margin: 0, justifyContent: 'flex-end'}}
       avoidKeyboard
-      onBackdropPress={closePress}
-      onBackButtonPress={closePress}
       {...props}>
       <View style={styles.content}>
         <View style={styles.avatar}>
           <FastImage
-            source={{uri: Const.API.baseURL + detailProduct.photo}}
+            source={{
+              uri:
+                Const.API.baseURL +
+                (detailProduct.photo || detailProduct.product.photo),
+            }}
             style={styles.images}
           />
           <View style={{flex: 1, paddingLeft: 10}}>
             <AppText style={styles.textName} numberOfLines={2}>
-              {detailProduct.name}
+              {detailProduct.name || detailProduct.product.name}
             </AppText>
             <View style={{}}>
-              <AppText style={styles.price}>{detailProduct.price}đ</AppText>
+              <AppText style={styles.price}>
+                {detailProduct.price || detailProduct.product.price}đ
+              </AppText>
             </View>
 
             <AppText style={styles.textKho}>
-              {trans('quantityInStock')}: {detailProduct.quantity}
+              {trans('quantityInStock')}:{' '}
+              {detailProduct.quantity || detailProduct.product.quantity}
             </AppText>
           </View>
         </View>
@@ -87,7 +106,7 @@ const ModalChangeQuantity = props => {
       </View>
     </Modal>
   );
-};
+});
 
 const styles = {
   content: {

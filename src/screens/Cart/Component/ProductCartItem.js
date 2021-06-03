@@ -8,7 +8,7 @@ import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import numeral from 'numeral';
 
 const ProductCartItem = props => {
-  const {item, removeCartItem, edit} = props;
+  const {item, removeCartItem, editCartItem} = props;
   return (
     <View style={styles.containerItem}>
       <View style={styles.left}>
@@ -25,8 +25,8 @@ const ProductCartItem = props => {
         </AppText>
 
         <View style={styles.soluong}>
-          <TouchableOpacity onPress={edit}>
-            {/* <Icon name="square-edit-outline" size={24} color={Colors.GRAY} /> */}
+          <TouchableOpacity onPress={editCartItem}>
+            <Icon name="square-edit-outline" size={24} color={Colors.GRAY} />
           </TouchableOpacity>
 
           <AppText style={{paddingRight: 8}}>

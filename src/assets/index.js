@@ -21,4 +21,5 @@ export const images = {
   zalo: require('./images/zalo.png'),
   box: require('./images/box.png'),
   noti: require('./images/noti.png'),
+  discount: require('./images/discount.png'),
 };

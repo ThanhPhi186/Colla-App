@@ -10,42 +10,24 @@ import {Const, trans} from '../../../utils';
 import styles from './styles';
 import numeral from 'numeral';
 import ButtonBottom from '../component/ButtonBottom';
-import ModalChangeQuantity from '../component/ModalChangeQuantity';
 
 import {useDispatch, useSelector} from 'react-redux';
 import {CartRedux} from '../../../redux';
 import IconCart from '../../../components/molecules/IconCart';
 import {post} from '../../../services/ServiceHandle';
+import ModalChangeQuantity from '../../../components/molecules/ModalChangeQuantity';
 
 const DetailProduct = ({navigation, route}) => {
   const dispatch = useDispatch();
   const {item} = route.params;
-  const dataCart = useSelector(state => state.CartReducer.listProductCart);
 
   const [visibleModal, setVisibleModal] = useState(false);
 
-  const [count, setCount] = useState(1);
-
   const [type, setType] = useState('');
-
-  const addQuantity = () => {
-    if (count < 10) {
-      setCount(count + 1);
-    }
-  };
-
-  const lessQuantity = () => {
-    if (count > 1) {
-      setCount(count - 1);
-    }
-  };
-
-  const onChangeQuantity = txt => {
-    setCount(Number(txt));
-  };
+  const refModal = useRef();
 
   const addToCart = () => {
-    const dataProduct = {product_id: item.id, amount: count};
+    const dataProduct = {product_id: item.id, amount: refModal.current};
     post(Const.API.baseURL + Const.API.Cart, dataProduct).then(res => {
       if (res.ok) {
         dispatch(CartRedux.Actions.getCart.request());
@@ -101,12 +83,7 @@ const DetailProduct = ({navigation, route}) => {
         }}
       />
       <ModalChangeQuantity
-        //ref
-        count={count}
-        onChangeQuantity={onChangeQuantity}
-        lessQuantity={lessQuantity}
-        addQuantity={addQuantity}
-        //end ref
+        ref={refModal}
         addToCart={addToCart}
         detailProduct={item}
         isVisible={visibleModal}
