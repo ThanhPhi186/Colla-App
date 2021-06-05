@@ -67,7 +67,7 @@ const PromotionScreen = ({navigation}) => {
     );
   };
   return (
-    <View style={{flex: 1, backgroundColor: Colors.WHITE}}>
+    <View style={{flex: 1, backgroundColor: Colors.LIGHT_GREY}}>
       <Appbar.Header>
         <Appbar.BackAction color="white" onPress={() => navigation.goBack()} />
         <Appbar.Content color="white" title={trans('myOffer')} />

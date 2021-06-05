@@ -20,6 +20,7 @@ import {
   ReportScreen,
   NotificationScreen,
   PromotionScreen,
+  TopSales,
 } from '../screens';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import {CustomButtonTab} from '../components/molecules';
@@ -40,7 +41,9 @@ const BottomTabNavigator = () => {
       routeName === 'PaymentScreen' ||
       routeName === 'DeliveryAddressScreen' ||
       routeName === 'AddNewAddress' ||
-      routeName === 'NotificationScreen'
+      routeName === 'NotificationScreen' ||
+      routeName === 'TopSales' ||
+      routeName === 'PromotionScreen'
     ) {
       return false;
     }
@@ -85,6 +88,8 @@ const BottomTabNavigator = () => {
           name="NotificationScreen"
           component={NotificationScreen}
         />
+        <Stack.Screen name="TopSales" component={TopSales} />
+        <Stack.Screen name="PromotionScreen" component={PromotionScreen} />
       </Stack.Navigator>
     );
   };

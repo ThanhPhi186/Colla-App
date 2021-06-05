@@ -22,6 +22,7 @@ import {
 } from './Cart';
 import RootView from './RootView';
 import NotificationScreen from './Notification';
+import TopSales from './TopSales';
 
 export {
   LoginScreen,
@@ -47,4 +48,5 @@ export {
   ReportScreen,
   NotificationScreen,
   PromotionScreen,
+  TopSales,
 };

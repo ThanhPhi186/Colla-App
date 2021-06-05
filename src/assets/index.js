@@ -22,4 +22,5 @@ export const images = {
   box: require('./images/box.png'),
   noti: require('./images/noti.png'),
   discount: require('./images/discount.png'),
+  TopSaleT7: require('./images/TopSaleT7.png'),
 };

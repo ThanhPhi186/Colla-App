@@ -14,8 +14,6 @@ const ModalChangeQuantity = forwardRef((props, ref) => {
 
   const [count, setCount] = useState(detailProduct.amount || 1);
 
-  console.log('detailProduct', detailProduct.amount);
-
   useEffect(() => {
     ref.current = count;
   }, [count, ref]);
@@ -49,7 +47,6 @@ const ModalChangeQuantity = forwardRef((props, ref) => {
           <TouchableOpacity onPress={addQuantity}>
             <Icon name="menu-up" size={40} color={Colors.PRIMARY} />
           </TouchableOpacity>
-
           <TextInput
             onChangeText={onChangeQuantity}
             style={styles.textInput}

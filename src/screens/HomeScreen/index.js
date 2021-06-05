@@ -129,13 +129,15 @@ const HomeScreen = ({navigation}) => {
               marginVertical: 12,
             }}>
             <View>
-              <View style={styles.viewProduct}>
+              <TouchableOpacity
+                onPress={() => navigation.navigate('TopSales')}
+                style={styles.viewProduct}>
                 <IconMaterialCommunityIcons
                   name="badge-account-horizontal-outline"
                   size={40}
                   color={Colors.PRIMARY}
                 />
-              </View>
+              </TouchableOpacity>
               <AppText style={styles.txtProduct}>Top Saler</AppText>
             </View>
             <TouchableOpacity
@@ -149,7 +151,8 @@ const HomeScreen = ({navigation}) => {
               </View>
               <AppText style={styles.txtProduct}>Sản Phẩm</AppText>
             </TouchableOpacity>
-            <View>
+            <TouchableOpacity
+              onPress={() => navigation.navigate('PromotionScreen')}>
               <View style={styles.viewProduct}>
                 <IconMaterialCommunityIcons
                   name="gift-outline"
@@ -158,7 +161,7 @@ const HomeScreen = ({navigation}) => {
                 />
               </View>
               <AppText style={styles.txtProduct}>Ưu Đãi</AppText>
-            </View>
+            </TouchableOpacity>
           </View>
         </View>
       </View>
