@@ -21,6 +21,7 @@ import {
   NotificationScreen,
   PromotionScreen,
   TopSales,
+  Policy,
 } from '../screens';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import {CustomButtonTab} from '../components/molecules';
@@ -58,7 +59,8 @@ const BottomTabNavigator = () => {
       routeName === 'ListCustomer' ||
       routeName === 'HistoryPoint' ||
       routeName === 'ReportScreen' ||
-      routeName === 'PromotionScreen'
+      routeName === 'PromotionScreen' ||
+      routeName === 'Policy'
     ) {
       return false;
     }
@@ -109,6 +111,7 @@ const BottomTabNavigator = () => {
         <Stack.Screen name="HistoryPoint" component={HistoryPoint} />
         <Stack.Screen name="ReportScreen" component={ReportScreen} />
         <Stack.Screen name="PromotionScreen" component={PromotionScreen} />
+        <Stack.Screen name="Policy" component={Policy} />
       </Stack.Navigator>
     );
   };

@@ -1,8 +1,9 @@
 import React from 'react';
-import {FlatList, Text, View} from 'react-native';
+import {FlatList, Text, TouchableOpacity, View} from 'react-native';
 import FastImage from 'react-native-fast-image';
 import {Appbar} from 'react-native-paper';
 import {images} from '../../assets';
+import {AppText} from '../../components/atoms';
 import {container} from '../../styles/GlobalStyles';
 import {trans} from '../../utils';
 
@@ -27,6 +28,7 @@ const TopSales = ({navigation}) => {
         style={{width: '100%', height: 200}}
         resizeMode="stretch"
       />
+
       <FlatList
         data={dataSales}
         renderItem={renderItem}

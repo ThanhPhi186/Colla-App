@@ -44,4 +44,7 @@ export default {
   revenue: 'Doanh thu',
   notification: 'Thông báo',
   myOffer: 'Ưu đãi của tôi',
+  policy: 'Chính sách',
+  forgotPassword: 'Quên mật khẩu',
+  confirmPassword: 'Xác nhận mật khẩu',
 };

@@ -6,7 +6,7 @@ const styles = {
     paddingHorizontal: Mixin.moderateSize(32),
   },
   viewLogo: {
-    flex: 3,
+    flex: 2,
     justifyContent: 'center',
   },
   img: {
@@ -39,6 +39,13 @@ const styles = {
     paddingHorizontal: 8,
     borderRadius: 8,
     justifyContent: 'center',
+  },
+  viewForgotPass: {
+    alignItems: 'center',
+    marginTop: 12,
+  },
+  txtForgot: {
+    fontStyle: 'italic',
   },
 };
 

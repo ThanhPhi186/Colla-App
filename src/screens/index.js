@@ -11,6 +11,7 @@ import {
   HistoryPoint,
   ReportScreen,
   PromotionScreen,
+  Policy,
 } from './Account';
 import IntroScreen from './IntroScreen';
 import {ListProduct, DetailProduct} from './Product';
@@ -23,6 +24,7 @@ import {
 import RootView from './RootView';
 import NotificationScreen from './Notification';
 import TopSales from './TopSales';
+import {CheckPhone, NewPassword} from './ForgotPassword';
 
 export {
   LoginScreen,
@@ -49,4 +51,7 @@ export {
   NotificationScreen,
   PromotionScreen,
   TopSales,
+  Policy,
+  CheckPhone,
+  NewPassword,
 };

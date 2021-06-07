@@ -15,7 +15,6 @@ import FastImage from 'react-native-fast-image';
 import ItemAccount from '../component/ItemAccount';
 import BannerBehind from '../component/BannerBehind';
 import {images} from '../../../assets';
-import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 
 const MainAccount = ({navigation}) => {
   const dispatch = useDispatch();
@@ -84,7 +83,7 @@ const MainAccount = ({navigation}) => {
           <ItemAccount
             icon="message-reply-text"
             title="Chính sách Đại Lý"
-            onPress={() => {}}
+            onPress={() => navigation.navigate('Policy')}
           />
           <View style={styles.smallIndicate} />
           <ItemAccount icon="logout" title="Đăng xuất" onPress={logout} />

@@ -3,8 +3,9 @@ import {FONT_SIZE_14} from '../../../styles/Typography';
 
 const styles = {
   containerItem: {
-    padding: 12,
     flexDirection: 'row',
+    marginTop: 12,
+    // backgroundColor: 'white',
     // shadowColor: '#000',
     // shadowOffset: {
     //   width: 0,

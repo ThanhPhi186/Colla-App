@@ -7,13 +7,13 @@ import {
   View,
 } from 'react-native';
 import FastImage from 'react-native-fast-image';
-import {Appbar, Switch, TextInput} from 'react-native-paper';
+import {Appbar} from 'react-native-paper';
 import SimpleToast from 'react-native-simple-toast';
 import {useDispatch, useSelector} from 'react-redux';
 import {images} from '../../../assets';
 import {AppText} from '../../../components/atoms';
 import {AuthenOverallRedux} from '../../../redux';
-import {get, put} from '../../../services/ServiceHandle';
+import {put} from '../../../services/ServiceHandle';
 import {Colors} from '../../../styles';
 import {container} from '../../../styles/GlobalStyles';
 import {device_width} from '../../../styles/Mixin';
@@ -77,7 +77,6 @@ const DeliveryAddressScreen = ({navigation}) => {
               {trans('setDefault')}
             </AppText>
           </TouchableOpacity>
-
           <TouchableOpacity
             style={styles.buttonEdit}
             onPress={() =>

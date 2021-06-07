@@ -47,17 +47,48 @@ const PromotionScreen = ({navigation}) => {
             </Text>
           </View>
         </View>
+
         <View>
           <View style={{flex: 1}} />
-          <View style={{borderWidth: 0.5, borderColor: '#f5f5f5', flex: 1}} />
+          <View
+            style={{
+              borderWidth: 0.5,
+              borderColor: Colors.LIGHT_GREY,
+              flex: 1,
+            }}
+          />
           <View style={{flex: 1}} />
-          <View style={{borderWidth: 0.5, borderColor: '#f5f5f5', flex: 1}} />
+          <View
+            style={{
+              borderWidth: 0.5,
+              borderColor: Colors.LIGHT_GREY,
+              flex: 1,
+            }}
+          />
           <View style={{flex: 1}} />
-          <View style={{borderWidth: 0.5, borderColor: '#f5f5f5', flex: 1}} />
+          <View
+            style={{
+              borderWidth: 0.5,
+              borderColor: Colors.LIGHT_GREY,
+              flex: 1,
+            }}
+          />
           <View style={{flex: 1}} />
-          <View style={{borderWidth: 0.5, borderColor: '#f5f5f5', flex: 1}} />
+          <View
+            style={{
+              borderWidth: 0.5,
+              borderColor: Colors.LIGHT_GREY,
+              flex: 1,
+            }}
+          />
           <View style={{flex: 1}} />
-          <View style={{borderWidth: 0.5, borderColor: '#f5f5f5', flex: 1}} />
+          <View
+            style={{
+              borderWidth: 0.5,
+              borderColor: Colors.LIGHT_GREY,
+              flex: 1,
+            }}
+          />
           <View style={{flex: 1}} />
         </View>
         <View style={styles.right}>
@@ -66,8 +97,9 @@ const PromotionScreen = ({navigation}) => {
       </TouchableOpacity>
     );
   };
+
   return (
-    <View style={{flex: 1, backgroundColor: Colors.LIGHT_GREY}}>
+    <View style={{flex: 1, backgroundColor: Colors.BACKGROUND_COLOR}}>
       <Appbar.Header>
         <Appbar.BackAction color="white" onPress={() => navigation.goBack()} />
         <Appbar.Content color="white" title={trans('myOffer')} />
@@ -76,6 +108,7 @@ const PromotionScreen = ({navigation}) => {
         data={data}
         keyExtractor={(item, index) => index.toString()}
         renderItem={renderItem}
+        contentContainerStyle={{padding: 12}}
       />
     </View>
   );
