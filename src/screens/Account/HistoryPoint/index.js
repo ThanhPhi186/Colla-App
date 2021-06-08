@@ -1,36 +1,26 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import {FlatList, View} from 'react-native';
 import {Appbar} from 'react-native-paper';
 import {AppText} from '../../../components/atoms';
 import {Colors} from '../../../styles';
 import {container} from '../../../styles/GlobalStyles';
-import {trans} from '../../../utils';
+import {Const, trans} from '../../../utils';
 import numeral from 'numeral';
 import {FONT_SIZE_14} from '../../../styles/Typography';
+import {get} from '../../../services/ServiceHandle';
+import moment from 'moment';
+import styles from './styles';
 
 const HistoryPoint = ({navigation}) => {
-  const dataPoint = [
-    {
-      name: 'Bán hàng đơn DH0001',
-      point: 5000,
-      date: '30/05/2021',
-    },
-    {
-      name: 'Bán hàng đơn DH0002',
-      point: 7000,
-      date: '29/05/2021',
-    },
-    {
-      name: 'Bán hàng đơn DH0003',
-      point: 9000,
-      date: '28/05/2021',
-    },
-    {
-      name: 'Bán hàng đơn DH0004',
-      point: 10000,
-      date: '27/05/2021',
-    },
-  ];
+  const [dataPoint, setDataPoint] = useState([]);
+
+  useEffect(() => {
+    get(Const.API.baseURL + Const.API.Point).then(res => {
+      if (res.ok) {
+        setDataPoint(res.data.data);
+      }
+    });
+  }, []);
 
   const renderItem = ({item}) => {
     return (
@@ -50,9 +40,9 @@ const HistoryPoint = ({navigation}) => {
               marginBottom: 8,
               fontSize: FONT_SIZE_14,
             }}>
-            {item.name}
+            {item.reason}
           </AppText>
-          <AppText>{item.date}</AppText>
+          <AppText>{moment(item.createdAt).format('DD.MM.YYYY')}</AppText>
         </View>
         <AppText
           style={{
@@ -60,9 +50,15 @@ const HistoryPoint = ({navigation}) => {
             fontWeight: '600',
             fontSize: FONT_SIZE_14,
           }}>
-          + {numeral(item.point).format()}
+          + {numeral(item.amount).format()}
         </AppText>
       </View>
+    );
+  };
+
+  const renderEmptyComponent = () => {
+    return (
+      <AppText style={styles.txtEmpty}>{trans('emptyHistoryPoint')}</AppText>
     );
   };
 
@@ -75,6 +71,7 @@ const HistoryPoint = ({navigation}) => {
       <FlatList
         data={dataPoint}
         renderItem={renderItem}
+        ListEmptyComponent={renderEmptyComponent}
         keyExtractor={(item, index) => index.toString()}
         style={{padding: 16}}
       />

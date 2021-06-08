@@ -15,6 +15,9 @@ export default {
     SendOtp: 'api/auth/send-otp',
     VerifyOtp: 'api/auth/verify-otp',
     Cart: 'api/cart',
+    ForgotPassword: 'api/auth/forgot-password',
+    ResetPassword: 'api/auth/reset-password',
+    Point: 'api/point',
   },
   RESPONSE_CODES: {
     SUCCESS: {

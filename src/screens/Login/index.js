@@ -9,9 +9,7 @@ import {container} from '../../styles/GlobalStyles';
 import {Const, trans} from '../../utils';
 import styles from './styles';
 import SimpleToast from 'react-native-simple-toast';
-import {statusBar} from '../../styles/Mixin';
-import auth from '@react-native-firebase/auth';
-import {get, post} from '../../services/ServiceHandle';
+import {post} from '../../services/ServiceHandle';
 import {useDispatch} from 'react-redux';
 import {AuthenOverallRedux} from '../../redux';
 
@@ -98,15 +96,14 @@ const LoginScreen = ({navigation}) => {
               keyboardType="numeric"
             />
           </View>
-          <View style={styles.viewPhone}>
-            <TextInput
-              value={password}
-              onChangeText={setPassword}
-              placeholder="Mật khẩu"
-            />
-          </View>
+          <AppInput
+            type="password"
+            value={password}
+            onChangeText={setPassword}
+            placeholder="Mật khẩu"
+          />
           <TouchableOpacity
-            onPress={() => navigation.navigate('ForgotPassStack')}>
+            onPress={() => navigation.navigate('ForgotPassword')}>
             <AppText
               containerStyle={styles.viewForgotPass}
               style={styles.txtForgot}>

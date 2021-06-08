@@ -24,7 +24,7 @@ import {
 import RootView from './RootView';
 import NotificationScreen from './Notification';
 import TopSales from './TopSales';
-import {CheckPhone, NewPassword} from './ForgotPassword';
+import ForgotPassword from './ForgotPassword';
 
 export {
   LoginScreen,
@@ -52,6 +52,5 @@ export {
   PromotionScreen,
   TopSales,
   Policy,
-  CheckPhone,
-  NewPassword,
+  ForgotPassword,
 };

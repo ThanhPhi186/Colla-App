@@ -126,13 +126,12 @@ const RegisterScreen = ({navigation}) => {
                   keyboardType="numeric"
                 />
               </View>
-              <View style={styles.viewPhone}>
-                <TextInput
-                  value={password}
-                  onChangeText={setPassword}
-                  placeholder="Mật khẩu"
-                />
-              </View>
+              <AppInput
+                type="password"
+                value={password}
+                onChangeText={setPassword}
+                placeholder="Mật khẩu"
+              />
             </View>
           </>
         ) : (
