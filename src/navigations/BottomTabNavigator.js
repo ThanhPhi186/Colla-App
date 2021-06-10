@@ -75,7 +75,7 @@ const BottomTabNavigator = () => {
           gestureEnabled: false,
           animationEnabled: true,
         }}
-        initialRouteName="HomeScreen">
+        initialRouteName="AddNewAddress">
         <Stack.Screen name="HomeScreen" component={HomeScreen} />
         <Stack.Screen name="ListProduct" component={ListProduct} />
         <Stack.Screen name="DetailProduct" component={DetailProduct} />

@@ -9,14 +9,15 @@ import {AuthenOverallRedux} from '../../../redux';
 import {get, post, put} from '../../../services/ServiceHandle';
 import {Colors} from '../../../styles';
 import {container} from '../../../styles/GlobalStyles';
-import {Const, trans} from '../../../utils';
+import {AddressVN, Const, trans} from '../../../utils';
 
 const AddNewAddress = ({navigation, route}) => {
   const dispatch = useDispatch();
 
-  const {type} = route.params;
-
-  const {itemEdit} = route.params;
+  // const {type} = route.params;
+  // const {itemEdit} = route.params;
+  const type = 'ADD';
+  const itemEdit = null;
 
   const [fullname, setFullName] = useState(itemEdit?.fullname);
   const [phone, setPhone] = useState(itemEdit?.phone);
