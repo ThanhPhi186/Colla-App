@@ -1,5 +1,11 @@
-import React, {useState} from 'react';
-import {Keyboard, TouchableWithoutFeedback, View} from 'react-native';
+import React, {useRef, useState} from 'react';
+import {
+  Keyboard,
+  ScrollView,
+  TouchableOpacity,
+  TouchableWithoutFeedback,
+  View,
+} from 'react-native';
 import {Appbar, Switch, TextInput} from 'react-native-paper';
 import SimpleToast from 'react-native-simple-toast';
 import {useDispatch} from 'react-redux';
@@ -10,32 +16,48 @@ import {get, post, put} from '../../../services/ServiceHandle';
 import {Colors} from '../../../styles';
 import {container} from '../../../styles/GlobalStyles';
 import {AddressVN, Const, trans} from '../../../utils';
+import ChooseAddress from '../Component/ChooseAddress';
 
 const AddNewAddress = ({navigation, route}) => {
   const dispatch = useDispatch();
 
-  // const {type} = route.params;
-  // const {itemEdit} = route.params;
-  const type = 'ADD';
-  const itemEdit = null;
+  const {type} = route.params;
+  const {itemEdit} = route.params;
+
+  const refAddress = useRef();
 
   const [fullname, setFullName] = useState(itemEdit?.fullname);
   const [phone, setPhone] = useState(itemEdit?.phone);
   const [address, setAddress] = useState(itemEdit?.address);
   const [valueSwitch, setValueSwitch] = useState(false);
-  console.log('fullname', fullname);
+
+  console.log('refAddress.current', refAddress.current);
 
   const handelCheckValue = () => {
+    const regex =
+      /^(0?)(3[2-9]|5[6|8|9]|7[0|6-9]|8[0-6|8|9]|9[0-4|6-9])[0-9]{7}$/;
     if (!fullname) {
       SimpleToast.show('Tên người nhận không được để trống', SimpleToast.SHORT);
       return true;
     }
-    if (!phone) {
-      SimpleToast.show('Số điện thoại không được để trống', SimpleToast.SHORT);
+    if (!regex.test(phone)) {
+      SimpleToast.show('Số điện thoại không đúng định dạng', SimpleToast.SHORT);
       return true;
     }
     if (!address) {
       SimpleToast.show('Địa chỉ không được để trống', SimpleToast.SHORT);
+      return true;
+    }
+    if (!refAddress.current.province) {
+      SimpleToast.show('Vui lòng chọn Tỉnh / Thành Phố', SimpleToast.SHORT);
+      return true;
+    }
+    if (!refAddress.current.districts) {
+      SimpleToast.show('Vui lòng chọn Quận / Huyện', SimpleToast.SHORT);
+      return true;
+    }
+    if (!refAddress.current.wards) {
+      SimpleToast.show('Vui lòng chọn Xã / Phường', SimpleToast.SHORT);
       return true;
     }
 
@@ -46,10 +68,19 @@ const AddNewAddress = ({navigation, route}) => {
     if (handelCheckValue()) {
       return;
     }
+    const addressConvert =
+      address +
+      ', ' +
+      refAddress.current.wards.name +
+      ', ' +
+      refAddress.current.districts.name +
+      ', ' +
+      refAddress.current.province.name;
+
     const params = {
       phone,
       fullname,
-      address,
+      address: addressConvert,
       is_default: valueSwitch,
     };
     if (type === 'EDIT') {
@@ -86,50 +117,58 @@ const AddNewAddress = ({navigation, route}) => {
             }
           />
         </Appbar.Header>
-
-        <TextInput
-          style={{
-            backgroundColor: Colors.WHITE,
-            marginVertical: 16,
-          }}
-          label={trans('recipientName')}
-          value={fullname}
-          onChangeText={setFullName}
-        />
-        <TextInput
-          style={{backgroundColor: Colors.WHITE, marginVertical: 16}}
-          label={trans('phoneNumber')}
-          value={phone}
-          onChangeText={setPhone}
-        />
-        <TextInput
-          style={{backgroundColor: Colors.WHITE, marginVertical: 16}}
-          label={trans('deliveryAddress')}
-          value={address}
-          onChangeText={setAddress}
-        />
-
-        <View style={{flex: 1, alignItems: 'center', marginTop: 16}}>
-          <View
+        <ScrollView style={{paddingHorizontal: 16}}>
+          <TextInput
             style={{
-              flexDirection: 'row',
-              justifyContent: 'space-between',
-              width: '90%',
-              alignItems: 'center',
-              marginBottom: 16,
-            }}>
-            <AppText>Đặt làm địa chỉ mặc định</AppText>
-            <Switch
-              onValueChange={() => setValueSwitch(!valueSwitch)}
-              value={valueSwitch}
-              trackColor="#0187E0"
-              thumbColor={Colors.WHITE}
-              ios_backgroundColor={Colors.WHITE_SMOKE}
+              backgroundColor: Colors.WHITE,
+              marginVertical: 16,
+            }}
+            label={trans('recipientName')}
+            value={fullname}
+            onChangeText={setFullName}
+            mode="outlined"
+          />
+          <TextInput
+            style={{backgroundColor: Colors.WHITE, marginVertical: 16}}
+            label={trans('phoneNumber')}
+            value={phone}
+            onChangeText={setPhone}
+            mode="outlined"
+          />
+          <TextInput
+            style={{backgroundColor: Colors.WHITE, marginVertical: 16}}
+            label={trans('deliveryAddress')}
+            value={address}
+            onChangeText={setAddress}
+            mode="outlined"
+          />
+
+          <ChooseAddress ref={refAddress} />
+          <View style={{marginTop: 16}}>
+            <View
+              style={{
+                flexDirection: 'row',
+                justifyContent: 'space-between',
+                width: '100%',
+                alignItems: 'center',
+                marginBottom: 16,
+              }}>
+              <AppText>Đặt làm địa chỉ mặc định</AppText>
+              <Switch
+                onValueChange={() => setValueSwitch(!valueSwitch)}
+                value={valueSwitch}
+                trackColor="#0187E0"
+                thumbColor={Colors.WHITE}
+                ios_backgroundColor={Colors.WHITE_SMOKE}
+              />
+            </View>
+            <Button
+              containerStyle={{width: '100%'}}
+              title={trans('save').toUpperCase()}
+              onPress={saveAddress}
             />
           </View>
-
-          <Button title={trans('save').toUpperCase()} onPress={saveAddress} />
-        </View>
+        </ScrollView>
       </View>
     </TouchableWithoutFeedback>
   );

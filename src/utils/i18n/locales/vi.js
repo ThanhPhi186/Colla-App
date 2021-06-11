@@ -48,4 +48,5 @@ export default {
   forgotPassword: 'Quên mật khẩu',
   confirmPassword: 'Xác nhận mật khẩu',
   emptyHistoryPoint: 'Bạn chưa có điểm tích luỹ nào',
+  search: 'Tìm kiếm',
 };

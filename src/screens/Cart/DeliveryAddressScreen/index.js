@@ -13,11 +13,12 @@ import {useDispatch, useSelector} from 'react-redux';
 import {images} from '../../../assets';
 import {AppText} from '../../../components/atoms';
 import {AuthenOverallRedux} from '../../../redux';
-import {put} from '../../../services/ServiceHandle';
+import {deleteApi, put} from '../../../services/ServiceHandle';
 import {Colors} from '../../../styles';
-import {container} from '../../../styles/GlobalStyles';
+import {container, rowSpaceBetween} from '../../../styles/GlobalStyles';
 import {device_width} from '../../../styles/Mixin';
 import {Const, trans} from '../../../utils';
+import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 
 const DeliveryAddressScreen = ({navigation}) => {
   const dispatch = useDispatch();
@@ -42,25 +43,47 @@ const DeliveryAddressScreen = ({navigation}) => {
     );
   };
 
+  const onDelete = item => {
+    deleteApi(`${Const.API.baseURL + Const.API.Useraddress}/${item.id}`).then(
+      res => {
+        if (res.ok) {
+          dispatch(AuthenOverallRedux.Actions.getProfile.request());
+          SimpleToast.show('Xoá địa chỉ thành công', SimpleToast.SHORT);
+        }
+      },
+    );
+  };
+
   const renderItem = ({item}) => {
+    console.log('itemitem', item);
     return (
       <View style={styles.container}>
-        <View style={{flexDirection: 'row', marginVertical: 5}}>
-          <FastImage source={images.avatar} style={{width: 24, height: 24}} />
-          <View style={{width: '95%', justifyContent: 'center', marginLeft: 5}}>
-            <AppText style={{fontSize: 16}}>{item.fullname}</AppText>
+        <View style={{justifyContent: 'center'}}>
+          <View style={{flexDirection: 'row', marginVertical: 5}}>
+            <Icon name="account-circle" size={24} color={Colors.GRAY} />
+            <View
+              style={{width: '95%', justifyContent: 'center', marginLeft: 5}}>
+              <AppText style={{fontSize: 16}}>{item.fullname}</AppText>
+            </View>
           </View>
+          {!item.is_default && (
+            <TouchableOpacity
+              style={{position: 'absolute', right: 0}}
+              onPress={() => onDelete(item)}>
+              <Icon name="trash-can-outline" size={24} color={Colors.GRAY} />
+            </TouchableOpacity>
+          )}
         </View>
 
         <View style={{flexDirection: 'row', marginVertical: 5}}>
-          <FastImage source={images.avatar} style={{width: 24, height: 24}} />
+          <Icon name="cellphone" size={24} color={Colors.GRAY} />
           <View style={{width: '95%', justifyContent: 'center', marginLeft: 5}}>
             <AppText style={{fontSize: 16}}>{item.phone}</AppText>
           </View>
         </View>
 
         <View style={{flexDirection: 'row', marginVertical: 5}}>
-          <FastImage source={images.avatar} style={{width: 24, height: 24}} />
+          <Icon name="map-marker" size={24} color={Colors.GRAY} />
           <View style={{width: '95%', justifyContent: 'center', marginLeft: 5}}>
             <AppText style={{fontSize: 16}}>{item.address}</AppText>
           </View>
