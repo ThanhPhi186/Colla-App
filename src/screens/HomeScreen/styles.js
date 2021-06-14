@@ -40,6 +40,11 @@ const styles = {
     textAlign: 'center',
     marginTop: 8,
   },
+  largeIndicate: {
+    width: '100%',
+    height: 7,
+    backgroundColor: Colors.LIGHT_GREY,
+  },
 };
 
 export default styles;

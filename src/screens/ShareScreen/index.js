@@ -154,7 +154,7 @@ const ShareScreen = () => {
             }}>
             <Text style={{fontWeight: 'bold'}}>
               <Text style={{color: Colors.ORANGE}}>
-                {numeral(50000).format()}{' '}
+                {numeral(userInfo.point).format()}{' '}
               </Text>
               điểm
             </Text>
