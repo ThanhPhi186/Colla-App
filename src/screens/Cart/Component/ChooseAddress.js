@@ -34,7 +34,7 @@ const ChooseAddress = forwardRef((props, ref) => {
     }
     if (type === 'WARDS') {
       setDataAddress(address.districts.wards);
-      setDataSearch(address.province.wards);
+      setDataSearch(address.districts.wards);
     }
   }, [type, address]);
 
