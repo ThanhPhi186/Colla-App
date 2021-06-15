@@ -18,6 +18,10 @@ import {post} from '../../../services/ServiceHandle';
 import ModalChangeQuantity from '../../../components/molecules/ModalChangeQuantity';
 
 const DetailProduct = ({navigation, route}) => {
+  const numberProductCart = useSelector(
+    state => state.CartReducer.numberProductCart,
+  );
+
   const dispatch = useDispatch();
   const {item} = route.params;
 
@@ -45,7 +49,10 @@ const DetailProduct = ({navigation, route}) => {
       <Appbar.Header>
         <Appbar.BackAction color="white" onPress={() => navigation.goBack()} />
         <Appbar.Content color="white" title={trans('detailProduct')} />
-        <IconCart onPress={() => navigation.navigate('CartScreen')} />
+        <IconCart
+          number={numberProductCart}
+          onPress={() => navigation.navigate('CartScreen')}
+        />
       </Appbar.Header>
       <View style={container}>
         <View style={{height: device_height / 2.6}}>

@@ -7,9 +7,9 @@ import {
   ScrollView,
   TouchableOpacity,
   ImageBackground,
+  FlatList,
 } from 'react-native';
 
-import LinearGradient from 'react-native-linear-gradient';
 import {images} from '../../assets';
 import {AppImage, AppText} from '../../components/atoms';
 import {container, viewRow, rowSpaceBetween} from '../../styles/GlobalStyles';
@@ -22,14 +22,54 @@ import {useDispatch, useSelector} from 'react-redux';
 import IconCart from '../../components/molecules/IconCart';
 import numeral from 'numeral';
 import {CartRedux} from '../../redux';
+import {device_width} from '../../styles/Mixin';
+import ItemCategory from './component/ItemCategory';
 
 const HomeScreen = ({navigation}) => {
+  const numberProductCart = useSelector(
+    state => state.CartReducer.numberProductCart,
+  );
   const userInfo = useSelector(state => state.AuthenOverallReducer.userAuthen);
   const dispatch = useDispatch();
+
+  const categoryData = [
+    {
+      name: 'Mẹ và bé',
+      img: 'https://yt.cdnxbvn.com/medias/uploads/205/205537-binh-sua-tommee-tippee-500x340.jpg',
+    },
+    {
+      name: 'Công nghệ',
+      img: 'https://www.zonegroup.vn/wp-content/uploads/2019/03/option5-300x300.jpg',
+    },
+    {
+      name: 'Sức khoẻ',
+      img: 'https://printgo.vn/uploads/media/772948/4-nguyen-tac-trong-thiet-ke-logo-nganh-y-duoc1_1585664899.jpg',
+    },
+    {
+      name: 'Làm đẹp',
+      img: 'https://yt.cdnxbvn.com/medias/uploads/188/188616-da-hon-hop.jpg',
+    },
+    {
+      name: 'Đồ gia dụng',
+      img: 'https://static2.yan.vn/YanNews/201909/201909270932104845-05e95836-8fd5-4a78-899f-d311c9754d3b.png',
+    },
+    {
+      name: 'Thời trang nam',
+      img: 'https://ann.com.vn/wp-content/uploads/shop-quan-ao-nam.jpg',
+    },
+  ];
 
   useEffect(() => {
     dispatch(CartRedux.Actions.getCart.request());
   }, [dispatch]);
+
+  const renderCategory = ({item}) => {
+    return (
+      <View style={{width: device_width / 3.5, alignItems: 'center'}}>
+        <ItemCategory item={item} />
+      </View>
+    );
+  };
 
   return (
     <View style={container}>
@@ -48,7 +88,10 @@ const HomeScreen = ({navigation}) => {
             </View>
           </View>
           <View style={{flexDirection: 'row'}}>
-            <IconCart onPress={() => navigation.navigate('CartScreen')} />
+            <IconCart
+              number={numberProductCart}
+              onPress={() => navigation.navigate('CartScreen')}
+            />
             <TouchableOpacity
               onPress={() => navigation.navigate('NotificationScreen')}
               style={{
@@ -97,7 +140,6 @@ const HomeScreen = ({navigation}) => {
           },
           shadowOpacity: 0.3,
           shadowRadius: 4.65,
-
           elevation: 8,
         }}>
         <View style={{flex: 1}}>
@@ -141,7 +183,9 @@ const HomeScreen = ({navigation}) => {
               <AppText style={styles.txtProduct}>Top Saler</AppText>
             </View>
             <TouchableOpacity
-              onPress={() => navigation.navigate('ListProduct')}>
+              onPress={() =>
+                navigation.navigate('ListProduct', {type: 'ORDER'})
+              }>
               <View style={styles.viewProduct}>
                 <IconMaterialCommunityIcons
                   name="download-multiple"
@@ -167,64 +211,18 @@ const HomeScreen = ({navigation}) => {
       </View>
 
       <View style={{flex: 4, paddingHorizontal: 20, marginTop: 20}}>
-        {/* Blog */}
-        <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
-          <View
-            style={{
-              height: 100,
-              width: 100,
-              backgroundColor: '#CEDC8F',
-              justifyContent: 'center',
-              alignItems: 'center',
-            }}>
-            <Ionicons
-              name="md-newspaper-outline"
-              size={50}
-              color={Colors.PRIMARY}
-            />
-            <AppText style={{color: Colors.PRIMARY, fontWeight: 'bold'}}>
-              Blog
-            </AppText>
-          </View>
-          <View
-            style={{
-              height: 100,
-              width: 100,
-              backgroundColor: '#CEDC8F',
-              justifyContent: 'center',
-              alignItems: 'center',
-            }}>
-            <Ionicons
-              name="md-newspaper-outline"
-              size={50}
-              color={Colors.PRIMARY}
-            />
-            <AppText style={{color: Colors.PRIMARY, fontWeight: 'bold'}}>
-              Blog
-            </AppText>
-          </View>
-          <View
-            style={{
-              height: 100,
-              width: 100,
-              backgroundColor: '#CEDC8F',
-              justifyContent: 'center',
-              alignItems: 'center',
-            }}>
-            <Ionicons
-              name="md-newspaper-outline"
-              size={50}
-              color={Colors.PRIMARY}
-            />
-            <AppText style={{color: Colors.PRIMARY, fontWeight: 'bold'}}>
-              Blog
-            </AppText>
-          </View>
-        </View>
-        <FastImage
-          source={images.test1}
-          style={{width: '100%', height: 200, marginTop: 40}}
-        />
+        {/* Category */}
+        <ScrollView horizontal showsHorizontalScrollIndicator={false}>
+          <FlatList
+            data={categoryData}
+            renderItem={renderCategory}
+            keyExtractor={(item, index) => index.toString()}
+            numColumns={Math.ceil(categoryData.length / 2)}
+            scrollEnabled={false}
+          />
+        </ScrollView>
+
+        <FastImage source={images.test1} style={{width: '100%', height: 200}} />
       </View>
     </View>
   );

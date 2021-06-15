@@ -1,6 +1,5 @@
 import {createAction} from '@reduxjs/toolkit';
 import {reduxHelper} from '../../helpers';
-import {generateActions} from '../../helpers/reduxHelpers';
 
 export const NUMBER_PRODUCT_CART = 'NUMBER_PRODUCT_CART';
 export const ADD_TO_CART = 'ADD_TO_CART';

@@ -28,7 +28,7 @@ const ItemProduct = props => {
           </AppText>
         </View>
         <TouchableOpacity style={styles.btnCart} onPress={addToCart}>
-          <Icon name="cart-plus" size={20} color={Colors.WHITE} />
+          <Icon name="cart-plus" size={18} color={Colors.WHITE} />
         </TouchableOpacity>
       </TouchableOpacity>
     </View>

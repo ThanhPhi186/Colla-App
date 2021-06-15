@@ -5,9 +5,7 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 import {useSelector} from 'react-redux';
 
 const IconCart = props => {
-  const numberProductCart = useSelector(
-    state => state.CartReducer.numberProductCart,
-  );
+  const {number} = props;
 
   return (
     <TouchableOpacity
@@ -19,7 +17,7 @@ const IconCart = props => {
       }}>
       <View style={{padding: 6}}>
         <Ionicons name="cart" size={32} color={Colors.WHITE} />
-        {numberProductCart !== 0 && (
+        {number !== 0 && (
           <View
             style={{
               position: 'absolute',
@@ -33,7 +31,7 @@ const IconCart = props => {
               justifyContent: 'center',
             }}>
             <Text style={{fontSize: 12, color: 'white', fontWeight: '600'}}>
-              {numberProductCart}
+              {number}
             </Text>
           </View>
         )}
