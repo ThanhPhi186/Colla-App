@@ -13,12 +13,16 @@ const ProductPaymentItem = props => {
     <View style={styles.containerItem}>
       <View style={styles.left}>
         <FastImage
-          source={{uri: Const.API.baseURL + item.product.photo}}
+          source={{
+            uri: Const.API.baseURL + (item.product?.photo || item.photo),
+          }}
           style={styles.avt}
         />
       </View>
       <View style={styles.right}>
-        <AppText style={styles.textName}>{item.product.name}</AppText>
+        <AppText style={styles.textName}>
+          {item.product?.name || item.name}
+        </AppText>
         <View
           style={{
             flexDirection: 'row',
@@ -26,7 +30,7 @@ const ProductPaymentItem = props => {
             paddingRight: 16,
           }}>
           <AppText style={styles.textPrice}>
-            {numeral(item.product.price).format()} đ
+            {numeral(item.product?.price || item.price).format()} đ
           </AppText>
           <AppText style={styles.textPrice}>X {item.amount}</AppText>
         </View>

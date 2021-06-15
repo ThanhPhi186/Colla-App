@@ -1,3 +1,4 @@
 import AuthenOverallRedux from './authen';
 import CartRedux from './cart';
-export {AuthenOverallRedux, CartRedux};
+import SalesCartRedux from './salesCart';
+export {AuthenOverallRedux, CartRedux, SalesCartRedux};

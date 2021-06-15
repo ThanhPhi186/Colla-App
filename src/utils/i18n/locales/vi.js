@@ -49,4 +49,7 @@ export default {
   confirmPassword: 'Xác nhận mật khẩu',
   emptyHistoryPoint: 'Bạn chưa có điểm tích luỹ nào',
   search: 'Tìm kiếm',
+  customerInfo: 'Thông tin khách hàng',
+  orderInfo: 'Thông tin đơn hàng',
+  email: 'Email',
 };

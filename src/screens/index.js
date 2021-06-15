@@ -25,6 +25,7 @@ import RootView from './RootView';
 import NotificationScreen from './Notification';
 import TopSales from './TopSales';
 import ForgotPassword from './ForgotPassword';
+import {ListProductInStore, PaymentOfSales, SalesCart} from './SellProduct';
 
 export {
   LoginScreen,
@@ -53,4 +54,7 @@ export {
   TopSales,
   Policy,
   ForgotPassword,
+  ListProductInStore,
+  PaymentOfSales,
+  SalesCart,
 };

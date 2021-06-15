@@ -22,6 +22,9 @@ import {
   PromotionScreen,
   TopSales,
   Policy,
+  ListProductInStore,
+  SalesCart,
+  PaymentOfSales,
 } from '../screens';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import {CustomButtonTab} from '../components/molecules';
@@ -62,6 +65,16 @@ const BottomTabNavigator = () => {
       routeName === 'PromotionScreen' ||
       routeName === 'Policy'
     ) {
+      return false;
+    }
+    return true;
+  };
+
+  const getSalesProductVisibility = route => {
+    const routeName =
+      getFocusedRouteNameFromRoute(route) ?? 'ListProductInStore';
+
+    if (routeName === 'SalesCart' || routeName === 'PaymentOfSales') {
       return false;
     }
     return true;
@@ -116,6 +129,25 @@ const BottomTabNavigator = () => {
     );
   };
 
+  const SalesProductStack = () => {
+    return (
+      <Stack.Navigator
+        screenOptions={{
+          headerShown: false,
+          gestureEnabled: false,
+          animationEnabled: true,
+        }}
+        initialRouteName="ListProductInStore">
+        <Stack.Screen
+          name="ListProductInStore"
+          component={ListProductInStore}
+        />
+        <Stack.Screen name="SalesCart" component={SalesCart} />
+        <Stack.Screen name="PaymentOfSales" component={PaymentOfSales} />
+      </Stack.Navigator>
+    );
+  };
+
   return (
     <Tab.Navigator initialRouteName={trans('home')}>
       <Tab.Screen
@@ -141,13 +173,14 @@ const BottomTabNavigator = () => {
           ),
         }}
       />
-      {/* <Tab.Screen
+      <Tab.Screen
         name="Middle"
-        component={HomeScreen}
-        options={{
+        component={SalesProductStack}
+        options={({route}) => ({
+          tabBarVisible: getSalesProductVisibility(route),
           tabBarButton: props => <CustomButtonTab {...props} />,
-        }}
-      /> */}
+        })}
+      />
       <Tab.Screen
         name={trans('share')}
         options={{

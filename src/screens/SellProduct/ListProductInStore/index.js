@@ -1,25 +1,20 @@
 import React, {useEffect, useState} from 'react';
-import {FlatList, TouchableOpacity, View} from 'react-native';
-import FastImage from 'react-native-fast-image';
+import {FlatList, View} from 'react-native';
 import {Appbar} from 'react-native-paper';
-import {AppText} from '../../../components/atoms';
-import {container} from '../../../styles/GlobalStyles';
-import {Const, trans} from '../../../utils';
-import {images} from '../../../assets';
-import {get, post} from '../../../services/ServiceHandle';
-
+import {useDispatch, useSelector} from 'react-redux';
 import {ItemProduct} from '../../../components/molecules';
 import IconCart from '../../../components/molecules/IconCart';
-import {useDispatch, useSelector} from 'react-redux';
-import {CartRedux} from '../../../redux';
+import {SalesCartRedux} from '../../../redux';
+import {get} from '../../../services/ServiceHandle';
+import {container} from '../../../styles/GlobalStyles';
+import {Const, trans} from '../../../utils';
 
-const ListProduct = ({navigation, route}) => {
+const ListProductInStore = ({navigation}) => {
   const numberProductCart = useSelector(
-    state => state.CartReducer.numberProductCart,
+    state => state.SalesCartReducer.numberSalesCart,
   );
   const dispatch = useDispatch();
   const [listProduct, setListProduct] = useState([]);
-  const {type} = route.params;
 
   useEffect(() => {
     const getListProduct = () => {
@@ -32,21 +27,18 @@ const ListProduct = ({navigation, route}) => {
     getListProduct();
   }, []);
 
-  const addToCart = item => {
-    const dataProduct = {product_id: item.id, amount: 1};
-    post(Const.API.baseURL + Const.API.Cart, dataProduct).then(res => {
-      if (res.ok) {
-        dispatch(CartRedux.Actions.getCart.request());
-      }
-    });
+  const addToSalesCart = item => {
+    const salesCartItem = {...item, ...{amount: 1}};
+
+    dispatch(SalesCartRedux.Actions.addSalesCart(salesCartItem));
   };
 
   const renderItem = item => {
     return (
       <ItemProduct
         item={item}
-        onPress={() => navigation.navigate('DetailProduct', {item})}
-        addToCart={() => addToCart(item)}
+        // onPress={() => navigation.navigate('DetailProduct', {item})}
+        addToCart={() => addToSalesCart(item)}
       />
     );
   };
@@ -54,11 +46,14 @@ const ListProduct = ({navigation, route}) => {
   return (
     <View style={container}>
       <Appbar.Header>
-        <Appbar.BackAction color="white" onPress={() => navigation.goBack()} />
-        <Appbar.Content color="white" title={trans('listProduct')} />
+        <Appbar.Content
+          style={{alignItems: 'center'}}
+          color="white"
+          title={trans('listProduct')}
+        />
         <IconCart
           number={numberProductCart}
-          onPress={() => navigation.navigate('CartScreen')}
+          onPress={() => navigation.navigate('SalesCart')}
         />
       </Appbar.Header>
       <View style={{flex: 1}}>
@@ -78,4 +73,4 @@ const ListProduct = ({navigation, route}) => {
   );
 };
 
-export default ListProduct;
+export default ListProductInStore;

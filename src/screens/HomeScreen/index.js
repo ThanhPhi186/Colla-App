@@ -26,6 +26,9 @@ import {device_width} from '../../styles/Mixin';
 import ItemCategory from './component/ItemCategory';
 
 const HomeScreen = ({navigation}) => {
+  const numberProductCart = useSelector(
+    state => state.CartReducer.numberProductCart,
+  );
   const userInfo = useSelector(state => state.AuthenOverallReducer.userAuthen);
   const dispatch = useDispatch();
 
@@ -85,7 +88,10 @@ const HomeScreen = ({navigation}) => {
             </View>
           </View>
           <View style={{flexDirection: 'row'}}>
-            <IconCart onPress={() => navigation.navigate('CartScreen')} />
+            <IconCart
+              number={numberProductCart}
+              onPress={() => navigation.navigate('CartScreen')}
+            />
             <TouchableOpacity
               onPress={() => navigation.navigate('NotificationScreen')}
               style={{
@@ -134,7 +140,6 @@ const HomeScreen = ({navigation}) => {
           },
           shadowOpacity: 0.3,
           shadowRadius: 4.65,
-
           elevation: 8,
         }}>
         <View style={{flex: 1}}>
@@ -178,7 +183,9 @@ const HomeScreen = ({navigation}) => {
               <AppText style={styles.txtProduct}>Top Saler</AppText>
             </View>
             <TouchableOpacity
-              onPress={() => navigation.navigate('ListProduct')}>
+              onPress={() =>
+                navigation.navigate('ListProduct', {type: 'ORDER'})
+              }>
               <View style={styles.viewProduct}>
                 <IconMaterialCommunityIcons
                   name="download-multiple"
