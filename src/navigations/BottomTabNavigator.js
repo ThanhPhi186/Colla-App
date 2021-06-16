@@ -73,7 +73,6 @@ const BottomTabNavigator = () => {
   const getSalesProductVisibility = route => {
     const routeName =
       getFocusedRouteNameFromRoute(route) ?? 'ListProductInStore';
-
     if (routeName === 'SalesCart' || routeName === 'PaymentOfSales') {
       return false;
     }
@@ -129,7 +128,7 @@ const BottomTabNavigator = () => {
     );
   };
 
-  const SalesProductStack = () => {
+  const SalesProductStack = ({navigation}) => {
     return (
       <Stack.Navigator
         screenOptions={{
@@ -174,11 +173,20 @@ const BottomTabNavigator = () => {
         }}
       />
       <Tab.Screen
-        name="Middle"
+        name="Lên đơn"
         component={SalesProductStack}
         options={({route}) => ({
           tabBarVisible: getSalesProductVisibility(route),
-          tabBarButton: props => <CustomButtonTab {...props} />,
+          tabBarIcon: ({color, size}) => (
+            <MaterialCommunityIcons
+              name="plus-circle-outline"
+              color={color}
+              size={size}
+            />
+          ),
+          // tabBarButton: props => (
+          //   <CustomButtonTab {...props} tabBarVisible={route} />
+          // ),
         })}
       />
       <Tab.Screen

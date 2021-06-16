@@ -1,24 +1,31 @@
-import React, {useEffect, useState} from 'react';
+import React, {useEffect, useRef, useState} from 'react';
 import {FlatList, View} from 'react-native';
 import {Appbar} from 'react-native-paper';
+import SimpleToast from 'react-native-simple-toast';
 import {useDispatch, useSelector} from 'react-redux';
 import {ItemProduct} from '../../../components/molecules';
 import IconCart from '../../../components/molecules/IconCart';
-import {SalesCartRedux} from '../../../redux';
-import {get} from '../../../services/ServiceHandle';
+import ModalChangeQuantity from '../../../components/molecules/ModalChangeQuantity';
+import {CartRedux} from '../../../redux';
+
+import {get, post} from '../../../services/ServiceHandle';
 import {container} from '../../../styles/GlobalStyles';
 import {Const, trans} from '../../../utils';
 
 const ListProductInStore = ({navigation}) => {
   const numberProductCart = useSelector(
-    state => state.SalesCartReducer.numberSalesCart,
+    state => state.CartReducer.numberSalesCart,
   );
   const dispatch = useDispatch();
+  const refModal = useRef();
+
   const [listProduct, setListProduct] = useState([]);
+  const [visibleModal, setVisibleModal] = useState(false);
+  const [itemProduct, setItemProduct] = useState();
 
   useEffect(() => {
     const getListProduct = () => {
-      get(Const.API.baseURL + Const.API.GetListProduct).then(res => {
+      get(Const.API.baseURL + Const.API.ImportProduct).then(res => {
         if (res.ok) {
           setListProduct(res.data.data);
         }
@@ -27,10 +34,27 @@ const ListProductInStore = ({navigation}) => {
     getListProduct();
   }, []);
 
-  const addToSalesCart = item => {
-    const salesCartItem = {...item, ...{amount: 1}};
+  useEffect(() => {
+    dispatch(CartRedux.Actions.getSalesCart.request());
+  }, [dispatch]);
 
-    dispatch(SalesCartRedux.Actions.addSalesCart(salesCartItem));
+  const addToSalesCart = () => {
+    const dataProduct = {
+      product_id: itemProduct.id,
+      amount: refModal.current,
+      type: 'retail',
+    };
+    post(Const.API.baseURL + Const.API.Cart, dataProduct).then(res => {
+      if (res.ok) {
+        dispatch(CartRedux.Actions.getSalesCart.request());
+        setVisibleModal(false);
+        setTimeout(() => {
+          SimpleToast.show('Thêm sản phẩm thành công', SimpleToast.SHORT);
+        }, 500);
+      } else {
+        SimpleToast.show(res.error, SimpleToast.SHORT);
+      }
+    });
   };
 
   const renderItem = item => {
@@ -38,7 +62,10 @@ const ListProductInStore = ({navigation}) => {
       <ItemProduct
         item={item}
         // onPress={() => navigation.navigate('DetailProduct', {item})}
-        addToCart={() => addToSalesCart(item)}
+        addToCart={() => {
+          setItemProduct(item);
+          setVisibleModal(true);
+        }}
       />
     );
   };
@@ -69,6 +96,15 @@ const ListProductInStore = ({navigation}) => {
           }}
         />
       </View>
+      {itemProduct && (
+        <ModalChangeQuantity
+          ref={refModal}
+          addToCart={addToSalesCart}
+          detailProduct={itemProduct}
+          isVisible={visibleModal}
+          onBackdropPress={() => setVisibleModal(false)}
+        />
+      )}
     </View>
   );
 };

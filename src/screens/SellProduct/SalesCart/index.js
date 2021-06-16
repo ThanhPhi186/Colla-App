@@ -1,22 +1,61 @@
-import React from 'react';
+import React, {useRef, useState} from 'react';
 import {FlatList, View} from 'react-native';
 import {Appbar} from 'react-native-paper';
 import {AppText} from '../../../components/atoms';
 import {Button} from '../../../components/molecules';
 import {container} from '../../../styles/GlobalStyles';
-import {trans} from '../../../utils';
+import {Const, trans} from '../../../utils';
 import ProductCartItem from '../../Cart/Component/ProductCartItem';
 import styles from './styles';
 import numeral from 'numeral';
-import {useSelector} from 'react-redux';
+import {useDispatch, useSelector} from 'react-redux';
 import {isEmpty, sum} from 'lodash';
 import SimpleToast from 'react-native-simple-toast';
+import {deleteApi, put} from '../../../services/ServiceHandle';
+import {CartRedux} from '../../../redux';
+import ModalChangeQuantity from '../../../components/molecules/ModalChangeQuantity';
 
 const SalesCart = ({navigation}) => {
-  const dataSalesCart = useSelector(
-    state => state.SalesCartReducer.listSalesCart,
+  const dispatch = useDispatch();
+  const dataSalesCart = useSelector(state => state.CartReducer.listSalesCart);
+  const totalPrice = sum(
+    dataSalesCart?.map(elm => elm.product.price * elm.amount),
   );
-  const totalPrice = sum(dataSalesCart?.map(elm => elm.price * elm.amount));
+
+  const [visibleModal, setVisibleModal] = useState(false);
+  const [itemCart, setItemCart] = useState();
+  const refModal = useRef();
+
+  const editCartItem = () => {
+    const params = {
+      amount: refModal.current,
+    };
+    put(`${Const.API.baseURL + Const.API.Cart}/${itemCart.id}`, params).then(
+      res => {
+        if (res.ok) {
+          setVisibleModal(false);
+          dispatch(CartRedux.Actions.getSalesCart.request());
+          setTimeout(() => {
+            SimpleToast.show('Cập nhật sản phẩm thành công', SimpleToast.SHORT);
+          }, 500);
+        }
+      },
+    );
+  };
+
+  const removeCartItem = item => {
+    deleteApi(`${Const.API.baseURL + Const.API.Cart}/${item.id}`).then(res => {
+      if (res.ok) {
+        dispatch(CartRedux.Actions.getSalesCart.request());
+        SimpleToast.show(
+          'Xóa sản phẩm khỏi giỏ hàng thành công!',
+          SimpleToast.SHORT,
+        );
+      } else {
+        SimpleToast.show(res.error, SimpleToast.SHORT);
+      }
+    });
+  };
 
   const goPayment = () => {
     if (!isEmpty(dataSalesCart)) {
@@ -31,11 +70,11 @@ const SalesCart = ({navigation}) => {
     return (
       <ProductCartItem
         item={item}
-        // removeCartItem={() => removeCartItem(item)}
-        // editCartItem={() => {
-        //   setItemCart(item);
-        //   setVisibleModal(true);
-        // }}
+        removeCartItem={() => removeCartItem(item)}
+        editCartItem={() => {
+          setItemCart(item);
+          setVisibleModal(true);
+        }}
       />
     );
   };
@@ -68,6 +107,15 @@ const SalesCart = ({navigation}) => {
         title={trans('purchase')}
         onPress={goPayment}
       />
+      {itemCart && (
+        <ModalChangeQuantity
+          ref={refModal}
+          addToCart={editCartItem}
+          detailProduct={itemCart}
+          isVisible={visibleModal}
+          onBackdropPress={() => setVisibleModal(false)}
+        />
+      )}
     </View>
   );
 };

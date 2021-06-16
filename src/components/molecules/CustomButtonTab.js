@@ -1,13 +1,18 @@
 import React from 'react';
-import {TouchableOpacity, View} from 'react-native';
+import {Platform, TouchableOpacity, View} from 'react-native';
 import {Colors} from '../../styles';
 import IconMaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 
 const CustomButtonTab = (props, children) => {
-  const {onPress} = props;
+  const {onPress, tabBarVisible} = props;
+  console.log('tabBarVisible', tabBarVisible);
+
   return (
     <TouchableOpacity
-      style={styles.container}
+      style={[
+        styles.container,
+        {top: Platform.OS === 'android' && !tabBarVisible ? 70 : -20},
+      ]}
       activeOpacity={1}
       onPress={onPress}>
       {/* <View style={styles.circleCover}> */}
@@ -24,7 +29,6 @@ const CustomButtonTab = (props, children) => {
 };
 const styles = {
   container: {
-    top: -20,
     justifyContent: 'center',
     alignItems: 'center',
   },

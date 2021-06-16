@@ -82,6 +82,9 @@ const AddNewAddress = ({navigation, route}) => {
       fullname,
       address: addressConvert,
       is_default: valueSwitch,
+      district: refAddress.current.districts.id,
+      province: refAddress.current.province.id,
+      ward: refAddress.current.wards.id,
     };
     if (type === 'EDIT') {
       put(

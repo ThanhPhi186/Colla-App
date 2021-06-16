@@ -33,7 +33,7 @@ const ListProduct = ({navigation, route}) => {
   }, []);
 
   const addToCart = item => {
-    const dataProduct = {product_id: item.id, amount: 1};
+    const dataProduct = {product_id: item.id, amount: 1, type: 'import'};
     post(Const.API.baseURL + Const.API.Cart, dataProduct).then(res => {
       if (res.ok) {
         dispatch(CartRedux.Actions.getCart.request());

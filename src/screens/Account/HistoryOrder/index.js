@@ -1,5 +1,5 @@
 import React from 'react';
-import {FlatList, Text, TouchableOpacity, View} from 'react-native';
+import {FlatList, TouchableOpacity, View} from 'react-native';
 import {Appbar} from 'react-native-paper';
 import {AppLoading, AppText} from '../../../components/atoms';
 import {Colors} from '../../../styles';
@@ -7,7 +7,7 @@ import {container} from '../../../styles/GlobalStyles';
 import {Const, trans} from '../../../utils';
 import numeral from 'numeral';
 import {useEffect} from 'react';
-import {get, post} from '../../../services/ServiceHandle';
+import {get} from '../../../services/ServiceHandle';
 import {useState} from 'react';
 import moment from 'moment';
 
@@ -65,7 +65,7 @@ const HistoryOrder = ({navigation}) => {
             {item.order_details.map((elm, index) => {
               return (
                 <AppText key={index}>
-                  - {elm.id} x {elm.amount}
+                  - {elm.product.name} x {elm.amount}
                 </AppText>
               );
             })}

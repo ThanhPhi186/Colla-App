@@ -32,6 +32,8 @@ const CartScreen = ({navigation}) => {
           'Xóa sản phẩm khỏi giỏ hàng thành công!',
           SimpleToast.SHORT,
         );
+      } else {
+        SimpleToast.show(res.error, SimpleToast.SHORT);
       }
     });
   };

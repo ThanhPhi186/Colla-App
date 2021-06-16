@@ -18,6 +18,7 @@ export default {
     ForgotPassword: 'api/auth/forgot-password',
     ResetPassword: 'api/auth/reset-password',
     Point: 'api/point',
+    ImportProduct: 'api/import/product',
   },
   RESPONSE_CODES: {
     SUCCESS: {

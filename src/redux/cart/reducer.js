@@ -3,22 +3,13 @@ import * as Actions from './action';
 
 const initialState = {
   numberProductCart: 0,
+  numberSalesCart: 0,
   listProductCart: [],
+  listSalesCart: [],
 };
 
 const cartReducer = createReducer(initialState, {
-  [Actions.addToCart.success]: (state, action) => {
-    // if (state.listProductCart.map(elm => elm.id).includes(action.payload.id)) {
-    //   state.listProductCart = [...state.listProductCart].map(elm => {
-    //     if (elm.id === action.payload.id) {
-    //       elm.quantity += action.payload.quantity;
-    //     }
-    //     return elm;
-    //   });
-    // } else {
-    //   state.listProductCart.push(action.payload);
-    // }
-  },
+  // import cart
   [Actions.getCart.success]: (state, action) => {
     state.listProductCart = action.payload;
     state.numberProductCart = action.payload.length;
@@ -31,9 +22,18 @@ const cartReducer = createReducer(initialState, {
     state.numberProductCart = state.listProductCart.length;
   },
 
-  [Actions.emptyCart]: (state, action) => {
-    state.listProductCart = [];
-    state.numberProductCart = 0;
+  // sales cart
+
+  [Actions.getSalesCart.success]: (state, action) => {
+    state.listSalesCart = action.payload;
+    state.numberSalesCart = action.payload.length;
+  },
+
+  [Actions.removeSalesCart]: (state, action) => {
+    state.listSalesCart = [
+      ...state.listSalesCart.filter(elm => elm.id !== action.payload.id),
+    ];
+    state.numberSalesCart = state.listSalesCart.length;
   },
 });
 

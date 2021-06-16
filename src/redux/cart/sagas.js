@@ -1,13 +1,13 @@
 import {put, call, takeEvery, select} from 'redux-saga/effects';
 import {get, post} from '../../services/ServiceHandle';
 
-import {Const, trans} from '../../utils';
+import {Const} from '../../utils';
 
-import {addToCart, getCart, getDomain, login, logout} from './action';
+import {getCart, getSalesCart} from './action';
 
 function* getCartAsync(action) {
   try {
-    const url = Const.API.baseURL + Const.API.Cart;
+    const url = `${Const.API.baseURL + Const.API.Cart}?type='import'`;
     const response = yield call(get, url);
     if (response.ok) {
       yield put(getCart.success(response.data.data));
@@ -19,53 +19,21 @@ function* getCartAsync(action) {
   }
 }
 
-function* createCartAsync(action) {
+function* getSalesCartAsync(action) {
   try {
-    const url = Const.API.baseURL + Const.API.Cart;
-    const response = yield call(post, url, action.payload);
+    const url = `${Const.API.baseURL + Const.API.Cart}?type='retail'`;
+    const response = yield call(get, url);
     if (response.ok) {
-      yield put(addToCart.success(response.data));
+      yield put(getSalesCart.success(response.data.data));
     } else {
-      yield put(addToCart.failed(response.error));
+      yield put(getSalesCart.failed(response.error));
     }
   } catch (error) {
     // yield put(login.failed(error));
   }
 }
 
-// function* loginAsync(action) {
-//   try {
-//     const baseURL = yield select(getBaseUrl);
-
-//     const url = baseURL + Const.API.Login;
-//     const response = yield call(post, url, action.payload);
-//     if (response.data._ERROR_MESSAGE_) {
-//       yield put(login.failed(response.data._ERROR_MESSAGE_));
-//     } else {
-//       yield put(login.success(response.data));
-//     }
-//   } catch (error) {
-//     yield put(login.failed(error));
-//   }
-// }
-
-// function* logoutAsync(action) {
-//   try {
-//     const baseURL = yield select(getBaseUrl);
-
-//     const url = baseURL + Const.API.Logout;
-//     const response = yield call(post, url, action.payload);
-//     if (response.ok) {
-//       yield put(logout.success(response.data));
-//     } else {
-//       yield put(logout.failed(response.error));
-//     }
-//   } catch (error) {
-//     yield put(logout.failed(error));
-//   }
-// }
 export function* CartWatcher() {
-  [yield takeEvery(addToCart.requestName, createCartAsync)];
   [yield takeEvery(getCart.requestName, getCartAsync)];
-  //   [yield takeEvery(getDomain.requestName, getDomainAsync)];
+  [yield takeEvery(getSalesCart.requestName, getSalesCartAsync)];
 }

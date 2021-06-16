@@ -1,9 +1,8 @@
-import {AuthenOverallRedux, CartRedux, SalesCartRedux} from '../../redux';
+import {AuthenOverallRedux, CartRedux} from '../../redux';
 
 const reducerMap = {
   AuthenOverallReducer: AuthenOverallRedux.Reducer,
   CartReducer: CartRedux.Reducer,
-  SalesCartReducer: SalesCartRedux.Reducer,
 };
 
 export default reducerMap;
