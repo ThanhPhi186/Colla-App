@@ -92,13 +92,17 @@ const AddNewAddress = ({navigation, route}) => {
         params,
       ).then(res => {
         if (res.ok) {
+          dispatch(AuthenOverallRedux.Actions.getProfile.request());
+          SimpleToast.show('Chỉnh sửa địa chỉ thành công', SimpleToast.SHORT);
+          navigation.goBack();
         }
+
       });
     } else {
       post(Const.API.baseURL + Const.API.Useraddress, params).then(res => {
         if (res.ok) {
           dispatch(AuthenOverallRedux.Actions.getProfile.request());
-          SimpleToast.show('thêm mới địa chỉ thành công', SimpleToast.SHORT);
+          SimpleToast.show('Thêm mới địa chỉ thành công', SimpleToast.SHORT);
           navigation.goBack();
         }
       });
