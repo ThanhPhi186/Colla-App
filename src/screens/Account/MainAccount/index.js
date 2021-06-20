@@ -65,7 +65,14 @@ const MainAccount = ({navigation}) => {
           <ItemAccount
             icon="clock-outline"
             title="Lịch sử nhập hàng"
-            onPress={() => navigation.navigate('HistoryOrder')}
+            onPress={() =>
+              navigation.navigate('HistoryOrder', {type: 'IMPORT'})
+            }
+          />
+          <ItemAccount
+            icon="clock-outline"
+            title="Lịch sử bán hàng"
+            onPress={() => navigation.navigate('HistoryOrder', {type: 'SALES'})}
           />
           <View style={styles.smallIndicate} />
           <ItemAccount

@@ -7,7 +7,7 @@ import {getCart, getSalesCart} from './action';
 
 function* getCartAsync(action) {
   try {
-    const url = `${Const.API.baseURL + Const.API.Cart}?type='import'`;
+    const url = Const.API.baseURL + Const.API.ImportCart;
     const response = yield call(get, url);
     if (response.ok) {
       yield put(getCart.success(response.data.data));
@@ -21,7 +21,7 @@ function* getCartAsync(action) {
 
 function* getSalesCartAsync(action) {
   try {
-    const url = `${Const.API.baseURL + Const.API.Cart}?type='retail'`;
+    const url = Const.API.baseURL + Const.API.Cart;
     const response = yield call(get, url);
     if (response.ok) {
       yield put(getSalesCart.success(response.data.data));

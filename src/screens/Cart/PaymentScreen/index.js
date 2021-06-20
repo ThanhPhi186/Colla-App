@@ -36,7 +36,6 @@ const PaymentScreen = ({navigation}) => {
       return SimpleToast.show('Chưa có địa chỉ nhận hàng', SimpleToast.SHORT);
     }
     const carts = dataCart.map(elm => elm.id);
-    console.log('carts', carts);
     const params = {
       phone: dataAddress.phone,
       address_ship: dataAddress.address,
@@ -44,9 +43,8 @@ const PaymentScreen = ({navigation}) => {
       payment_method: 'cod',
       ship_method: '',
       carts,
-      type: 'import',
     };
-    post(Const.API.baseURL + Const.API.Order, params).then(res => {
+    post(Const.API.baseURL + Const.API.ImportOrder, params).then(res => {
       if (res.ok) {
         dispatch(CartRedux.Actions.getCart.request());
         SimpleToast.show('Đặt hàng thành công', SimpleToast.SHORT);

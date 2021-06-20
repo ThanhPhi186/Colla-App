@@ -23,7 +23,7 @@ const ListProduct = ({navigation, route}) => {
 
   useEffect(() => {
     const getListProduct = () => {
-      get(Const.API.baseURL + Const.API.GetListProduct).then(res => {
+      get(Const.API.baseURL + Const.API.ImportProduct).then(res => {
         if (res.ok) {
           setListProduct(res.data.data);
         }
@@ -33,8 +33,8 @@ const ListProduct = ({navigation, route}) => {
   }, []);
 
   const addToCart = item => {
-    const dataProduct = {product_id: item.id, amount: 1, type: 'import'};
-    post(Const.API.baseURL + Const.API.Cart, dataProduct).then(res => {
+    const dataProduct = {product_id: item.id, amount: 1};
+    post(Const.API.baseURL + Const.API.ImportCart, dataProduct).then(res => {
       if (res.ok) {
         dispatch(CartRedux.Actions.getCart.request());
       }

@@ -25,34 +25,37 @@ const CartScreen = ({navigation}) => {
   const refModal = useRef();
 
   const removeCartItem = item => {
-    deleteApi(`${Const.API.baseURL + Const.API.Cart}/${item.id}`).then(res => {
-      if (res.ok) {
-        dispatch(CartRedux.Actions.getCart.request());
-        SimpleToast.show(
-          'Xóa sản phẩm khỏi giỏ hàng thành công!',
-          SimpleToast.SHORT,
-        );
-      } else {
-        SimpleToast.show(res.error, SimpleToast.SHORT);
-      }
-    });
+    deleteApi(`${Const.API.baseURL + Const.API.ImportCart}/${item.id}`).then(
+      res => {
+        if (res.ok) {
+          dispatch(CartRedux.Actions.getCart.request());
+          SimpleToast.show(
+            'Xóa sản phẩm khỏi giỏ hàng thành công!',
+            SimpleToast.SHORT,
+          );
+        } else {
+          SimpleToast.show(res.error, SimpleToast.SHORT);
+        }
+      },
+    );
   };
 
   const editCartItem = () => {
     const params = {
       amount: refModal.current,
     };
-    put(`${Const.API.baseURL + Const.API.Cart}/${itemCart.id}`, params).then(
-      res => {
-        if (res.ok) {
-          setVisibleModal(false);
-          dispatch(CartRedux.Actions.getCart.request());
-          setTimeout(() => {
-            SimpleToast.show('Cập nhật sản phẩm thành công', SimpleToast.SHORT);
-          }, 700);
-        }
-      },
-    );
+    put(
+      `${Const.API.baseURL + Const.API.ImportCart}/${itemCart.id}`,
+      params,
+    ).then(res => {
+      if (res.ok) {
+        setVisibleModal(false);
+        dispatch(CartRedux.Actions.getCart.request());
+        setTimeout(() => {
+          SimpleToast.show('Cập nhật sản phẩm thành công', SimpleToast.SHORT);
+        }, 700);
+      }
+    });
   };
 
   const goPayment = () => {
@@ -80,7 +83,7 @@ const CartScreen = ({navigation}) => {
     <View style={container}>
       <Appbar.Header>
         <Appbar.BackAction color="white" onPress={() => navigation.goBack()} />
-        <Appbar.Content color="white" title={trans('myCart')} />
+        <Appbar.Content color="white" title={trans('importCart')} />
       </Appbar.Header>
       <View style={container}>
         <FlatList

@@ -62,7 +62,6 @@ const PaymentOfSales = ({navigation}) => {
       payment_method: 'cod',
       ship_method: '',
       carts,
-      type: 'retail',
     };
     post(Const.API.baseURL + Const.API.Order, params).then(res => {
       if (res.ok) {

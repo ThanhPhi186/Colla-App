@@ -25,7 +25,7 @@ const ListProductInStore = ({navigation}) => {
 
   useEffect(() => {
     const getListProduct = () => {
-      get(Const.API.baseURL + Const.API.ImportProduct).then(res => {
+      get(Const.API.baseURL + Const.API.GetListProduct).then(res => {
         if (res.ok) {
           setListProduct(res.data.data);
         }
@@ -42,7 +42,6 @@ const ListProductInStore = ({navigation}) => {
     const dataProduct = {
       product_id: itemProduct.id,
       amount: refModal.current,
-      type: 'retail',
     };
     post(Const.API.baseURL + Const.API.Cart, dataProduct).then(res => {
       if (res.ok) {
@@ -60,6 +59,7 @@ const ListProductInStore = ({navigation}) => {
   const renderItem = item => {
     return (
       <ItemProduct
+        disabled
         item={item}
         // onPress={() => navigation.navigate('DetailProduct', {item})}
         addToCart={() => {

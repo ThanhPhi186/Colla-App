@@ -86,7 +86,7 @@ const SalesCart = ({navigation}) => {
         <Appbar.Content
           style={{alignItems: 'center'}}
           color="white"
-          title={trans('myCart')}
+          title={trans('salesCart')}
         />
       </Appbar.Header>
       <View style={container}>

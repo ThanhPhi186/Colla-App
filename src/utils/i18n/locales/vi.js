@@ -52,4 +52,7 @@ export default {
   customerInfo: 'Thông tin khách hàng',
   orderInfo: 'Thông tin đơn hàng',
   email: 'Email',
+  importCart: 'Giỏ hàng nhập',
+  salesCart: 'Giỏ hàng bán',
+  salesHistory: 'Lịch sử bán hàng',
 };

@@ -96,7 +96,6 @@ const AddNewAddress = ({navigation, route}) => {
           SimpleToast.show('Chỉnh sửa địa chỉ thành công', SimpleToast.SHORT);
           navigation.goBack();
         }
-
       });
     } else {
       post(Const.API.baseURL + Const.API.Useraddress, params).then(res => {

@@ -11,14 +11,19 @@ import {get} from '../../../services/ServiceHandle';
 import {useState} from 'react';
 import moment from 'moment';
 
-const HistoryOrder = ({navigation}) => {
+const HistoryOrder = ({navigation, route}) => {
   const [dataOrder, setDataOrder] = useState([]);
   const [loading, setLoading] = useState(false);
+
+  const {type} = route.params;
 
   useEffect(() => {
     const getData = () => {
       setLoading(true);
-      get(Const.API.baseURL + Const.API.Order).then(res => {
+      get(
+        Const.API.baseURL +
+          (type === 'SALES' ? Const.API.Order : Const.API.ImportOrder),
+      ).then(res => {
         if (res.ok) {
           setLoading(false);
           setDataOrder(res.data.data);
@@ -29,7 +34,7 @@ const HistoryOrder = ({navigation}) => {
       });
     };
     getData();
-  }, []);
+  }, [type]);
 
   const renderItem = ({item}) => {
     return (
@@ -56,7 +61,7 @@ const HistoryOrder = ({navigation}) => {
         <AppText>Địa chỉ: {item.address_ship}</AppText>
         <AppText>
           Thời gian tạo:{' '}
-          {moment(item.createdAt).format('HH:mm:ss - DD-MM/YYYY')}
+          {moment(item.createdAt).format('HH:mm:ss - DD-MM-YYYY')}
         </AppText>
         <View style={{flexDirection: 'row'}}>
           <AppText>Sản phẩm: </AppText>
@@ -98,7 +103,12 @@ const HistoryOrder = ({navigation}) => {
     <View style={container}>
       <Appbar.Header>
         <Appbar.BackAction color="white" onPress={() => navigation.goBack()} />
-        <Appbar.Content color="white" title={trans('historyOrder')} />
+        <Appbar.Content
+          color="white"
+          title={
+            type === 'SALES' ? trans('salesHistory') : trans('historyOrder')
+          }
+        />
       </Appbar.Header>
       <AppLoading isVisible={loading} />
       <View style={{flex: 1}}>

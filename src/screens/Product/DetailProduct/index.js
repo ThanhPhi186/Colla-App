@@ -34,9 +34,8 @@ const DetailProduct = ({navigation, route}) => {
     const dataProduct = {
       product_id: item.id,
       amount: refModal.current,
-      type: 'import',
     };
-    post(Const.API.baseURL + Const.API.Cart, dataProduct).then(res => {
+    post(Const.API.baseURL + Const.API.ImportCart, dataProduct).then(res => {
       if (res.ok) {
         dispatch(CartRedux.Actions.getCart.request());
       }

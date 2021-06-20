@@ -71,25 +71,20 @@ const ModalChangeQuantity = forwardRef((props, ref) => {
         <View style={styles.avatar}>
           <FastImage
             source={{
-              uri:
-                Const.API.baseURL +
-                (detailProduct.photo || detailProduct.product.photo),
+              uri: Const.API.baseURL + detailProduct.photo,
             }}
             style={styles.images}
           />
           <View style={{flex: 1, paddingLeft: 10}}>
             <AppText style={styles.textName} numberOfLines={2}>
-              {detailProduct.name || detailProduct.product.name}
+              {detailProduct.name}
             </AppText>
             <View style={{}}>
-              <AppText style={styles.price}>
-                {detailProduct.price || detailProduct.product.price}đ
-              </AppText>
+              <AppText style={styles.price}>{detailProduct.price}đ</AppText>
             </View>
 
             <AppText style={styles.textKho}>
-              {trans('quantityInStock')}:{' '}
-              {detailProduct.quantity || detailProduct.product.quantity}
+              {trans('quantityInStock')}: {detailProduct.quantity}
             </AppText>
           </View>
         </View>
