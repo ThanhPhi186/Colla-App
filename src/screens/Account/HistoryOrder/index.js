@@ -1,5 +1,5 @@
 import React from 'react';
-import {FlatList, TouchableOpacity, View} from 'react-native';
+import {FlatList, Text, TouchableOpacity, View} from 'react-native';
 import {Appbar} from 'react-native-paper';
 import {AppLoading, AppText} from '../../../components/atoms';
 import {Colors} from '../../../styles';
@@ -7,9 +7,11 @@ import {container} from '../../../styles/GlobalStyles';
 import {Const, trans} from '../../../utils';
 import numeral from 'numeral';
 import {useEffect} from 'react';
-import {get} from '../../../services/ServiceHandle';
+import {get, put} from '../../../services/ServiceHandle';
 import {useState} from 'react';
 import moment from 'moment';
+import styles from './styles';
+import SimpleToast from 'react-native-simple-toast';
 
 const HistoryOrder = ({navigation, route}) => {
   const [dataOrder, setDataOrder] = useState([]);
@@ -18,50 +20,96 @@ const HistoryOrder = ({navigation, route}) => {
   const {type} = route.params;
 
   useEffect(() => {
-    const getData = () => {
-      setLoading(true);
-      get(
-        Const.API.baseURL +
-          (type === 'SALES' ? Const.API.Order : Const.API.ImportOrder),
-      ).then(res => {
-        if (res.ok) {
-          setLoading(false);
-          setDataOrder(res.data.data);
-        } else {
-          setLoading(false);
-          console.log(res.error);
-        }
-      });
-    };
     getData();
   }, [type]);
 
+  const getData = () => {
+    setLoading(true);
+    get(
+      Const.API.baseURL +
+        (type === 'SALES' ? Const.API.Order : Const.API.ImportOrder),
+    ).then(res => {
+      if (res.ok) {
+        setLoading(false);
+        setDataOrder(res.data.data);
+      } else {
+        setLoading(false);
+        console.log(res.error);
+      }
+    });
+  };
+
+  const changeStatus = (item, status) => {
+    put(`${Const.API.baseURL + Const.API.Order}/${item.id}`, {status}).then(
+      res => {
+        if (res.ok) {
+          getData();
+        } else {
+          SimpleToast.show(res.error, SimpleToast.SHORT);
+        }
+      },
+    );
+  };
+
+  const renderStatus = status => {
+    switch (status) {
+      case 'verifing':
+        return 'Đang chờ xác nhận';
+      case 'verified':
+        return 'Đã xác nhận';
+      case 'shipping':
+        return 'Đang giao hàng';
+      case 'shipped':
+        return 'Đã giao hàng';
+      case 'finish':
+        return 'Hoàn thành';
+      case 'cancel':
+        return 'Đã huỷ';
+    }
+  };
+
+  const renderColorStatus = status => {
+    switch (status) {
+      case 'verifing':
+        return Colors.ORANGE_CODE.orange600;
+      case 'verified':
+        return Colors.BLUE_CODE.blue600;
+      case 'shipping':
+        return Colors.LIME_CODE.lime800;
+      case 'shipped':
+        return Colors.CYAN_CODE.cyan600;
+      case 'finish':
+        return Colors.GREEN_1;
+      case 'cancel':
+        return Colors.RED_CODE.red500;
+    }
+  };
+
   const renderItem = ({item}) => {
     return (
-      <View
-        style={{
-          alignSelf: 'center',
-          width: '90%',
-          backgroundColor: Colors.WHITE,
-          shadowColor: '#000',
-          shadowOffset: {
-            width: 0,
-            height: 2,
-          },
-          shadowOpacity: 0.25,
-          shadowRadius: 3.84,
-          elevation: 5,
-          paddingHorizontal: 8,
-          paddingVertical: 16,
-          marginTop: 16,
-          borderRadius: 12,
-        }}>
-        {/* <AppText>Mã đơn hàng : {item.id}</AppText> */}
-        <AppText>Người nhận: {item.fullname}</AppText>
-        <AppText>Địa chỉ: {item.address_ship}</AppText>
+      <View style={styles.containerItem}>
+        <View style={{alignItems: 'flex-end'}}>
+          <AppText
+            style={{color: Colors.WHITE, fontWeight: 'bold'}}
+            containerStyle={{
+              backgroundColor: renderColorStatus(item.status),
+              padding: 8,
+              borderRadius: 8,
+            }}>
+            {renderStatus(item.status)}
+          </AppText>
+        </View>
+        <AppText>
+          Người nhận: <Text style={{fontWeight: 'bold'}}>{item.fullname}</Text>
+        </AppText>
+        <AppText>
+          Địa chỉ: <Text style={{fontWeight: 'bold'}}>{item.address_ship}</Text>
+        </AppText>
         <AppText>
           Thời gian tạo:{' '}
-          {moment(item.createdAt).format('HH:mm:ss - DD-MM-YYYY')}
+          <Text style={{fontWeight: 'bold'}}>
+            {moment(item.createdAt).format('HH:mm:ss - DD-MM-YYYY')}
+          </Text>
         </AppText>
         <View style={{flexDirection: 'row'}}>
           <AppText>Sản phẩm: </AppText>
@@ -69,7 +117,7 @@ const HistoryOrder = ({navigation, route}) => {
             <AppText />
             {item.order_details.map((elm, index) => {
               return (
-                <AppText key={index}>
+                <AppText style={{fontWeight: 'bold'}} key={index}>
                   - {elm.product.name} x {elm.amount}
                 </AppText>
               );
@@ -80,20 +128,26 @@ const HistoryOrder = ({navigation, route}) => {
           <AppText style={{color: Colors.GREEN_1}}>
             Tổng: {numeral(item.total).format()} đ
           </AppText>
-          <TouchableOpacity
-            style={{
-              backgroundColor: Colors.GREEN_1,
-              width: 70,
-              height: 30,
-              justifyContent: 'center',
-              alignItems: 'center',
-              marginTop: 8,
-              borderRadius: 8,
-            }}>
-            <AppText style={{color: Colors.WHITE, fontWeight: 'bold'}}>
-              Huỷ
-            </AppText>
-          </TouchableOpacity>
+          {type === 'SALES' &&
+            item.status !== 'finish' &&
+            item.status !== 'cancel' && (
+              <View style={styles.viewGroupBtn}>
+                <TouchableOpacity
+                  style={styles.btnCancel}
+                  onPress={() => changeStatus(item, 'cancel')}>
+                  <AppText style={{color: Colors.GREEN_1, fontWeight: 'bold'}}>
+                    Huỷ
+                  </AppText>
+                </TouchableOpacity>
+                <TouchableOpacity
+                  style={styles.btnConfirm}
+                  onPress={() => changeStatus(item, 'finish')}>
+                  <AppText style={{color: Colors.WHITE, fontWeight: 'bold'}}>
+                    Xác nhận
+                  </AppText>
+                </TouchableOpacity>
+              </View>
+            )}
         </View>
       </View>
     );
