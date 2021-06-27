@@ -19,7 +19,6 @@ const ListProduct = ({navigation, route}) => {
   );
   const dispatch = useDispatch();
   const [listProduct, setListProduct] = useState([]);
-  const {type} = route.params;
 
   useEffect(() => {
     const getListProduct = () => {

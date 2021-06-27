@@ -10,39 +10,20 @@ import {AppText} from '../../components/atoms';
 import {useDispatch, useSelector} from 'react-redux';
 import {CartRedux} from '../../redux';
 
+import * as RootNavigation from '../../navigations/RootNavigation';
+import BottomTabNavigator from '../../navigations/BottomTabNavigator';
+import LoginNavigator from '../../navigations/LoginNavigator';
+
 const RootView = props => {
   const dispatch = useDispatch();
   const isVisibleModal = useSelector(
     state => state.CartReducer.isVisibleModalTypeSales,
   );
-  // useEffect(() => {
-  //   // Assume a message-notification contains a "type" property in the data payload of the screen to open
-  //   messaging().onNotificationOpenedApp(remoteMessage => {
-  //     console.log(
-  //       'Notification caused app to open from background state:',
-  //       remoteMessage.notification,
-  //     );
-  //     // navigation.navigate(remoteMessage.data.type);
-  //   });
-
-  //   // Check whether an initial notification is available
-  //   messaging()
-  //     .getInitialNotification()
-  //     .then(remoteMessage => {
-  //       if (remoteMessage) {
-  //         console.log(
-  //           'Notification caused app to open from quit state:',
-  //           remoteMessage.notification,
-  //         );
-  //         // setInitialRoute(remoteMessage.data.type); // e.g. "Settings"
-  //       }
-  //       // setLoading(false);
-  //     });
-  // }, []);
+  const idToken = useSelector(state => state.AuthenOverallReducer.idToken);
 
   return (
     <SafeAreaProvider>
-      {props.children}
+      {idToken ? <BottomTabNavigator /> : <LoginNavigator />}
 
       <Modal
         isVisible={isVisibleModal}
@@ -58,7 +39,11 @@ const RootView = props => {
             justifyContent: 'space-between',
             ...Mixin.padding(16, 16, 8, 16),
           }}>
-          <TouchableOpacity onPress={() => {}}>
+          <TouchableOpacity
+            onPress={() => {
+              RootNavigation.navigate('ListProduct');
+              dispatch(CartRedux.Actions.handelModalTypeSales(false));
+            }}>
             <AppText>NAVI</AppText>
           </TouchableOpacity>
           <TouchableOpacity

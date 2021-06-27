@@ -5,8 +5,10 @@ import {PersistGate} from 'redux-persist/integration/react';
 import configureStore from './src/config/store/configureStore';
 import MainNavigator from './src/navigations/MainNavigator';
 import {RootView} from './src/screens';
+import {NavigationContainer} from '@react-navigation/native';
 
 import {Colors} from './src/styles';
+import {navigationRef} from './src/navigations/RootNavigation';
 
 const {persistor, store} = configureStore();
 // persistor.purge();
@@ -24,9 +26,11 @@ const App = () => {
     <Provider store={store}>
       <PaperProvider theme={theme}>
         <PersistGate persistor={persistor}>
-          <RootView>
-            <MainNavigator />
-          </RootView>
+          <NavigationContainer ref={navigationRef}>
+            <RootView />
+            {/* <MainNavigator /> */}
+            {/* </RootView> */}
+          </NavigationContainer>
         </PersistGate>
       </PaperProvider>
     </Provider>
