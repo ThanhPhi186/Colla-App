@@ -130,7 +130,7 @@ const RegisterScreen = ({navigation}) => {
                 type="password"
                 value={password}
                 onChangeText={setPassword}
-                placeholder="Mật khẩu"
+                placeholder="Nhập mật khẩu"
               />
             </View>
           </>

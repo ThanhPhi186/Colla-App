@@ -55,4 +55,5 @@ export default {
   importCart: 'Giỏ hàng nhập',
   salesCart: 'Giỏ hàng bán',
   salesHistory: 'Lịch sử bán hàng',
+  sellProduct: 'Bán hàng',
 };

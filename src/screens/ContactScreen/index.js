@@ -4,6 +4,7 @@ import FastImage from 'react-native-fast-image';
 import {Appbar} from 'react-native-paper';
 import {images} from '../../assets';
 import {AppText} from '../../components/atoms';
+import {Button} from '../../components/molecules';
 import AppInput from '../../components/molecules/AppInput';
 import {Colors} from '../../styles';
 import {container} from '../../styles/GlobalStyles';
@@ -94,7 +95,17 @@ const ContactScreen = () => {
             placeholder="Nội dung phản hồi của bạn"
           />
         </View>
-        <TouchableOpacity></TouchableOpacity>
+        <Button
+          title="Gửi phản hồi"
+          titleStyle={{fontSize: 16}}
+          containerStyle={{
+            width: '40%',
+            height: 40,
+            backgroundColor: Colors.ORANGE,
+            marginTop: 8,
+            alignSelf: 'flex-end',
+          }}
+        />
       </View>
     </ScrollView>
   );

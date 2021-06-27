@@ -51,6 +51,12 @@ const MainAccount = ({navigation}) => {
         <View style={styles.largeIndicate} />
         <ScrollView>
           <ItemAccount
+            icon="cart-arrow-down"
+            title="Nhập hàng"
+            onPress={() => navigation.navigate('ListImportProduct')}
+          />
+          <View style={styles.smallIndicate} />
+          <ItemAccount
             icon="file"
             title="Lịch sử tích điểm"
             onPress={() => navigation.navigate('HistoryPoint')}

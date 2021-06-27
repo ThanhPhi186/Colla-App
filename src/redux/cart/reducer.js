@@ -6,6 +6,7 @@ const initialState = {
   numberSalesCart: 0,
   listProductCart: [],
   listSalesCart: [],
+  isVisibleModalTypeSales: false,
 };
 
 const cartReducer = createReducer(initialState, {
@@ -34,6 +35,11 @@ const cartReducer = createReducer(initialState, {
       ...state.listSalesCart.filter(elm => elm.id !== action.payload.id),
     ];
     state.numberSalesCart = state.listSalesCart.length;
+  },
+
+  // change modal type sale
+  [Actions.handelModalTypeSales]: (state, action) => {
+    state.isVisibleModalTypeSales = action.payload;
   },
 });
 

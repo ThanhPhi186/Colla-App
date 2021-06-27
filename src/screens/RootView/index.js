@@ -1,9 +1,20 @@
 import React, {useEffect} from 'react';
-import {View} from 'react-native';
+import {TouchableOpacity, View} from 'react-native';
 import messaging from '@react-native-firebase/messaging';
 import {SafeAreaProvider, SafeAreaView} from 'react-native-safe-area-context';
-import {Colors} from '../../styles';
+import {Colors, Mixin} from '../../styles';
+import ChooseTypeSales from '../ChooseTypeSales';
+import MainNavigator from '../../navigations/MainNavigator';
+import Modal from 'react-native-modal';
+import {AppText} from '../../components/atoms';
+import {useDispatch, useSelector} from 'react-redux';
+import {CartRedux} from '../../redux';
+
 const RootView = props => {
+  const dispatch = useDispatch();
+  const isVisibleModal = useSelector(
+    state => state.CartReducer.isVisibleModalTypeSales,
+  );
   // useEffect(() => {
   //   // Assume a message-notification contains a "type" property in the data payload of the screen to open
   //   messaging().onNotificationOpenedApp(remoteMessage => {
@@ -31,10 +42,33 @@ const RootView = props => {
 
   return (
     <SafeAreaProvider>
-      {/* <SafeAreaView style={{flex: 1, backgroundColor: Colors.PRIMARY}}>
-        {props.children}
-      </SafeAreaView> */}
-      <View style={{flex: 1}}>{props.children}</View>
+      {props.children}
+
+      <Modal
+        isVisible={isVisibleModal}
+        onBackdropPress={() =>
+          dispatch(CartRedux.Actions.handelModalTypeSales(false))
+        }>
+        <View
+          style={{
+            height: Mixin.device_height * 0.18,
+            width: Mixin.device_width * 0.9,
+            backgroundColor: Colors.WHITE,
+            borderRadius: Mixin.moderateSize(8),
+            justifyContent: 'space-between',
+            ...Mixin.padding(16, 16, 8, 16),
+          }}>
+          <TouchableOpacity onPress={() => {}}>
+            <AppText>NAVI</AppText>
+          </TouchableOpacity>
+          <TouchableOpacity
+            onPress={() =>
+              dispatch(CartRedux.Actions.handelModalTypeSales(false))
+            }>
+            <AppText>OFF</AppText>
+          </TouchableOpacity>
+        </View>
+      </Modal>
     </SafeAreaProvider>
   );
 };

@@ -26,6 +26,8 @@ import NotificationScreen from './Notification';
 import TopSales from './TopSales';
 import ForgotPassword from './ForgotPassword';
 import {ListProductInStore, PaymentOfSales, SalesCart} from './SellProduct';
+import {ListImportProduct, ImportCart, ImportPayment} from './ImportProduct';
+import ChooseTypeSales from './ChooseTypeSales';
 
 export {
   LoginScreen,
@@ -57,4 +59,8 @@ export {
   ListProductInStore,
   PaymentOfSales,
   SalesCart,
+  ListImportProduct,
+  ImportCart,
+  ImportPayment,
+  ChooseTypeSales,
 };

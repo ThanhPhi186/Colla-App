@@ -4,12 +4,12 @@ import {ViewContainer, AppText} from '../atoms';
 import {Mixin, Colors} from '../../styles';
 
 const Button = props => {
-  const {containerStyle, titleColor, title} = props;
+  const {containerStyle, titleColor, title, titleStyle} = props;
   return (
     <TouchableOpacity {...props} style={[styles.container, containerStyle]}>
       <AppText
         title
-        style={[styles.title, {color: titleColor || Colors.WHITE}]}>
+        style={[styles.title, {color: titleColor || Colors.WHITE}, titleStyle]}>
         {title}
       </AppText>
     </TouchableOpacity>

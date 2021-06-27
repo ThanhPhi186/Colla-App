@@ -25,16 +25,26 @@ import {
   ListProductInStore,
   SalesCart,
   PaymentOfSales,
+  ListImportProduct,
+  ImportCart,
+  ImportPayment,
+  ModalTypeSales,
+  ChooseTypeSales,
 } from '../screens';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import {CustomButtonTab} from '../components/molecules';
 import {trans} from '../utils';
 import {getFocusedRouteNameFromRoute} from '@react-navigation/native';
+import {Alert, View} from 'react-native';
+import {useDispatch} from 'react-redux';
+import {CartRedux} from '../redux';
 
 const Tab = createBottomTabNavigator();
 const Stack = createStackNavigator();
 
-const BottomTabNavigator = () => {
+const BottomTabNavigator = props => {
+  const dispatch = useDispatch();
+
   const getTabBarVisibility = route => {
     const routeName = getFocusedRouteNameFromRoute(route) ?? 'HomeScreen';
 
@@ -63,7 +73,10 @@ const BottomTabNavigator = () => {
       routeName === 'HistoryPoint' ||
       routeName === 'ReportScreen' ||
       routeName === 'PromotionScreen' ||
-      routeName === 'Policy'
+      routeName === 'Policy' ||
+      routeName === 'ListImportProduct' ||
+      routeName === 'ImportCart' ||
+      routeName === 'ImportPayment'
     ) {
       return false;
     }
@@ -124,6 +137,9 @@ const BottomTabNavigator = () => {
         <Stack.Screen name="ReportScreen" component={ReportScreen} />
         <Stack.Screen name="PromotionScreen" component={PromotionScreen} />
         <Stack.Screen name="Policy" component={Policy} />
+        <Stack.Screen name="ListImportProduct" component={ListImportProduct} />
+        <Stack.Screen name="ImportCart" component={ImportCart} />
+        <Stack.Screen name="ImportPayment" component={ImportPayment} />
       </Stack.Navigator>
     );
   };
@@ -137,6 +153,10 @@ const BottomTabNavigator = () => {
           animationEnabled: true,
         }}
         initialRouteName="ListProductInStore">
+        <Stack.Screen
+          name="ListProductInStore"
+          component={ListProductInStore}
+        />
         <Stack.Screen
           name="ListProductInStore"
           component={ListProductInStore}
@@ -173,20 +193,26 @@ const BottomTabNavigator = () => {
         }}
       />
       <Tab.Screen
-        name="Lên đơn"
+        name={trans('sellProduct')}
         component={SalesProductStack}
         options={({route}) => ({
           tabBarVisible: getSalesProductVisibility(route),
-          tabBarIcon: ({color, size}) => (
-            <MaterialCommunityIcons
-              name="plus-circle-outline"
-              color={color}
-              size={size}
+          // tabBarIcon: ({color, size}) => (
+          //   <MaterialCommunityIcons
+          //     name="plus-circle-outline"
+          //     color={color}
+          //     size={size}
+          //   />
+          // ),
+          tabBarButton: props => (
+            <CustomButtonTab
+              {...props}
+              tabBarVisible={route}
+              onPress={() =>
+                dispatch(CartRedux.Actions.handelModalTypeSales(true))
+              }
             />
           ),
-          // tabBarButton: props => (
-          //   <CustomButtonTab {...props} tabBarVisible={route} />
-          // ),
         })}
       />
       <Tab.Screen
