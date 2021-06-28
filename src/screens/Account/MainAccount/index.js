@@ -37,7 +37,11 @@ const MainAccount = ({navigation}) => {
 
   return (
     <View style={styles.container}>
-      <BannerBehind backGround={images.ic_Background} avatar={images.avatar} />
+      <BannerBehind
+        backGround={images.ic_Background}
+        avatar={images.avatar}
+        goAccountDetail={() => navigation.navigate('AccountDetail')}
+      />
       <View style={styles.viewInfo}>
         <AppText title style={styles.txtName}>
           {userInfo.fullname}

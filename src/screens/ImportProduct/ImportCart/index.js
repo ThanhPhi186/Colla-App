@@ -17,10 +17,8 @@ import ModalChangeQuantity from '../../../components/molecules/ModalChangeQuanti
 
 const ImportCart = ({navigation}) => {
   const dispatch = useDispatch();
-  const dataSalesCart = useSelector(state => state.CartReducer.listSalesCart);
-  const totalPrice = sum(
-    dataSalesCart?.map(elm => elm.product.price * elm.amount),
-  );
+  const dataCart = useSelector(state => state.CartReducer.listProductCart);
+  const totalPrice = sum(dataCart?.map(elm => elm.product.price * elm.amount));
 
   const [visibleModal, setVisibleModal] = useState(false);
   const [itemCart, setItemCart] = useState();
@@ -30,36 +28,39 @@ const ImportCart = ({navigation}) => {
     const params = {
       amount: refModal.current,
     };
-    put(`${Const.API.baseURL + Const.API.Cart}/${itemCart.id}`, params).then(
+    put(
+      `${Const.API.baseURL + Const.API.ImportCart}/${itemCart.id}`,
+      params,
+    ).then(res => {
+      if (res.ok) {
+        setVisibleModal(false);
+        dispatch(CartRedux.Actions.getCart.request());
+        setTimeout(() => {
+          SimpleToast.show('Cập nhật sản phẩm thành công', SimpleToast.SHORT);
+        }, 500);
+      }
+    });
+  };
+
+  const removeCartItem = item => {
+    deleteApi(`${Const.API.baseURL + Const.API.ImportCart}/${item.id}`).then(
       res => {
         if (res.ok) {
-          setVisibleModal(false);
-          dispatch(CartRedux.Actions.getSalesCart.request());
-          setTimeout(() => {
-            SimpleToast.show('Cập nhật sản phẩm thành công', SimpleToast.SHORT);
-          }, 500);
+          dispatch(CartRedux.Actions.getCart.request());
+          SimpleToast.show(
+            'Xóa sản phẩm khỏi giỏ hàng thành công!',
+            SimpleToast.SHORT,
+          );
+        } else {
+          SimpleToast.show(res.error, SimpleToast.SHORT);
         }
       },
     );
   };
 
-  const removeCartItem = item => {
-    deleteApi(`${Const.API.baseURL + Const.API.Cart}/${item.id}`).then(res => {
-      if (res.ok) {
-        dispatch(CartRedux.Actions.getSalesCart.request());
-        SimpleToast.show(
-          'Xóa sản phẩm khỏi giỏ hàng thành công!',
-          SimpleToast.SHORT,
-        );
-      } else {
-        SimpleToast.show(res.error, SimpleToast.SHORT);
-      }
-    });
-  };
-
   const goPayment = () => {
-    if (!isEmpty(dataSalesCart)) {
-      navigation.navigate('PaymentOfSales');
+    if (!isEmpty(dataCart)) {
+      navigation.navigate('PaymentScreen');
     } else {
       SimpleToast.show('Giỏ hàng trống');
     }
@@ -86,12 +87,12 @@ const ImportCart = ({navigation}) => {
         <Appbar.Content
           style={{alignItems: 'center'}}
           color="white"
-          title={trans('salesCart')}
+          title={trans('importCart')}
         />
       </Appbar.Header>
       <View style={container}>
         <FlatList
-          data={dataSalesCart}
+          data={dataCart}
           renderItem={({item}) => renderItem(item)}
           keyExtractor={(item, index) => index.toString()}
         />

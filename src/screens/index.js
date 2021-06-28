@@ -12,6 +12,7 @@ import {
   ReportScreen,
   PromotionScreen,
   Policy,
+  AccountDetail,
 } from './Account';
 import IntroScreen from './IntroScreen';
 import {ListProduct, DetailProduct} from './Product';
@@ -25,9 +26,8 @@ import RootView from './RootView';
 import NotificationScreen from './Notification';
 import TopSales from './TopSales';
 import ForgotPassword from './ForgotPassword';
-import {ListProductInStore, PaymentOfSales, SalesCart} from './SellProduct';
+import {ListSalesProduct, PaymentOfSales, SalesCart} from './SellProduct';
 import {ListImportProduct, ImportCart, ImportPayment} from './ImportProduct';
-import ChooseTypeSales from './ChooseTypeSales';
 
 export {
   LoginScreen,
@@ -56,11 +56,10 @@ export {
   TopSales,
   Policy,
   ForgotPassword,
-  ListProductInStore,
+  ListSalesProduct,
   PaymentOfSales,
   SalesCart,
   ListImportProduct,
   ImportCart,
-  ImportPayment,
-  ChooseTypeSales,
+  AccountDetail,
 };

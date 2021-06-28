@@ -6,23 +6,36 @@ import IconMaterialCommunityIcons from 'react-native-vector-icons/MaterialCommun
 const CustomButtonTab = (props, children) => {
   const {onPress, tabBarVisible} = props;
   console.log('tabBarVisible', tabBarVisible);
-
   return (
+    // <TouchableOpacity
+    //   style={[
+    //     styles.container,
+    //     {top: Platform.OS === 'android' && !tabBarVisible ? 70 : -20},
+    //   ]}
+    //   activeOpacity={1}
+    //   onPress={onPress}>
+    //   {/* <View style={styles.circleCover}> */}
+    //   <View style={styles.circleInside}>
+    //     <IconMaterialCommunityIcons
+    //       name="qrcode-scan"
+    //       size={40}
+    //       color={Colors.WHITE}
+    //     />
+    //   </View>
+    //   {/* </View> */}
+    // </TouchableOpacity>
     <TouchableOpacity
-      style={[
-        styles.container,
-        {top: Platform.OS === 'android' && !tabBarVisible ? 70 : -20},
-      ]}
+      style={{alignSelf: 'center'}}
       activeOpacity={1}
       onPress={onPress}>
       {/* <View style={styles.circleCover}> */}
-      <View style={styles.circleInside}>
-        <IconMaterialCommunityIcons
-          name="qrcode-scan"
-          size={40}
-          color={Colors.WHITE}
-        />
-      </View>
+      {/* <View style={styles.circleInside}> */}
+      <IconMaterialCommunityIcons
+        name="qrcode-scan"
+        size={30}
+        color={Colors.GRAY}
+      />
+      {/* </View> */}
       {/* </View> */}
     </TouchableOpacity>
   );

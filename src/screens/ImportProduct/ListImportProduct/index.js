@@ -15,7 +15,7 @@ import {Const, trans} from '../../../utils';
 
 const ListImportProduct = ({navigation}) => {
   const numberProductCart = useSelector(
-    state => state.CartReducer.numberSalesCart,
+    state => state.CartReducer.numberProductCart,
   );
   const dispatch = useDispatch();
   const refModal = useRef();
@@ -39,14 +39,14 @@ const ListImportProduct = ({navigation}) => {
     dispatch(CartRedux.Actions.getCart.request());
   }, [dispatch]);
 
-  const addToSalesCart = () => {
+  const addToImportCard = () => {
     const dataProduct = {
       product_id: itemProduct.id,
       amount: refModal.current,
     };
     post(Const.API.baseURL + Const.API.ImportCart, dataProduct).then(res => {
       if (res.ok) {
-        dispatch(CartRedux.Actions.getSalesCart.request());
+        dispatch(CartRedux.Actions.getCart.request());
         setVisibleModal(false);
         setTimeout(() => {
           SimpleToast.show('Thêm sản phẩm thành công', SimpleToast.SHORT);
@@ -85,7 +85,7 @@ const ListImportProduct = ({navigation}) => {
         />
         <IconCart
           number={numberProductCart}
-          onPress={() => navigation.navigate('SalesCart')}
+          onPress={() => navigation.navigate('ImportCart')}
         />
       </Appbar.Header>
       <View style={{flex: 1}}>
@@ -104,7 +104,7 @@ const ListImportProduct = ({navigation}) => {
       {itemProduct && (
         <ModalChangeQuantity
           ref={refModal}
-          addToCart={addToSalesCart}
+          addToCart={addToImportCard}
           detailProduct={itemProduct}
           isVisible={visibleModal}
           onBackdropPress={() => setVisibleModal(false)}

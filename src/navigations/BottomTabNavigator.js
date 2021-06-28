@@ -22,20 +22,17 @@ import {
   PromotionScreen,
   TopSales,
   Policy,
-  ListProductInStore,
+  ListSalesProduct,
   SalesCart,
   PaymentOfSales,
   ListImportProduct,
   ImportCart,
-  ImportPayment,
-  ModalTypeSales,
-  ChooseTypeSales,
+  AccountDetail,
 } from '../screens';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import {CustomButtonTab} from '../components/molecules';
 import {trans} from '../utils';
 import {getFocusedRouteNameFromRoute} from '@react-navigation/native';
-import {Alert, View} from 'react-native';
 import {useDispatch} from 'react-redux';
 import {CartRedux} from '../redux';
 
@@ -76,7 +73,7 @@ const BottomTabNavigator = props => {
       routeName === 'Policy' ||
       routeName === 'ListImportProduct' ||
       routeName === 'ImportCart' ||
-      routeName === 'ImportPayment'
+      routeName === 'AccountDetail'
     ) {
       return false;
     }
@@ -84,8 +81,7 @@ const BottomTabNavigator = props => {
   };
 
   const getSalesProductVisibility = route => {
-    const routeName =
-      getFocusedRouteNameFromRoute(route) ?? 'ListProductInStore';
+    const routeName = getFocusedRouteNameFromRoute(route) ?? 'ListSalesProduct';
     if (routeName === 'SalesCart' || routeName === 'PaymentOfSales') {
       return false;
     }
@@ -131,6 +127,7 @@ const BottomTabNavigator = props => {
         }}
         initialRouteName="MainAccount">
         <Stack.Screen name="MainAccount" component={MainAccount} />
+        <Stack.Screen name="AccountDetail" component={AccountDetail} />
         <Stack.Screen name="HistoryOrder" component={HistoryOrder} />
         <Stack.Screen name="ListCustomer" component={ListCustomer} />
         <Stack.Screen name="HistoryPoint" component={HistoryPoint} />
@@ -139,12 +136,11 @@ const BottomTabNavigator = props => {
         <Stack.Screen name="Policy" component={Policy} />
         <Stack.Screen name="ListImportProduct" component={ListImportProduct} />
         <Stack.Screen name="ImportCart" component={ImportCart} />
-        <Stack.Screen name="ImportPayment" component={ImportPayment} />
       </Stack.Navigator>
     );
   };
 
-  const SalesProductStack = ({navigation}) => {
+  const SalesProductStack = () => {
     return (
       <Stack.Navigator
         screenOptions={{
@@ -152,15 +148,8 @@ const BottomTabNavigator = props => {
           gestureEnabled: false,
           animationEnabled: true,
         }}
-        initialRouteName="ListProductInStore">
-        <Stack.Screen
-          name="ListProductInStore"
-          component={ListProductInStore}
-        />
-        <Stack.Screen
-          name="ListProductInStore"
-          component={ListProductInStore}
-        />
+        initialRouteName="ListSalesProduct">
+        <Stack.Screen name="ListSalesProduct" component={ListSalesProduct} />
         <Stack.Screen name="SalesCart" component={SalesCart} />
         <Stack.Screen name="PaymentOfSales" component={PaymentOfSales} />
       </Stack.Navigator>

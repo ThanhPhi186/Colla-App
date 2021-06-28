@@ -56,4 +56,8 @@ export default {
   salesCart: 'Giỏ hàng bán',
   salesHistory: 'Lịch sử bán hàng',
   sellProduct: 'Bán hàng',
+  accountDetail: 'Thông tin tài khoản',
+  firstAndLastName: 'Họ và tên',
+  dateOfBirth: 'Ngày sinh',
+  bankAccountNumber: 'Số tài khoản ngân hàng',
 };

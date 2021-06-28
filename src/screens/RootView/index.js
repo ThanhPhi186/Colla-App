@@ -1,25 +1,22 @@
 import React, {useEffect} from 'react';
-import {TouchableOpacity, View} from 'react-native';
-import messaging from '@react-native-firebase/messaging';
-import {SafeAreaProvider, SafeAreaView} from 'react-native-safe-area-context';
+import {View} from 'react-native';
+import {SafeAreaProvider} from 'react-native-safe-area-context';
 import {Colors, Mixin} from '../../styles';
-import ChooseTypeSales from '../ChooseTypeSales';
-import MainNavigator from '../../navigations/MainNavigator';
 import Modal from 'react-native-modal';
-import {AppText} from '../../components/atoms';
 import {useDispatch, useSelector} from 'react-redux';
 import {CartRedux} from '../../redux';
-
 import * as RootNavigation from '../../navigations/RootNavigation';
 import BottomTabNavigator from '../../navigations/BottomTabNavigator';
 import LoginNavigator from '../../navigations/LoginNavigator';
+import {Button} from '../../components/molecules';
 
-const RootView = props => {
+const RootView = () => {
   const dispatch = useDispatch();
   const isVisibleModal = useSelector(
     state => state.CartReducer.isVisibleModalTypeSales,
   );
   const idToken = useSelector(state => state.AuthenOverallReducer.idToken);
+  const userInfo = useSelector(state => state.AuthenOverallReducer.userAuthen);
 
   return (
     <SafeAreaProvider>
@@ -32,26 +29,36 @@ const RootView = props => {
         }>
         <View
           style={{
-            height: Mixin.device_height * 0.18,
             width: Mixin.device_width * 0.9,
             backgroundColor: Colors.WHITE,
             borderRadius: Mixin.moderateSize(8),
-            justifyContent: 'space-between',
-            ...Mixin.padding(16, 16, 8, 16),
+            justifyContent: 'center',
+            alignItems: 'center',
+            paddingVertical: Mixin.moderateSize(16),
           }}>
-          <TouchableOpacity
-            onPress={() => {
-              RootNavigation.navigate('ListProduct');
-              dispatch(CartRedux.Actions.handelModalTypeSales(false));
-            }}>
-            <AppText>NAVI</AppText>
-          </TouchableOpacity>
-          <TouchableOpacity
-            onPress={() =>
-              dispatch(CartRedux.Actions.handelModalTypeSales(false))
-            }>
-            <AppText>OFF</AppText>
-          </TouchableOpacity>
+          {!userInfo.member_type === 'member' ? (
+            <Button containerStyle={{marginBottom: 0}} title="Hợp tác" />
+          ) : (
+            <>
+              <Button
+                title="Bán hàng online"
+                onPress={() => {
+                  RootNavigation.navigate('ListSalesProduct', {type: 'ONLINE'});
+                  dispatch(CartRedux.Actions.handelModalTypeSales(false));
+                }}
+              />
+              <Button
+                containerStyle={{marginBottom: 0}}
+                title="Bán hàng offline"
+                onPress={() => {
+                  RootNavigation.navigate('ListSalesProduct', {
+                    type: 'OFFLINE',
+                  });
+                  dispatch(CartRedux.Actions.handelModalTypeSales(false));
+                }}
+              />
+            </>
+          )}
         </View>
       </Modal>
     </SafeAreaProvider>

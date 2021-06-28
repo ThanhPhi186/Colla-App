@@ -1,5 +1,5 @@
-import ListProductInStore from './ListProductInStore';
+import ListSalesProduct from './ListSalesProduct';
 import PaymentOfSales from './PaymentOfSales';
 import SalesCart from './SalesCart';
 
-export {ListProductInStore, PaymentOfSales, SalesCart};
+export {ListSalesProduct, PaymentOfSales, SalesCart};

@@ -12,12 +12,13 @@ import {get, post} from '../../../services/ServiceHandle';
 import {container} from '../../../styles/GlobalStyles';
 import {Const, trans} from '../../../utils';
 
-const ListProductInStore = ({navigation}) => {
+const ListSalesProduct = ({navigation, route}) => {
   const numberProductCart = useSelector(
     state => state.CartReducer.numberSalesCart,
   );
   const dispatch = useDispatch();
   const refModal = useRef();
+  const {type} = route.params;
 
   const [listProduct, setListProduct] = useState([]);
   const [visibleModal, setVisibleModal] = useState(false);
@@ -109,4 +110,4 @@ const ListProductInStore = ({navigation}) => {
   );
 };
 
-export default ListProductInStore;
+export default ListSalesProduct;
