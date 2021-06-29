@@ -13,31 +13,41 @@ import {container} from '../../../styles/GlobalStyles';
 import {Const, trans} from '../../../utils';
 
 const ListSalesProduct = ({navigation, route}) => {
-  const numberProductCart = useSelector(
-    state => state.CartReducer.numberSalesCart,
+  const {type} = route.params;
+
+  const numberProductCart = useSelector(state =>
+    type === 'ONLINE'
+      ? state.CartReducer.numberCartOnline
+      : state.CartReducer.numberSalesCart,
   );
+
+  console.log('numberProductCart', numberProductCart);
+
   const dispatch = useDispatch();
   const refModal = useRef();
-  const {type} = route.params;
 
   const [listProduct, setListProduct] = useState([]);
   const [visibleModal, setVisibleModal] = useState(false);
   const [itemProduct, setItemProduct] = useState();
 
   useEffect(() => {
+    const apiGetProduct =
+      type === 'ONLINE' ? Const.API.OnlineProduct : Const.API.GetListProduct;
     const getListProduct = () => {
-      get(Const.API.baseURL + Const.API.GetListProduct).then(res => {
+      get(Const.API.baseURL + apiGetProduct).then(res => {
         if (res.ok) {
           setListProduct(res.data.data);
         }
       });
     };
     getListProduct();
-  }, []);
+  }, [type]);
 
   useEffect(() => {
-    dispatch(CartRedux.Actions.getSalesCart.request());
-  }, [dispatch]);
+    type === 'ONLINE'
+      ? dispatch(CartRedux.Actions.getOnlineCart.request())
+      : dispatch(CartRedux.Actions.getSalesCart.request());
+  }, [dispatch, type]);
 
   const addToSalesCart = () => {
     const dataProduct = {
@@ -47,6 +57,24 @@ const ListSalesProduct = ({navigation, route}) => {
     post(Const.API.baseURL + Const.API.Cart, dataProduct).then(res => {
       if (res.ok) {
         dispatch(CartRedux.Actions.getSalesCart.request());
+        setVisibleModal(false);
+        setTimeout(() => {
+          SimpleToast.show('Thêm sản phẩm thành công', SimpleToast.SHORT);
+        }, 500);
+      } else {
+        SimpleToast.show(res.error, SimpleToast.SHORT);
+      }
+    });
+  };
+
+  const addToOnlineCart = () => {
+    const dataProduct = {
+      product_id: itemProduct.id,
+      amount: refModal.current,
+    };
+    post(Const.API.baseURL + Const.API.OnlineCart, dataProduct).then(res => {
+      if (res.ok) {
+        dispatch(CartRedux.Actions.getOnlineCart.request());
         setVisibleModal(false);
         setTimeout(() => {
           SimpleToast.show('Thêm sản phẩm thành công', SimpleToast.SHORT);
@@ -74,14 +102,15 @@ const ListSalesProduct = ({navigation, route}) => {
   return (
     <View style={container}>
       <Appbar.Header>
+        <Appbar.BackAction color="white" onPress={() => navigation.goBack()} />
         <Appbar.Content
           style={{alignItems: 'center'}}
           color="white"
-          title={trans('listProduct')}
+          title={type === 'ONLINE' ? 'Lên đơn online' : 'Lên đơn offline'}
         />
         <IconCart
           number={numberProductCart}
-          onPress={() => navigation.navigate('SalesCart')}
+          onPress={() => navigation.navigate('SalesCart', {type})}
         />
       </Appbar.Header>
       <View style={{flex: 1}}>
@@ -100,7 +129,7 @@ const ListSalesProduct = ({navigation, route}) => {
       {itemProduct && (
         <ModalChangeQuantity
           ref={refModal}
-          addToCart={addToSalesCart}
+          addToCart={type === 'ONLINE' ? addToOnlineCart : addToSalesCart}
           detailProduct={itemProduct}
           isVisible={visibleModal}
           onBackdropPress={() => setVisibleModal(false)}

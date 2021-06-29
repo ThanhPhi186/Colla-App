@@ -9,6 +9,10 @@ import * as RootNavigation from '../../navigations/RootNavigation';
 import BottomTabNavigator from '../../navigations/BottomTabNavigator';
 import LoginNavigator from '../../navigations/LoginNavigator';
 import {Button} from '../../components/molecules';
+import {AppText} from '../../components/atoms';
+import {post} from '../../services/ServiceHandle';
+import {Const} from '../../utils';
+import SimpleToast from 'react-native-simple-toast';
 
 const RootView = () => {
   const dispatch = useDispatch();
@@ -17,6 +21,26 @@ const RootView = () => {
   );
   const idToken = useSelector(state => state.AuthenOverallReducer.idToken);
   const userInfo = useSelector(state => state.AuthenOverallReducer.userAuthen);
+
+  const agentRequest = () => {
+    const params = {member_type: 'agency'};
+    post(Const.API.baseURL + Const.API.AgencyRequest, params).then(res => {
+      if (res.ok) {
+        dispatch(CartRedux.Actions.handelModalTypeSales(false));
+        setTimeout(() => {
+          SimpleToast.show(
+            'Chúc mừng bạn đã đăng ký thành công. Đội ngũ của Colla sẽ liên hệ với bạn sớm nhất',
+            SimpleToast.SHORT,
+          );
+        }, 700);
+      } else {
+        dispatch(CartRedux.Actions.handelModalTypeSales(false));
+        setTimeout(() => {
+          SimpleToast.show(res.error, SimpleToast.SHORT);
+        }, 700);
+      }
+    });
+  };
 
   return (
     <SafeAreaProvider>
@@ -36,8 +60,24 @@ const RootView = () => {
             alignItems: 'center',
             paddingVertical: Mixin.moderateSize(16),
           }}>
-          {!userInfo.member_type === 'member' ? (
-            <Button containerStyle={{marginBottom: 0}} title="Hợp tác" />
+          {userInfo.member_type === 'member' ? (
+            <>
+              <AppText
+                style={{
+                  textAlign: 'center',
+                  marginBottom: 16,
+                  paddingHorizontal: 16,
+                  fontSize: 16,
+                }}>
+                Colla liên tục tuyển cộng tác viên bán hàng. Bạn có muốn trở
+                thành cộng tác viên không?
+              </AppText>
+              <Button
+                containerStyle={{marginBottom: 0}}
+                title="Hợp tác"
+                onPress={agentRequest}
+              />
+            </>
           ) : (
             <>
               <Button

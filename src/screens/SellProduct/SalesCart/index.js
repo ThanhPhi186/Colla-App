@@ -15,9 +15,19 @@ import {deleteApi, put} from '../../../services/ServiceHandle';
 import {CartRedux} from '../../../redux';
 import ModalChangeQuantity from '../../../components/molecules/ModalChangeQuantity';
 
-const SalesCart = ({navigation}) => {
+const SalesCart = ({navigation, route}) => {
+  const {type} = route.params;
+
+  const API_CART = type === 'ONLINE' ? Const.API.OnlineCart : Const.API.Cart;
+
   const dispatch = useDispatch();
-  const dataSalesCart = useSelector(state => state.CartReducer.listSalesCart);
+
+  console.log('type', type);
+  const dataSalesCart = useSelector(state =>
+    type === 'ONLINE'
+      ? state.CartReducer.listCartOnline
+      : state.CartReducer.listSalesCart,
+  );
   const totalPrice = sum(
     dataSalesCart?.map(elm => elm.product.price * elm.amount),
   );
@@ -30,23 +40,29 @@ const SalesCart = ({navigation}) => {
     const params = {
       amount: refModal.current,
     };
-    put(`${Const.API.baseURL + Const.API.Cart}/${itemCart.id}`, params).then(
-      res => {
-        if (res.ok) {
-          setVisibleModal(false);
-          dispatch(CartRedux.Actions.getSalesCart.request());
-          setTimeout(() => {
-            SimpleToast.show('Cập nhật sản phẩm thành công', SimpleToast.SHORT);
-          }, 500);
-        }
-      },
-    );
+    put(`${Const.API.baseURL + API_CART}/${itemCart.id}`, params).then(res => {
+      if (res.ok) {
+        setVisibleModal(false);
+        dispatch(
+          type === 'ONLINE'
+            ? CartRedux.Actions.getOnlineCart.request()
+            : CartRedux.Actions.getSalesCart.request(),
+        );
+        setTimeout(() => {
+          SimpleToast.show('Cập nhật sản phẩm thành công', SimpleToast.SHORT);
+        }, 500);
+      }
+    });
   };
 
   const removeCartItem = item => {
-    deleteApi(`${Const.API.baseURL + Const.API.Cart}/${item.id}`).then(res => {
+    deleteApi(`${Const.API.baseURL + API_CART}/${item.id}`).then(res => {
       if (res.ok) {
-        dispatch(CartRedux.Actions.getSalesCart.request());
+        dispatch(
+          type === 'ONLINE'
+            ? CartRedux.Actions.getOnlineCart.request()
+            : CartRedux.Actions.getSalesCart.request(),
+        );
         SimpleToast.show(
           'Xóa sản phẩm khỏi giỏ hàng thành công!',
           SimpleToast.SHORT,
@@ -59,7 +75,7 @@ const SalesCart = ({navigation}) => {
 
   const goPayment = () => {
     if (!isEmpty(dataSalesCart)) {
-      navigation.navigate('PaymentOfSales');
+      navigation.navigate('PaymentOfSales', {type});
     } else {
       SimpleToast.show('Giỏ hàng trống');
     }
@@ -86,7 +102,7 @@ const SalesCart = ({navigation}) => {
         <Appbar.Content
           style={{alignItems: 'center'}}
           color="white"
-          title={trans('salesCart')}
+          title={type === 'ONLINE' ? 'Giỏ hàng online' : 'Giỏ hàng offline'}
         />
       </Appbar.Header>
       <View style={container}>

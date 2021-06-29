@@ -52,6 +52,10 @@
 	</dict>
 	<key>NSLocationWhenInUseUsageDescription</key>
 	<string></string>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>$(PRODUCT_NAME) would like access to your photo gallery to get photos</string>
+		<key>NSCameraUsageDescription</key>
+	<string>$(PRODUCT_NAME) would like access to your photo gallery to get photos</string>
 	<key>UIAppFonts</key>
 	<array>
 		<string>AntDesign.ttf</string>

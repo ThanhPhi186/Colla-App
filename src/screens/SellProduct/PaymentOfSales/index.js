@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useCallback, useState} from 'react';
 import {FlatList, TouchableOpacity, View} from 'react-native';
 import {Appbar, TextInput} from 'react-native-paper';
 import {container} from '../../../styles/GlobalStyles';
@@ -16,57 +16,52 @@ import SimpleToast from 'react-native-simple-toast';
 import {post} from '../../../services/ServiceHandle';
 import {CartRedux} from '../../../redux';
 
-const PaymentOfSales = ({navigation}) => {
+const PaymentOfSales = ({navigation, route}) => {
+  const {type} = route.params;
+
+  const API_ORDER = type === 'ONLINE' ? Const.API.OnlineOrder : Const.API.Order;
+
   const dispatch = useDispatch();
-  const dataSalesProducts = useSelector(
-    state => state.CartReducer.listSalesCart,
+
+  const dataSalesProducts = useSelector(state =>
+    type === 'ONLINE'
+      ? state.CartReducer.listCartOnline
+      : state.CartReducer.listSalesCart,
   );
+
   const totalPrice = sum(
     dataSalesProducts?.map(elm => elm.product.price * elm.amount),
   );
 
-  const [fullname, setFullName] = useState('');
-  const [phone, setPhone] = useState('');
-  const [address, setAddress] = useState('');
+  const [customer, setCustomer] = useState();
 
-  const handelCheckValue = () => {
-    const regex =
-      /^(0?)(3[2-9]|5[6|8|9]|7[0|6-9]|8[0-6|8|9]|9[0-4|6-9])[0-9]{7}$/;
-    if (!fullname) {
-      SimpleToast.show('Tên người nhận không được để trống', SimpleToast.SHORT);
-      return true;
-    }
-    if (!regex.test(phone)) {
-      SimpleToast.show('Số điện thoại không đúng định dạng', SimpleToast.SHORT);
-      return true;
-    }
-    if (!address) {
-      SimpleToast.show('Địa chỉ không được để trống', SimpleToast.SHORT);
-      return true;
-    }
-
-    return false;
+  const chooseCustomer = item => {
+    setCustomer(item);
   };
 
   const orderPayment = () => {
-    if (handelCheckValue()) {
-      return;
+    if (!customer) {
+      return SimpleToast.show('Vui lòng chọn khách hàng', SimpleToast.SHORT);
     }
 
     const carts = dataSalesProducts.map(elm => elm.id);
 
     const params = {
-      phone,
-      address_ship: address,
-      fullname,
+      phone: customer.phone,
+      address_ship: customer.address_ship,
+      fullname: customer.fullname,
       payment_method: 'cod',
       ship_method: '',
       carts,
     };
-    post(Const.API.baseURL + Const.API.Order, params).then(res => {
+    post(Const.API.baseURL + API_ORDER, params).then(res => {
       if (res.ok) {
-        dispatch(CartRedux.Actions.getSalesCart.request());
-        SimpleToast.show('Đặt hàng thành công', SimpleToast.SHORT);
+        dispatch(
+          type === 'ONLINE'
+            ? CartRedux.Actions.getOnlineCart.request()
+            : CartRedux.Actions.getSalesCart.request(),
+        );
+        SimpleToast.show('Lên đơn thành công', SimpleToast.SHORT);
         navigation.popToTop();
       }
     });
@@ -88,7 +83,16 @@ const PaymentOfSales = ({navigation}) => {
       </Appbar.Header>
       <View style={{flex: 1}}>
         <View style={styles.locationArea}>
-          <View style={{flex: 1, marginTop: 10, marginBottom: 20}}>
+          <View style={{width: '9%', alignItems: 'center'}}>
+            <Icon
+              name="map-marker"
+              size={24}
+              style={{marginTop: 10}}
+              color={Colors.GRAY}
+            />
+          </View>
+
+          <View style={{flex: 1, paddingVertical: 10}}>
             <View
               style={{
                 width: '100%',
@@ -97,32 +101,36 @@ const PaymentOfSales = ({navigation}) => {
               }}>
               <AppText
                 style={{fontSize: 17, fontWeight: '500', color: 'black'}}>
-                {trans('customerInfo')}
+                Khách hàng
               </AppText>
+              <TouchableOpacity
+                style={{width: 30, aspectRatio: 1 / 1}}
+                onPress={() =>
+                  navigation.navigate('ListSalesCustomer', {
+                    chooseCustomer,
+                  })
+                }>
+                <Icon
+                  name="square-edit-outline"
+                  size={24}
+                  color={Colors.GRAY}
+                />
+              </TouchableOpacity>
             </View>
 
-            <TextInput
-              style={{
-                backgroundColor: Colors.WHITE,
-              }}
-              conta
-              label={trans('recipientName')}
-              value={fullname}
-              onChangeText={setFullName}
-            />
-            <TextInput
-              style={{backgroundColor: Colors.WHITE}}
-              label={trans('phoneNumber')}
-              value={phone}
-              onChangeText={setPhone}
-            />
-
-            <TextInput
-              style={{backgroundColor: Colors.WHITE}}
-              label={trans('deliveryAddress')}
-              value={address}
-              onChangeText={setAddress}
-            />
+            {customer && (
+              <>
+                <AppText style={{marginRight: 10, marginTop: 3}}>
+                  {customer?.fullname}
+                </AppText>
+                <AppText style={{marginRight: 10, marginTop: 3}}>
+                  {customer?.phone}
+                </AppText>
+                <AppText style={{marginRight: 10, marginTop: 3}}>
+                  {customer?.address_ship}
+                </AppText>
+              </>
+            )}
           </View>
         </View>
 

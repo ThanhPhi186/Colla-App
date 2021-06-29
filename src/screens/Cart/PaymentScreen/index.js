@@ -23,8 +23,6 @@ const PaymentScreen = ({navigation}) => {
 
   const userInfo = useSelector(state => state.AuthenOverallReducer.userAuthen);
 
-  console.log('userInfo', userInfo);
-
   const dataAddress = userInfo?.addresses?.filter(elm => elm.is_default)[0];
 
   const totalPrice = sum(dataCart.map(elm => elm.product.price * elm.amount));

@@ -14,10 +14,17 @@ import styles from './styles';
 import SimpleToast from 'react-native-simple-toast';
 
 const HistoryOrder = ({navigation, route}) => {
+  const {type} = route.params;
+
+  const API_ORDER =
+    type === 'IMPORT'
+      ? Const.API.ImportOrder
+      : type === 'SALES_ONLINE'
+      ? Const.API.OnlineOrder
+      : Const.API.Order;
+
   const [dataOrder, setDataOrder] = useState([]);
   const [loading, setLoading] = useState(false);
-
-  const {type} = route.params;
 
   useEffect(() => {
     getData();
@@ -25,10 +32,7 @@ const HistoryOrder = ({navigation, route}) => {
 
   const getData = () => {
     setLoading(true);
-    get(
-      Const.API.baseURL +
-        (type === 'SALES' ? Const.API.Order : Const.API.ImportOrder),
-    ).then(res => {
+    get(Const.API.baseURL + API_ORDER).then(res => {
       if (res.ok) {
         setLoading(false);
         setDataOrder(res.data.data);
@@ -40,15 +44,13 @@ const HistoryOrder = ({navigation, route}) => {
   };
 
   const changeStatus = (item, status) => {
-    put(`${Const.API.baseURL + Const.API.Order}/${item.id}`, {status}).then(
-      res => {
-        if (res.ok) {
-          getData();
-        } else {
-          SimpleToast.show(res.error, SimpleToast.SHORT);
-        }
-      },
-    );
+    put(`${Const.API.baseURL + API_ORDER}/${item.id}`, {status}).then(res => {
+      if (res.ok) {
+        getData();
+      } else {
+        SimpleToast.show(res.error, SimpleToast.SHORT);
+      }
+    });
   };
 
   const renderStatus = status => {
@@ -128,7 +130,7 @@ const HistoryOrder = ({navigation, route}) => {
           <AppText style={{color: Colors.GREEN_1}}>
             Tổng: {numeral(item.total).format()} đ
           </AppText>
-          {type === 'SALES' &&
+          {type !== 'IMPORT' &&
             item.status !== 'finish' &&
             item.status !== 'cancel' && (
               <View style={styles.viewGroupBtn}>
@@ -160,7 +162,11 @@ const HistoryOrder = ({navigation, route}) => {
         <Appbar.Content
           color="white"
           title={
-            type === 'SALES' ? trans('salesHistory') : trans('historyOrder')
+            type === 'IMPORT'
+              ? trans('historyOrder')
+              : type === 'SALES_ONLINE'
+              ? 'Lịch sử bán hàng ONLINE'
+              : 'Lịch sử bán hàng OFFLINE'
           }
         />
       </Appbar.Header>
@@ -171,6 +177,7 @@ const HistoryOrder = ({navigation, route}) => {
           renderItem={renderItem}
           keyExtractor={(item, index) => index.toString()}
           contentContainerStyle={{paddingBottom: 16}}
+          showsVerticalScrollIndicator={false}
         />
       </View>
     </View>

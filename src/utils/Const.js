@@ -21,6 +21,12 @@ export default {
     ImportProduct: 'api/import/product',
     ImportCart: 'api/import/cart',
     ImportOrder: 'api/import/order',
+    UserCustomer: 'api/usercustomer',
+    OnlineCart: 'api/online/cart',
+    OnlineOrder: 'api/online/order',
+    OnlineProduct: 'api/online/product',
+    AgencyRequest: 'api/agencyrequest',
+    UploadAvatar: 'api/auth/upload-avatar',
   },
   RESPONSE_CODES: {
     SUCCESS: {

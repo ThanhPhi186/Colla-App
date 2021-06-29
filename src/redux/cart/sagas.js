@@ -3,7 +3,7 @@ import {get, post} from '../../services/ServiceHandle';
 
 import {Const} from '../../utils';
 
-import {getCart, getSalesCart} from './action';
+import {getCart, getOnlineCart, getSalesCart} from './action';
 
 function* getCartAsync(action) {
   try {
@@ -33,7 +33,22 @@ function* getSalesCartAsync(action) {
   }
 }
 
+function* getOnlineCartAsync(action) {
+  try {
+    const url = Const.API.baseURL + Const.API.OnlineCart;
+    const response = yield call(get, url);
+    if (response.ok) {
+      yield put(getOnlineCart.success(response.data.data));
+    } else {
+      yield put(getOnlineCart.failed(response.error));
+    }
+  } catch (error) {
+    // yield put(login.failed(error));
+  }
+}
+
 export function* CartWatcher() {
   [yield takeEvery(getCart.requestName, getCartAsync)];
   [yield takeEvery(getSalesCart.requestName, getSalesCartAsync)];
+  [yield takeEvery(getOnlineCart.requestName, getOnlineCartAsync)];
 }

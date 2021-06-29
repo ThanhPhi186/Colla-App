@@ -26,7 +26,13 @@ import RootView from './RootView';
 import NotificationScreen from './Notification';
 import TopSales from './TopSales';
 import ForgotPassword from './ForgotPassword';
-import {ListSalesProduct, PaymentOfSales, SalesCart} from './SellProduct';
+import {
+  ListSalesProduct,
+  PaymentOfSales,
+  SalesCart,
+  ListSalesCustomer,
+  AddNewCustomer,
+} from './SellProduct';
 import {ListImportProduct, ImportCart, ImportPayment} from './ImportProduct';
 
 export {
@@ -62,4 +68,6 @@ export {
   ListImportProduct,
   ImportCart,
   AccountDetail,
+  ListSalesCustomer,
+  AddNewCustomer,
 };

@@ -1,11 +1,10 @@
 import React from 'react';
-import {Platform, TouchableOpacity, View} from 'react-native';
+import {Platform, Text, TouchableOpacity, View} from 'react-native';
 import {Colors} from '../../styles';
 import IconMaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 
 const CustomButtonTab = (props, children) => {
   const {onPress, tabBarVisible} = props;
-  console.log('tabBarVisible', tabBarVisible);
   return (
     // <TouchableOpacity
     //   style={[
@@ -14,7 +13,6 @@ const CustomButtonTab = (props, children) => {
     //   ]}
     //   activeOpacity={1}
     //   onPress={onPress}>
-    //   {/* <View style={styles.circleCover}> */}
     //   <View style={styles.circleInside}>
     //     <IconMaterialCommunityIcons
     //       name="qrcode-scan"
@@ -22,10 +20,14 @@ const CustomButtonTab = (props, children) => {
     //       color={Colors.WHITE}
     //     />
     //   </View>
-    //   {/* </View> */}
     // </TouchableOpacity>
     <TouchableOpacity
-      style={{alignSelf: 'center'}}
+      style={{
+        alignSelf: 'center',
+        marginHorizontal: 12,
+        justifyContent: 'center',
+        alignItems: 'center',
+      }}
       activeOpacity={1}
       onPress={onPress}>
       {/* <View style={styles.circleCover}> */}
@@ -35,6 +37,7 @@ const CustomButtonTab = (props, children) => {
         size={30}
         color={Colors.GRAY}
       />
+
       {/* </View> */}
       {/* </View> */}
     </TouchableOpacity>

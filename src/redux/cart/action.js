@@ -9,13 +9,17 @@ export const GET_CART = 'GET_CART';
 export const GET_SALES_CART = 'GET_SALES_CART';
 export const REMOVE_SALES_CART = 'REMOVE_SALES_CART';
 export const VISIBLE_MODAL_TYPE_SALES = 'VISIBLE_MODAL_TYPE_SALES';
+export const GET_ONLINE_CART = 'GET_ONLINE_CART';
+export const REMOVE_ONLINE_CART = 'REMOVE_ONLINE_CART';
 
 const addToCart = reduxHelper.generateActions(ADD_TO_CART);
 const getCart = reduxHelper.generateActions(GET_CART);
 const removeToCart = createAction(REMOVE_TO_CART);
 const emptyCart = createAction(EMPTY_CART);
 const getSalesCart = reduxHelper.generateActions(GET_SALES_CART);
+const getOnlineCart = reduxHelper.generateActions(GET_ONLINE_CART);
 const removeSalesCart = createAction(REMOVE_SALES_CART);
+const removeOnlineCart = createAction(REMOVE_ONLINE_CART);
 const handelModalTypeSales = createAction(VISIBLE_MODAL_TYPE_SALES);
 
 export {
@@ -26,4 +30,6 @@ export {
   getSalesCart,
   removeSalesCart,
   handelModalTypeSales,
+  getOnlineCart,
+  removeOnlineCart,
 };

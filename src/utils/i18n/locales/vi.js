@@ -60,4 +60,7 @@ export default {
   firstAndLastName: 'Họ và tên',
   dateOfBirth: 'Ngày sinh',
   bankAccountNumber: 'Số tài khoản ngân hàng',
+  addNewCustomer: 'Thêm mới khách hàng',
+  editCustomer: 'Cập nhật thông tin khách hàng',
+  choose: 'Chọn',
 };

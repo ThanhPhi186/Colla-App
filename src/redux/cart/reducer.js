@@ -7,6 +7,8 @@ const initialState = {
   listProductCart: [],
   listSalesCart: [],
   isVisibleModalTypeSales: false,
+  listCartOnline: [],
+  numberCartOnline: 0,
 };
 
 const cartReducer = createReducer(initialState, {
@@ -35,6 +37,20 @@ const cartReducer = createReducer(initialState, {
       ...state.listSalesCart.filter(elm => elm.id !== action.payload.id),
     ];
     state.numberSalesCart = state.listSalesCart.length;
+  },
+
+  // online cart
+
+  [Actions.getOnlineCart.success]: (state, action) => {
+    state.listCartOnline = action.payload;
+    state.numberCartOnline = action.payload.length;
+  },
+
+  [Actions.removeOnlineCart]: (state, action) => {
+    state.listCartOnline = [
+      ...state.listCartOnline.filter(elm => elm.id !== action.payload.id),
+    ];
+    state.numberCartOnline = state.listCartOnline.length;
   },
 
   // change modal type sale

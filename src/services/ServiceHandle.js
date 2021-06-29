@@ -8,7 +8,14 @@ const api = create({
     'Content-Type': `application/json`,
   },
 });
-// }
+
+const apiUpload = create({
+  baseURL: Const.API.baseURL,
+  timeout: 20000,
+  headers: {
+    'content-type': `multipart/form-data`,
+  },
+});
 
 const returnData = respone => {
   console.log('response =====>', respone);
@@ -27,6 +34,7 @@ const returnData = respone => {
 
 const setToken = token => {
   api.setHeader('Authorization', `Bearer ${token}`);
+  apiUpload.setHeader('Authorization', `Bearer ${token}`);
 };
 
 const get = async (url, params) => {
@@ -45,5 +53,14 @@ const deleteApi = async (url, payload) => {
   const respone = await api.delete(url, payload);
   return returnData(respone);
 };
+const uploadImage = async (url, payload) => {
+  const respone = await apiUpload.post(url, payload);
+  return returnData(respone);
+};
+// uploadImage = async file => {
+//   const response = await this.apiUpload.post("upload/", file);
+//   // logic handle response here
+//   return response.data;
+// };
 
-export {get, post, put, deleteApi, setToken};
+export {get, post, put, deleteApi, setToken, uploadImage};

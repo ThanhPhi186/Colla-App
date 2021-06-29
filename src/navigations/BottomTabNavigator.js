@@ -28,6 +28,8 @@ import {
   ListImportProduct,
   ImportCart,
   AccountDetail,
+  ListSalesCustomer,
+  AddNewCustomer,
 } from '../screens';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import {CustomButtonTab} from '../components/molecules';
@@ -54,7 +56,12 @@ const BottomTabNavigator = props => {
       routeName === 'AddNewAddress' ||
       routeName === 'NotificationScreen' ||
       routeName === 'TopSales' ||
-      routeName === 'PromotionScreen'
+      routeName === 'PromotionScreen' ||
+      routeName === 'ListSalesProduct' ||
+      routeName === 'SalesCart' ||
+      routeName === 'PaymentOfSales' ||
+      routeName === 'ListSalesCustomer' ||
+      routeName === 'AddNewCustomer'
     ) {
       return false;
     }
@@ -82,7 +89,12 @@ const BottomTabNavigator = props => {
 
   const getSalesProductVisibility = route => {
     const routeName = getFocusedRouteNameFromRoute(route) ?? 'ListSalesProduct';
-    if (routeName === 'SalesCart' || routeName === 'PaymentOfSales') {
+    if (
+      routeName === 'SalesCart' ||
+      routeName === 'PaymentOfSales' ||
+      routeName === 'ListSalesCustomer' ||
+      routeName === 'AddNewCustomer'
+    ) {
       return false;
     }
     return true;
@@ -113,6 +125,11 @@ const BottomTabNavigator = props => {
         />
         <Stack.Screen name="TopSales" component={TopSales} />
         <Stack.Screen name="PromotionScreen" component={PromotionScreen} />
+        <Stack.Screen name="ListSalesProduct" component={ListSalesProduct} />
+        <Stack.Screen name="SalesCart" component={SalesCart} />
+        <Stack.Screen name="PaymentOfSales" component={PaymentOfSales} />
+        <Stack.Screen name="ListSalesCustomer" component={ListSalesCustomer} />
+        <Stack.Screen name="AddNewCustomer" component={AddNewCustomer} />
       </Stack.Navigator>
     );
   };
@@ -152,6 +169,8 @@ const BottomTabNavigator = props => {
         <Stack.Screen name="ListSalesProduct" component={ListSalesProduct} />
         <Stack.Screen name="SalesCart" component={SalesCart} />
         <Stack.Screen name="PaymentOfSales" component={PaymentOfSales} />
+        <Stack.Screen name="ListSalesCustomer" component={ListSalesCustomer} />
+        <Stack.Screen name="AddNewCustomer" component={AddNewCustomer} />
       </Stack.Navigator>
     );
   };
@@ -186,6 +205,7 @@ const BottomTabNavigator = props => {
         component={SalesProductStack}
         options={({route}) => ({
           tabBarVisible: getSalesProductVisibility(route),
+
           // tabBarIcon: ({color, size}) => (
           //   <MaterialCommunityIcons
           //     name="plus-circle-outline"
@@ -193,6 +213,7 @@ const BottomTabNavigator = props => {
           //     size={size}
           //   />
           // ),
+
           tabBarButton: props => (
             <CustomButtonTab
               {...props}
