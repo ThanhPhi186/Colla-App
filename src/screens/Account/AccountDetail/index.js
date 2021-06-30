@@ -1,7 +1,7 @@
 import React, {useCallback, useEffect, useState} from 'react';
 import {Pressable, Text, TouchableOpacity, View} from 'react-native';
 import {Appbar} from 'react-native-paper';
-import {FormInput} from '../../../components/atoms';
+import {AppText, FormInput} from '../../../components/atoms';
 import {container} from '../../../styles/GlobalStyles';
 import {Const, trans} from '../../../utils';
 import styles from './styles';
@@ -9,59 +9,14 @@ import moment from 'moment';
 import FastImage from 'react-native-fast-image';
 import {images} from '../../../assets';
 import {Button} from '../../../components/molecules';
-import {Mixin} from '../../../styles';
+import {Colors, Mixin} from '../../../styles';
 import {useDispatch, useSelector} from 'react-redux';
 import {post, uploadImage} from '../../../services/ServiceHandle';
 import SimpleToast from 'react-native-simple-toast';
 import {AuthenOverallRedux} from '../../../redux';
 import {launchCamera, launchImageLibrary} from 'react-native-image-picker';
-
-const actions = [
-  {
-    title: 'Take Image',
-    type: 'capture',
-    options: {
-      saveToPhotos: true,
-      mediaType: 'photo',
-      includeBase64: false,
-    },
-  },
-  {
-    title: 'Select Image',
-    type: 'library',
-    options: {
-      maxHeight: 200,
-      maxWidth: 200,
-      selectionLimit: 1,
-      mediaType: 'photo',
-      includeBase64: false,
-    },
-  },
-  {
-    title: 'Take Video',
-    type: 'capture',
-    options: {
-      saveToPhotos: true,
-      mediaType: 'video',
-    },
-  },
-  {
-    title: 'Select Video',
-    type: 'library',
-    options: {
-      selectionLimit: 0,
-      mediaType: 'video',
-    },
-  },
-  {
-    title: `Select Image or Video\n(mixed)`,
-    type: 'library',
-    options: {
-      selectionLimit: 0,
-      mediaType: 'mixed',
-    },
-  },
-];
+import Modal from 'react-native-modal';
+import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 
 const AccountDetail = ({navigation}) => {
   const userInfo = useSelector(state => state.AuthenOverallReducer.userAuthen);
@@ -73,8 +28,30 @@ const AccountDetail = ({navigation}) => {
   );
   const [bankNumber, setBankNumber] = useState(userInfo?.bankNumber);
   const [responseImg, setResponseImg] = useState(null);
+  const [modalAvatar, setModalAvatar] = useState(false);
 
-  console.log('responseImg', responseImg);
+  const actions = [
+    {
+      title: 'Camera',
+      type: 'capture',
+      options: {
+        saveToPhotos: true,
+        mediaType: 'photo',
+        includeBase64: false,
+      },
+    },
+    {
+      title: 'Chọn từ thư viện',
+      type: 'library',
+      options: {
+        maxHeight: 200,
+        maxWidth: 200,
+        selectionLimit: 1,
+        mediaType: 'photo',
+        includeBase64: false,
+      },
+    },
+  ];
 
   const updateProfile = () => {
     const params = {
@@ -100,14 +77,23 @@ const AccountDetail = ({navigation}) => {
     } else if (res.errorMessage) {
       console.log(res.errorMessage);
     } else {
+      console.log('resss', res);
       const formData = new FormData();
 
-      formData.append('sourcePath', res.assets[0].uri);
-      uploadImage(Const.API.baseURL + Const.API.UploadAvatar, formData).then(
+      formData.append('files', {
+        uri: res.assets[0].uri,
+        name: res.assets[0].fileName,
+        type: res.assets[0].type,
+      });
+
+      post(Const.API.baseURL + Const.API.UploadAvatar, formData).then(
         result => {
           if (result.ok) {
+            dispatch(AuthenOverallRedux.Actions.getProfile.request());
+            setModalAvatar(false);
           } else {
             SimpleToast.show(result.error, SimpleToast.SHORT);
+            setModalAvatar(false);
           }
         },
       );
@@ -116,7 +102,7 @@ const AccountDetail = ({navigation}) => {
 
   const handleImage = useCallback((type, options) => {
     if (type === 'capture') {
-      launchCamera(options, setResponseImg);
+      launchCamera(options, updateAvatar);
     } else {
       launchImageLibrary(options, updateAvatar);
     }
@@ -144,16 +130,17 @@ const AccountDetail = ({navigation}) => {
         <Appbar.Content color="white" title={trans('accountDetail')} />
       </Appbar.Header>
       <View style={styles.container}>
-        {actions.map(({title, type, options}) => {
-          return DemoButton(() => handleImage(type, options), title);
-        })}
-
-        {/* <TouchableOpacity onPress={handleImage}> */}
-        <FastImage
-          source={{uri: responseImg?.assets[0]?.uri}}
-          style={styles.image}
-        />
-        {/* </TouchableOpacity> */}
+        <TouchableOpacity
+          style={styles.viewImg}
+          onPress={() => setModalAvatar(true)}>
+          <FastImage
+            source={{uri: Const.API.baseURL + userInfo.avatar}}
+            style={styles.image}
+          />
+          <View style={{position: 'absolute', bottom: 0, right: 8}}>
+            <Icon name="camera" size={24} color={Colors.LIGHT_GREY} />
+          </View>
+        </TouchableOpacity>
         <FormInput
           placeholder="Họ và tên"
           value={fullName}
@@ -183,6 +170,29 @@ const AccountDetail = ({navigation}) => {
           }}
         />
       </View>
+      <Modal
+        isVisible={modalAvatar}
+        onBackdropPress={() => setModalAvatar(false)}>
+        <View
+          style={{
+            width: Mixin.device_width * 0.9,
+            backgroundColor: Colors.WHITE,
+            borderRadius: Mixin.moderateSize(8),
+            justifyContent: 'center',
+            alignItems: 'center',
+            paddingVertical: Mixin.moderateSize(16),
+          }}>
+          {actions.map(({title, type, options}) => {
+            return (
+              <Button
+                key={title}
+                title={title}
+                onPress={() => handleImage(type, options)}
+              />
+            );
+          })}
+        </View>
+      </Modal>
     </View>
   );
 };

@@ -14,7 +14,6 @@ import {
   PaymentScreen,
   DeliveryAddressScreen,
   AddNewAddress,
-  HistoryOrder,
   ListCustomer,
   HistoryPoint,
   ReportScreen,
@@ -30,6 +29,8 @@ import {
   AccountDetail,
   ListSalesCustomer,
   AddNewCustomer,
+  ImportHistory,
+  SalesHistory,
 } from '../screens';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import {CustomButtonTab} from '../components/molecules';
@@ -72,7 +73,6 @@ const BottomTabNavigator = props => {
     const routeName = getFocusedRouteNameFromRoute(route) ?? 'MainAccount';
 
     if (
-      routeName === 'HistoryOrder' ||
       routeName === 'ListCustomer' ||
       routeName === 'HistoryPoint' ||
       routeName === 'ReportScreen' ||
@@ -80,7 +80,9 @@ const BottomTabNavigator = props => {
       routeName === 'Policy' ||
       routeName === 'ListImportProduct' ||
       routeName === 'ImportCart' ||
-      routeName === 'AccountDetail'
+      routeName === 'AccountDetail' ||
+      routeName === 'ImportHistory' ||
+      routeName === 'SalesHistory'
     ) {
       return false;
     }
@@ -145,7 +147,8 @@ const BottomTabNavigator = props => {
         initialRouteName="MainAccount">
         <Stack.Screen name="MainAccount" component={MainAccount} />
         <Stack.Screen name="AccountDetail" component={AccountDetail} />
-        <Stack.Screen name="HistoryOrder" component={HistoryOrder} />
+        <Stack.Screen name="ImportHistory" component={ImportHistory} />
+        <Stack.Screen name="SalesHistory" component={SalesHistory} />
         <Stack.Screen name="ListCustomer" component={ListCustomer} />
         <Stack.Screen name="HistoryPoint" component={HistoryPoint} />
         <Stack.Screen name="ReportScreen" component={ReportScreen} />
@@ -176,7 +179,10 @@ const BottomTabNavigator = props => {
   };
 
   return (
-    <Tab.Navigator initialRouteName={trans('home')}>
+    <Tab.Navigator
+      initialRouteName={trans('home')}
+      // tabBar={props => <CustomTabBar />}
+    >
       <Tab.Screen
         name={trans('home')}
         component={HomeStack}

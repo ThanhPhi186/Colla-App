@@ -10,8 +10,11 @@ const styles = {
     width: device_width / 4,
     aspectRatio: 1 / 1,
     borderRadius: 100,
-    alignSelf: 'center',
     backgroundColor: Colors.WHITE,
+  },
+  viewImg: {
+    alignSelf: 'center',
+    width: device_width / 4,
     marginTop: Mixin.moderateSize(20),
   },
 };

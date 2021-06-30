@@ -6,13 +6,14 @@ import ShareScreen from './ShareScreen';
 import ContactScreen from './ContactScreen';
 import {
   MainAccount,
-  HistoryOrder,
   ListCustomer,
   HistoryPoint,
   ReportScreen,
   PromotionScreen,
   Policy,
   AccountDetail,
+  ImportHistory,
+  SalesHistory,
 } from './Account';
 import IntroScreen from './IntroScreen';
 import {ListProduct, DetailProduct} from './Product';
@@ -53,7 +54,6 @@ export {
   DeliveryAddressScreen,
   AddNewAddress,
   RootView,
-  HistoryOrder,
   ListCustomer,
   HistoryPoint,
   ReportScreen,
@@ -70,4 +70,6 @@ export {
   AccountDetail,
   ListSalesCustomer,
   AddNewCustomer,
+  ImportHistory,
+  SalesHistory,
 };

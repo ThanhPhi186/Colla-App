@@ -75,22 +75,13 @@ const MainAccount = ({navigation}) => {
           <ItemAccount
             icon="clock-outline"
             title="Lịch sử nhập hàng"
-            onPress={() =>
-              navigation.navigate('HistoryOrder', {type: 'IMPORT'})
-            }
+            onPress={() => navigation.navigate('ImportHistory')}
           />
           <ItemAccount
             icon="clock-outline"
-            title="Lịch sử bán hàng ONLINE"
+            title="Lịch sử bán hàng"
             onPress={() =>
-              navigation.navigate('HistoryOrder', {type: 'SALES_ONLINE'})
-            }
-          />
-          <ItemAccount
-            icon="clock-outline"
-            title="Lịch sử bán hàng OFFLINE"
-            onPress={() =>
-              navigation.navigate('HistoryOrder', {type: 'SALES_OFFLINE'})
+              navigation.navigate('SalesHistory', {type: 'SALES_ONLINE'})
             }
           />
           <View style={styles.smallIndicate} />
