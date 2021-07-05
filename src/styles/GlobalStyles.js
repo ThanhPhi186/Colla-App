@@ -1,5 +1,9 @@
-import {Colors} from '.';
+import {Colors, Mixin} from '.';
+import {getBottomSpace} from '../helpers/iphoneXHelper';
 import {FONT_SIZE_20} from './Typography';
+
+export const NAVIGATION_BOTTOM_TABS_HEIGHT = 64 + getBottomSpace();
+export const HEIGHT_MIDDLE_HOME_BTN = 70;
 
 export const container = {
   flex: 1,

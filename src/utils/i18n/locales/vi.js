@@ -36,7 +36,7 @@ export default {
   listCustomer: 'Danh sách khách hàng',
   copy: 'Sao chép',
   contact: 'Liên hệ',
-  contactAkini: 'Liên hệ với Akini',
+  contactColla: 'Liên hệ với Colla',
   historyPoint: 'Lịch sử tích điểm',
   editAddress: 'Chỉnh sửa địa chỉ',
   report: 'Báo cáo',
@@ -63,4 +63,5 @@ export default {
   addNewCustomer: 'Thêm mới khách hàng',
   editCustomer: 'Cập nhật thông tin khách hàng',
   choose: 'Chọn',
+  chooseBank: 'Chọn ngân hàng',
 };

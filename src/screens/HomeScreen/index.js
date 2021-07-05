@@ -24,6 +24,7 @@ import numeral from 'numeral';
 import {CartRedux} from '../../redux';
 import {device_width} from '../../styles/Mixin';
 import ItemCategory from './component/ItemCategory';
+import {Const} from '../../utils';
 
 const HomeScreen = ({navigation}) => {
   const numberProductCart = useSelector(
@@ -78,7 +79,14 @@ const HomeScreen = ({navigation}) => {
         <View style={[rowSpaceBetween]}>
           <View>
             <View style={viewRow}>
-              <AppImage source={images.avatar} imageStyle={styles.avatar} />
+              <AppImage
+                source={
+                  userInfo.avatar
+                    ? {uri: Const.API.baseURL + userInfo.avatar}
+                    : images.avatar
+                }
+                imageStyle={styles.avatar}
+              />
               <View>
                 <AppText style={styles.txtHello}>Xin chào,</AppText>
                 <AppText title style={styles.txtName}>
@@ -222,7 +230,7 @@ const HomeScreen = ({navigation}) => {
           />
         </ScrollView>
 
-        <FastImage source={images.test1} style={{width: '100%', height: 200}} />
+        {/* <FastImage source={images.test1} style={{width: '100%', height: 200}} /> */}
       </View>
     </View>
   );

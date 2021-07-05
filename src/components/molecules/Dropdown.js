@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react';
+import React from 'react';
 import DropDownPicker from 'react-native-dropdown-picker';
 import {AppText} from '../atoms';
 import {Colors, Mixin} from '../../styles';
@@ -12,13 +12,13 @@ import {FONT_SIZE_14} from '../../styles/Typography';
 // }
 
 // const defaultValue = [{label: 'Chọn giá trị', value: -1}];
-const AppDropDown = (props) => {
+const AppDropDown = props => {
   // const [value, setValue] = useState(props.value || '');
   // const [data, setData] = useState();
-  const onChangeItems = (item) => {
-    // setValue(item.value);
-    props.onChangeItem(item);
-  };
+  // const onChangeItems = item => {
+  //   // setValue(item.value);
+  //   props.onChangeItem(item);
+  // };
 
   // useEffect(() => {
   //   setData([...props.items]);
@@ -46,7 +46,7 @@ const AppDropDown = (props) => {
         labelStyle={styles.labelStyle}
         itemStyle={styles.itemStyle}
         dropDownStyle={styles.dropDownStyle}
-        onChangeItem={onChangeItems}
+        // onChangeItem={onChangeItems}
         activeLabelStyle={styles.activeLabelStyle}
         activeItemStyle={styles.activeItemStyle}
       />
@@ -83,17 +83,17 @@ const styles = {
     borderTopRightRadius: Mixin.moderateSize(4),
     borderBottomLeftRadius: Mixin.moderateSize(4),
     borderBottomRightRadius: Mixin.moderateSize(4),
-    shadowColor: 'gray',
-    shadowOffset: {
-      width: 0,
-      height: 2,
-    },
-    shadowOpacity: 0.23,
-    shadowRadius: 2.62,
-    elevation: 1,
+    // shadowColor: '#000',
+    // shadowOffset: {
+    //   width: 0,
+    //   height: 2,
+    // },
+    // shadowOpacity: 0.23,
+    // shadowRadius: 2.62,
+    // elevation: 1,
   },
   placeholderStyle: {
-    color: 'transparent',
+    color: Colors.GRAY,
   },
   activeItemStyle: {
     // backgroundColor: color.primary,

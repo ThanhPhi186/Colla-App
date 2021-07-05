@@ -38,11 +38,18 @@ import {trans} from '../utils';
 import {getFocusedRouteNameFromRoute} from '@react-navigation/native';
 import {useDispatch} from 'react-redux';
 import {CartRedux} from '../redux';
+import {isIphoneX} from '../helpers/iphoneXHelper';
+import {device_width} from '../styles/Mixin';
+import {Text, TouchableOpacity, View} from 'react-native';
+import TabShape from './TabShape';
+import {Colors} from '../styles';
+import {FONT_SIZE_10} from '../styles/Typography';
+import {NAVIGATION_BOTTOM_TABS_HEIGHT} from '../styles/GlobalStyles';
 
 const Tab = createBottomTabNavigator();
 const Stack = createStackNavigator();
 
-const BottomTabNavigator = props => {
+const BottomTabNavigator = () => {
   const dispatch = useDispatch();
 
   const getTabBarVisibility = route => {
@@ -178,84 +185,154 @@ const BottomTabNavigator = props => {
     );
   };
 
+  function MyTabBar({state, descriptors, navigation}) {
+    console.log('isIphoneX', isIphoneX());
+    const focusedOptions = descriptors[state.routes[state.index].key].options;
+
+    const tabWidth = React.useMemo(
+      () => device_width / state.routes.length,
+      [state.routes.length],
+    );
+
+    if (focusedOptions.tabBarVisible === false) {
+      return null;
+    }
+    const renderIcon = name => {
+      switch (name) {
+        case trans('home'):
+          return 'home';
+        case trans('contact'):
+          return 'phone-in-talk';
+        case 'Lên đơn':
+          return 'plus-circle-outline';
+        case trans('share'):
+          return 'share-variant';
+        case trans('personal'):
+          return 'account';
+        default:
+          break;
+      }
+    };
+
+    return (
+      <View style={styles.content}>
+        <TabShape {...{tabWidth}} />
+        <View style={styles.subContent}>
+          {state.routes.map((route, index) => {
+            const {options} = descriptors[route.key];
+
+            const label =
+              options.tabBarLabel !== undefined
+                ? options.tabBarLabel
+                : options.title !== undefined
+                ? options.title
+                : route.name;
+
+            const isFocused = state.index === index;
+
+            const onPress = () => {
+              const event = navigation.emit({
+                type: 'tabPress',
+                target: route.key,
+                canPreventDefault: true,
+              });
+
+              if (!isFocused && !event.defaultPrevented) {
+                navigation.navigate(route.name);
+              }
+            };
+
+            const onLongPress = () => {
+              navigation.emit({
+                type: 'tabLongPress',
+                target: route.key,
+              });
+            };
+            if (index === 2) {
+              return (
+                <CustomButtonTab
+                  onPress={() =>
+                    dispatch(CartRedux.Actions.handelModalTypeSales(true))
+                  }
+                  key={index}
+                />
+              );
+            }
+
+            return (
+              <TouchableOpacity
+                key={index}
+                accessibilityRole="button"
+                accessibilityState={isFocused ? {selected: true} : {}}
+                accessibilityLabel={options.tabBarAccessibilityLabel}
+                testID={options.tabBarTestID}
+                onPress={onPress}
+                onLongPress={onLongPress}
+                style={{
+                  flex: 1,
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                }}>
+                <MaterialCommunityIcons
+                  name={renderIcon(label)}
+                  color={isFocused ? Colors.PRIMARY : Colors.GRAY}
+                  size={24}
+                />
+                <Text
+                  style={{
+                    color: isFocused ? Colors.PRIMARY : Colors.GRAY,
+                    marginTop: 8,
+                    fontSize: FONT_SIZE_10,
+                  }}>
+                  {label}
+                </Text>
+              </TouchableOpacity>
+            );
+          })}
+        </View>
+      </View>
+    );
+  }
+
   return (
-    <Tab.Navigator
-      initialRouteName={trans('home')}
-      // tabBar={props => <CustomTabBar />}
-    >
+    <Tab.Navigator tabBar={props => <MyTabBar {...props} />}>
       <Tab.Screen
         name={trans('home')}
         component={HomeStack}
-        options={({route}) => ({
-          tabBarVisible: getTabBarVisibility(route),
-          tabBarIcon: ({color, size}) => (
-            <MaterialCommunityIcons name="home" color={color} size={size} />
-          ),
-        })}
+        options={({route}) => ({tabBarVisible: getTabBarVisibility(route)})}
       />
-      <Tab.Screen
-        name={trans('contact')}
-        component={ContactScreen}
-        options={{
-          tabBarIcon: ({color, size}) => (
-            <MaterialCommunityIcons
-              name="phone-in-talk"
-              color={color}
-              size={size}
-            />
-          ),
-        }}
-      />
+      <Tab.Screen name={trans('contact')} component={ContactScreen} />
       <Tab.Screen
         name={trans('sellProduct')}
         component={SalesProductStack}
         options={({route}) => ({
           tabBarVisible: getSalesProductVisibility(route),
-
-          // tabBarIcon: ({color, size}) => (
-          //   <MaterialCommunityIcons
-          //     name="plus-circle-outline"
-          //     color={color}
-          //     size={size}
-          //   />
-          // ),
-
-          tabBarButton: props => (
-            <CustomButtonTab
-              {...props}
-              tabBarVisible={route}
-              onPress={() =>
-                dispatch(CartRedux.Actions.handelModalTypeSales(true))
-              }
-            />
-          ),
         })}
       />
-      <Tab.Screen
-        name={trans('share')}
-        options={{
-          tabBarIcon: ({color, size}) => (
-            <MaterialCommunityIcons
-              name="share-variant"
-              color={color}
-              size={size}
-            />
-          ),
-        }}
-        component={ShareScreen}
-      />
+      <Tab.Screen name={trans('share')} component={ShareScreen} />
       <Tab.Screen
         name={trans('personal')}
         component={AccountStack}
-        options={({route}) => ({
-          tabBarVisible: getPersonVisibility(route),
-          tabBarIcon: ({color, size}) => (
-            <MaterialCommunityIcons name="account" color={color} size={size} />
-          ),
-        })}
+        options={({route}) => ({tabBarVisible: getPersonVisibility(route)})}
       />
     </Tab.Navigator>
   );
+};
+
+const styles = {
+  content: {
+    zIndex: 0,
+    position: 'absolute',
+    bottom: 0,
+  },
+  subContent: {
+    flexDirection: 'row',
+    zIndex: 1,
+    position: 'absolute',
+    bottom: 0,
+    height: NAVIGATION_BOTTOM_TABS_HEIGHT,
+    width: device_width,
+  },
 };
 
 export default BottomTabNavigator;

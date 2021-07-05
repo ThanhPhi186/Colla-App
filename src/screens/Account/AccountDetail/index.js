@@ -8,10 +8,10 @@ import styles from './styles';
 import moment from 'moment';
 import FastImage from 'react-native-fast-image';
 import {images} from '../../../assets';
-import {Button} from '../../../components/molecules';
+import {Button, DropDown} from '../../../components/molecules';
 import {Colors, Mixin} from '../../../styles';
 import {useDispatch, useSelector} from 'react-redux';
-import {post, uploadImage} from '../../../services/ServiceHandle';
+import {get, post, uploadImage} from '../../../services/ServiceHandle';
 import SimpleToast from 'react-native-simple-toast';
 import {AuthenOverallRedux} from '../../../redux';
 import {launchCamera, launchImageLibrary} from 'react-native-image-picker';
@@ -27,8 +27,10 @@ const AccountDetail = ({navigation}) => {
     moment(userInfo?.dob).format('DD-MM-YYYY'),
   );
   const [bankNumber, setBankNumber] = useState(userInfo?.bankNumber);
-  const [responseImg, setResponseImg] = useState(null);
   const [modalAvatar, setModalAvatar] = useState(false);
+  const [modalBank, setModalBank] = useState(false);
+  const [bankCode, setBankCode] = useState(userInfo?.bankCode);
+  const [listBank, setListBank] = useState([]);
 
   const actions = [
     {
@@ -53,11 +55,34 @@ const AccountDetail = ({navigation}) => {
     },
   ];
 
+  console.log('bankCode', bankCode);
+
+  useEffect(() => {
+    const getListBank = () => {
+      get(Const.API.baseURL + Const.API.Bank).then(res => {
+        if (res.ok) {
+          const convertData = res.data.data.map(elm => {
+            return {
+              label: `${elm.vn_name} (${elm.shortName})`,
+              value: elm.bankCode,
+            };
+          });
+          setListBank(convertData);
+          console.log('convertData', convertData);
+        } else {
+          SimpleToast.show(res.error, SimpleToast.SHORT);
+        }
+      });
+    };
+    getListBank();
+  }, []);
+
   const updateProfile = () => {
     const params = {
       fullname: fullName,
       dob: moment(dateOfBirth, 'DD-MM-YYYY').format(),
       bankNumber,
+      bankCode,
     };
 
     post(Const.API.baseURL + Const.API.UpdateProfile, params).then(res => {
@@ -77,7 +102,6 @@ const AccountDetail = ({navigation}) => {
     } else if (res.errorMessage) {
       console.log(res.errorMessage);
     } else {
-      console.log('resss', res);
       const formData = new FormData();
 
       formData.append('files', {
@@ -108,21 +132,6 @@ const AccountDetail = ({navigation}) => {
     }
   }, []);
 
-  const DemoButton = (onPress, title) => {
-    return (
-      <Pressable
-        onPress={onPress}
-        style={({pressed}) => [
-          {
-            backgroundColor: pressed ? 'skyblue' : 'steelblue',
-          },
-          styles.container,
-        ]}>
-        <Text style={styles.text}>{title}</Text>
-      </Pressable>
-    );
-  };
-
   return (
     <View style={container}>
       <Appbar.Header>
@@ -134,7 +143,11 @@ const AccountDetail = ({navigation}) => {
           style={styles.viewImg}
           onPress={() => setModalAvatar(true)}>
           <FastImage
-            source={{uri: Const.API.baseURL + userInfo.avatar}}
+            source={
+              userInfo.avatar
+                ? {uri: Const.API.baseURL + userInfo.avatar}
+                : images.avatar
+            }
             style={styles.image}
           />
           <View style={{position: 'absolute', bottom: 0, right: 8}}>
@@ -154,6 +167,17 @@ const AccountDetail = ({navigation}) => {
           setValueDate={date =>
             setDateOfBird(moment(date).format('DD-MM-YYYY'))
           }
+        />
+        <DropDown
+          placeholder={trans('chooseBank')}
+          open={modalBank}
+          setOpen={setModalBank}
+          items={listBank}
+          setItems={setListBank}
+          value={bankCode}
+          setValue={setBankCode}
+          searchable
+          searchPlaceholder={trans('search')}
         />
         <FormInput
           placeholder="Số tài khoản"

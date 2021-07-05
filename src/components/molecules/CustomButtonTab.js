@@ -1,65 +1,38 @@
 import React from 'react';
-import {Platform, Text, TouchableOpacity, View} from 'react-native';
+import {TouchableOpacity, View} from 'react-native';
 import {Colors} from '../../styles';
-import IconMaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
+import Ionicons from 'react-native-vector-icons/Ionicons';
+import {
+  HEIGHT_MIDDLE_HOME_BTN,
+  NAVIGATION_BOTTOM_TABS_HEIGHT,
+} from '../../styles/GlobalStyles';
+import {isIphoneX} from '../../helpers/iphoneXHelper';
 
 const CustomButtonTab = (props, children) => {
-  const {onPress, tabBarVisible} = props;
+  const {onPress} = props;
+
   return (
-    // <TouchableOpacity
-    //   style={[
-    //     styles.container,
-    //     {top: Platform.OS === 'android' && !tabBarVisible ? 70 : -20},
-    //   ]}
-    //   activeOpacity={1}
-    //   onPress={onPress}>
-    //   <View style={styles.circleInside}>
-    //     <IconMaterialCommunityIcons
-    //       name="qrcode-scan"
-    //       size={40}
-    //       color={Colors.WHITE}
-    //     />
-    //   </View>
-    // </TouchableOpacity>
     <TouchableOpacity
-      style={{
-        alignSelf: 'center',
-        marginHorizontal: 12,
-        justifyContent: 'center',
-        alignItems: 'center',
-      }}
+      style={styles.container}
       activeOpacity={1}
       onPress={onPress}>
-      {/* <View style={styles.circleCover}> */}
-      {/* <View style={styles.circleInside}> */}
-      <IconMaterialCommunityIcons
-        name="qrcode-scan"
-        size={30}
-        color={Colors.GRAY}
-      />
-
-      {/* </View> */}
-      {/* </View> */}
+      <View style={styles.circleInside}>
+        <Ionicons name="logo-usd" size={44} color={Colors.WHITE} />
+      </View>
     </TouchableOpacity>
   );
 };
 const styles = {
   container: {
-    justifyContent: 'center',
-    alignItems: 'center',
+    top: isIphoneX()
+      ? -(NAVIGATION_BOTTOM_TABS_HEIGHT / 2 + 5)
+      : -(NAVIGATION_BOTTOM_TABS_HEIGHT / 2 + 25),
   },
-  circleCover: {
-    width: 90,
-    height: 90,
-    borderRadius: 45,
-    backgroundColor: 'red',
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
+
   circleInside: {
-    width: 70,
-    height: 70,
-    borderRadius: 35,
+    width: HEIGHT_MIDDLE_HOME_BTN,
+    height: HEIGHT_MIDDLE_HOME_BTN,
+    borderRadius: HEIGHT_MIDDLE_HOME_BTN / 2,
     backgroundColor: Colors.PRIMARY,
     justifyContent: 'center',
     alignItems: 'center',

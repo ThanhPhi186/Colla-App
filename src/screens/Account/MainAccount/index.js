@@ -6,8 +6,12 @@ import {AppText} from '../../../components/atoms';
 import {Button} from '../../../components/molecules';
 import {AuthenOverallRedux} from '../../../redux';
 import {setToken} from '../../../services/ServiceHandle';
-import {container} from '../../../styles/GlobalStyles';
-import {trans} from '../../../utils';
+import {
+  container,
+  HEIGHT_MIDDLE_HOME_BTN,
+  NAVIGATION_BOTTOM_TABS_HEIGHT,
+} from '../../../styles/GlobalStyles';
+import {Const, trans} from '../../../utils';
 import auth from '@react-native-firebase/auth';
 import {Colors, Mixin} from '../../../styles';
 import {device_height, device_width} from '../../../styles/Mixin';
@@ -39,7 +43,11 @@ const MainAccount = ({navigation}) => {
     <View style={styles.container}>
       <BannerBehind
         backGround={images.ic_Background}
-        avatar={images.avatar}
+        avatar={
+          userInfo.avatar
+            ? {uri: Const.API.baseURL + userInfo.avatar}
+            : images.avatar
+        }
         goAccountDetail={() => navigation.navigate('AccountDetail')}
       />
       <View style={styles.viewInfo}>
@@ -53,7 +61,12 @@ const MainAccount = ({navigation}) => {
         <View style={styles.largeIndicate} />
         <ItemAccount point={userInfo.point} />
         <View style={styles.largeIndicate} />
-        <ScrollView>
+        <ScrollView
+          showsVerticalScrollIndicator={false}
+          contentContainerStyle={{
+            paddingBottom:
+              NAVIGATION_BOTTOM_TABS_HEIGHT + HEIGHT_MIDDLE_HOME_BTN,
+          }}>
           <ItemAccount
             icon="cart-arrow-down"
             title="Nhập hàng"

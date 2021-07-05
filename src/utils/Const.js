@@ -27,6 +27,7 @@ export default {
     OnlineProduct: 'api/online/product',
     AgencyRequest: 'api/agencyrequest',
     UploadAvatar: 'api/auth/upload-avatar',
+    Bank: 'api/bank',
   },
   RESPONSE_CODES: {
     SUCCESS: {
