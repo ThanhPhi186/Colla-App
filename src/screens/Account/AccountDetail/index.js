@@ -180,6 +180,12 @@ const AccountDetail = ({navigation}) => {
           searchPlaceholder={trans('search')}
         />
         <FormInput
+          placeholder="Nhập chi nhánh"
+          value={bankNumber}
+          onChangeText={setBankNumber}
+          title={trans('branch').toUpperCase()}
+        />
+        <FormInput
           placeholder="Số tài khoản"
           value={bankNumber}
           onChangeText={setBankNumber}

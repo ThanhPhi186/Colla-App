@@ -64,4 +64,5 @@ export default {
   editCustomer: 'Cập nhật thông tin khách hàng',
   choose: 'Chọn',
   chooseBank: 'Chọn ngân hàng',
+  branch: 'Chi nhánh',
 };
