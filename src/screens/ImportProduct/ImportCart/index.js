@@ -17,7 +17,7 @@ import ModalChangeQuantity from '../../../components/molecules/ModalChangeQuanti
 
 const ImportCart = ({navigation}) => {
   const dispatch = useDispatch();
-  const dataCart = useSelector(state => state.CartReducer.listProductCart);
+  const dataCart = useSelector(state => state.CartReducer.listImportCart);
   const totalPrice = sum(dataCart?.map(elm => elm.product.price * elm.amount));
 
   const [visibleModal, setVisibleModal] = useState(false);
@@ -34,7 +34,7 @@ const ImportCart = ({navigation}) => {
     ).then(res => {
       if (res.ok) {
         setVisibleModal(false);
-        dispatch(CartRedux.Actions.getCart.request());
+        dispatch(CartRedux.Actions.getImportCart.request());
         setTimeout(() => {
           SimpleToast.show('Cập nhật sản phẩm thành công', SimpleToast.SHORT);
         }, 500);
@@ -46,7 +46,7 @@ const ImportCart = ({navigation}) => {
     deleteApi(`${Const.API.baseURL + Const.API.ImportCart}/${item.id}`).then(
       res => {
         if (res.ok) {
-          dispatch(CartRedux.Actions.getCart.request());
+          dispatch(CartRedux.Actions.getImportCart.request());
           SimpleToast.show(
             'Xóa sản phẩm khỏi giỏ hàng thành công!',
             SimpleToast.SHORT,
@@ -60,7 +60,7 @@ const ImportCart = ({navigation}) => {
 
   const goPayment = () => {
     if (!isEmpty(dataCart)) {
-      navigation.navigate('PaymentScreen');
+      navigation.navigate('PaymentScreen', {type: 'IMPORT'});
     } else {
       SimpleToast.show('Giỏ hàng trống');
     }
@@ -105,7 +105,7 @@ const ImportCart = ({navigation}) => {
       </View>
       <Button
         containerStyle={styles.btnPurchase}
-        title={trans('purchase')}
+        title={trans('payment')}
         onPress={goPayment}
       />
       {itemCart && (

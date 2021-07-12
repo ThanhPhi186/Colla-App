@@ -1,5 +1,13 @@
 import React, {useEffect, useState} from 'react';
-import {TextInput, TouchableOpacity, View} from 'react-native';
+import {
+  Keyboard,
+  KeyboardAvoidingView,
+  ScrollView,
+  TextInput,
+  TouchableOpacity,
+  TouchableWithoutFeedback,
+  View,
+} from 'react-native';
 import {Appbar} from 'react-native-paper';
 import {images} from '../../assets';
 import {AppImage, AppLoading, AppText} from '../../components/atoms';
@@ -12,6 +20,7 @@ import SimpleToast from 'react-native-simple-toast';
 import {post} from '../../services/ServiceHandle';
 import {useDispatch} from 'react-redux';
 import {AuthenOverallRedux} from '../../redux';
+import messaging from '@react-native-firebase/messaging';
 
 const LoginScreen = ({navigation}) => {
   const [phoneNumber, setPhoneNumber] = useState('');
@@ -21,6 +30,22 @@ const LoginScreen = ({navigation}) => {
   const [password, setPassword] = useState('');
 
   const dispatch = useDispatch();
+
+  // useEffect(() => {
+  //   const currentToken = async () => {
+  //     try {
+  //       const fcmToken = await messaging().getToken();
+
+  //       if (fcmToken) {
+  //         // user has a device token
+  //         return Promise.resolve(fcmToken);
+  //       }
+  //     } catch (error) {
+  //       SimpleToast.show(error, SimpleToast.SHORT);
+  //     }
+  //   };
+  //   currentToken();
+  // }, []);
 
   const handelCheckValue = () => {
     const regex =
@@ -71,53 +96,58 @@ const LoginScreen = ({navigation}) => {
   };
 
   return (
-    <View style={container}>
-      <AppLoading isVisible={loading} />
-      <Appbar.Header>
-        <Appbar.BackAction color="white" onPress={() => navigation.goBack()} />
-        <Appbar.Content color="white" title={trans('login')} />
-      </Appbar.Header>
-      <View style={styles.viewContent}>
-        <View style={styles.viewLogo}>
-          <AppImage source={images.logoTransparent} imageStyle={styles.img} />
-        </View>
-        <View style={styles.viewText}>
-          <AppText title style={styles.textHello}>
-            Xin chào!
-          </AppText>
-          <AppText>Xin vui lòng đăng nhập bằng số điện thoại của bạn</AppText>
-        </View>
-        <View style={styles.viewInput}>
-          <View style={styles.viewPhone}>
-            <TextInput
-              value={phoneNumber}
-              onChangeText={setPhoneNumber}
-              placeholder="Số điện thoại của bạn"
-              keyboardType="numeric"
-            />
-          </View>
-          <AppInput
-            type="password"
-            value={password}
-            onChangeText={setPassword}
-            placeholder="Mật khẩu"
+    <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
+      <View style={container}>
+        <AppLoading isVisible={loading} />
+        <Appbar.Header>
+          <Appbar.BackAction
+            color="white"
+            onPress={() => navigation.goBack()}
           />
-          <TouchableOpacity
-            onPress={() => navigation.navigate('ForgotPassword')}>
-            <AppText
-              containerStyle={styles.viewForgotPass}
-              style={styles.txtForgot}>
-              {trans('forgotPassword')} ?
+          <Appbar.Content color="white" title={trans('login')} />
+        </Appbar.Header>
+        <View style={styles.viewContent}>
+          <View style={styles.viewLogo}>
+            <AppImage source={images.logoTransparent} imageStyle={styles.img} />
+          </View>
+          <View style={styles.viewText}>
+            <AppText title style={styles.textHello}>
+              Xin chào!
             </AppText>
-          </TouchableOpacity>
+            <AppText>Xin vui lòng đăng nhập bằng số điện thoại của bạn</AppText>
+          </View>
+          <View style={styles.viewInput}>
+            <View style={styles.viewPhone}>
+              <TextInput
+                value={phoneNumber}
+                onChangeText={setPhoneNumber}
+                placeholder="Số điện thoại của bạn"
+                keyboardType="numeric"
+              />
+            </View>
+            <AppInput
+              type="password"
+              value={password}
+              onChangeText={setPassword}
+              placeholder="Mật khẩu"
+            />
+            <TouchableOpacity
+              onPress={() => navigation.navigate('ForgotPassword')}>
+              <AppText
+                containerStyle={styles.viewForgotPass}
+                style={styles.txtForgot}>
+                {trans('forgotPassword')} ?
+              </AppText>
+            </TouchableOpacity>
+          </View>
         </View>
+        <Button
+          containerStyle={styles.btnContinue}
+          title={trans('continue').toUpperCase()}
+          onPress={login}
+        />
       </View>
-      <Button
-        containerStyle={styles.btnContinue}
-        title={trans('continue').toUpperCase()}
-        onPress={login}
-      />
-    </View>
+    </TouchableWithoutFeedback>
   );
 };
 

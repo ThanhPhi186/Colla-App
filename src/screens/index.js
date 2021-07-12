@@ -12,8 +12,10 @@ import {
   PromotionScreen,
   Policy,
   AccountDetail,
-  ImportHistory,
+  PurchaseHistory,
   SalesHistory,
+  Recharge,
+  Withdrawal,
 } from './Account';
 import IntroScreen from './IntroScreen';
 import {ListProduct, DetailProduct} from './Product';
@@ -34,7 +36,7 @@ import {
   ListSalesCustomer,
   AddNewCustomer,
 } from './SellProduct';
-import {ListImportProduct, ImportCart, ImportPayment} from './ImportProduct';
+import {ListImportProduct, ImportCart} from './ImportProduct';
 
 export {
   LoginScreen,
@@ -70,6 +72,8 @@ export {
   AccountDetail,
   ListSalesCustomer,
   AddNewCustomer,
-  ImportHistory,
+  PurchaseHistory,
   SalesHistory,
+  Recharge,
+  Withdrawal,
 };

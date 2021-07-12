@@ -1,5 +1,5 @@
 import MainAccount from './MainAccount';
-import ImportHistory from './ImportHistory';
+import PurchaseHistory from './PurchaseHistory';
 import ListCustomer from './ListCustomer';
 import HistoryPoint from './HistoryPoint';
 import ReportScreen from './Report';
@@ -7,6 +7,8 @@ import PromotionScreen from './Promotion';
 import Policy from './Policy';
 import AccountDetail from './AccountDetail';
 import SalesHistory from './SalesHistory';
+import Recharge from './Recharge';
+import Withdrawal from './Withdrawal';
 
 export {
   MainAccount,
@@ -16,6 +18,8 @@ export {
   PromotionScreen,
   Policy,
   AccountDetail,
-  ImportHistory,
+  PurchaseHistory,
   SalesHistory,
+  Recharge,
+  Withdrawal,
 };

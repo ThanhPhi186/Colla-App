@@ -27,8 +27,8 @@ import ItemCategory from './component/ItemCategory';
 import {Const} from '../../utils';
 
 const HomeScreen = ({navigation}) => {
-  const numberProductCart = useSelector(
-    state => state.CartReducer.numberProductCart,
+  const numberPurchaseCart = useSelector(
+    state => state.CartReducer.numberPurchaseCart,
   );
   const userInfo = useSelector(state => state.AuthenOverallReducer.userAuthen);
   const dispatch = useDispatch();
@@ -61,7 +61,7 @@ const HomeScreen = ({navigation}) => {
   ];
 
   useEffect(() => {
-    dispatch(CartRedux.Actions.getCart.request());
+    dispatch(CartRedux.Actions.getPurchaseCart.request());
   }, [dispatch]);
 
   const renderCategory = ({item}) => {
@@ -82,7 +82,7 @@ const HomeScreen = ({navigation}) => {
               <AppImage
                 source={
                   userInfo.avatar
-                    ? {uri: Const.API.baseURL + userInfo.avatar}
+                    ? {uri: Const.API.baseUrlImage + userInfo.avatar}
                     : images.avatar
                 }
                 imageStyle={styles.avatar}
@@ -97,7 +97,7 @@ const HomeScreen = ({navigation}) => {
           </View>
           <View style={{flexDirection: 'row'}}>
             <IconCart
-              number={numberProductCart}
+              number={numberPurchaseCart}
               onPress={() => navigation.navigate('CartScreen')}
             />
             <TouchableOpacity

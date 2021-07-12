@@ -13,6 +13,7 @@ import {AppText} from '../../components/atoms';
 import {post} from '../../services/ServiceHandle';
 import {Const} from '../../utils';
 import SimpleToast from 'react-native-simple-toast';
+import messaging from '@react-native-firebase/messaging';
 
 const RootView = () => {
   const dispatch = useDispatch();
@@ -22,30 +23,31 @@ const RootView = () => {
   const idToken = useSelector(state => state.AuthenOverallReducer.idToken);
   const userInfo = useSelector(state => state.AuthenOverallReducer.userAuthen);
 
-  // useEffect(() => {
-  //   // Assume a message-notification contains a "type" property in the data payload of the screen to open
-  //   messaging().onNotificationOpenedApp(remoteMessage => {
-  //     console.log(
-  //       'Notification caused app to open from background state:',
-  //       remoteMessage.notification,
-  //     );
-  //     // navigation.navigate(remoteMessage.data.type);
-  //   });
+  useEffect(() => {
+    // Assume a message-notification contains a "type" property in the data payload of the screen to open
 
-  //   // Check whether an initial notification is available
-  //   messaging()
-  //     .getInitialNotification()
-  //     .then(remoteMessage => {
-  //       if (remoteMessage) {
-  //         console.log(
-  //           'Notification caused app to open from quit state:',
-  //           remoteMessage.notification,
-  //         );
-  //         // setInitialRoute(remoteMessage.data.type); // e.g. "Settings"
-  //       }
-  //       // setLoading(false);
-  //     });
-  // }, []);
+    messaging().onNotificationOpenedApp(remoteMessage => {
+      console.log(
+        'Notification caused app to open from background state:',
+        remoteMessage.notification,
+      );
+      // navigation.navigate(remoteMessage.data.type);
+    });
+
+    // Check whether an initial notification is available
+    messaging()
+      .getInitialNotification()
+      .then(remoteMessage => {
+        if (remoteMessage) {
+          console.log(
+            'Notification caused app to open from quit state:',
+            remoteMessage.notification,
+          );
+          // setInitialRoute(remoteMessage.data.type); // e.g. "Settings"
+        }
+        // setLoading(false);
+      });
+  }, []);
 
   const agentRequest = () => {
     const params = {member_type: 'agency'};

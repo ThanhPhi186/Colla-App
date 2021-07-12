@@ -1,7 +1,7 @@
 import React, {useCallback, useEffect, useState} from 'react';
-import {Pressable, Text, TouchableOpacity, View} from 'react-native';
+import {TouchableOpacity, View} from 'react-native';
 import {Appbar} from 'react-native-paper';
-import {AppText, FormInput} from '../../../components/atoms';
+import {FormInput} from '../../../components/atoms';
 import {container} from '../../../styles/GlobalStyles';
 import {Const, trans} from '../../../utils';
 import styles from './styles';
@@ -11,7 +11,7 @@ import {images} from '../../../assets';
 import {Button, DropDown} from '../../../components/molecules';
 import {Colors, Mixin} from '../../../styles';
 import {useDispatch, useSelector} from 'react-redux';
-import {get, post, uploadImage} from '../../../services/ServiceHandle';
+import {get, post} from '../../../services/ServiceHandle';
 import SimpleToast from 'react-native-simple-toast';
 import {AuthenOverallRedux} from '../../../redux';
 import {launchCamera, launchImageLibrary} from 'react-native-image-picker';
@@ -29,7 +29,8 @@ const AccountDetail = ({navigation}) => {
   const [bankNumber, setBankNumber] = useState(userInfo?.bankNumber);
   const [modalAvatar, setModalAvatar] = useState(false);
   const [modalBank, setModalBank] = useState(false);
-  const [bankCode, setBankCode] = useState(userInfo?.bankCode);
+  const [bankCode, setBankCode] = useState(userInfo?.bankCode || '');
+  const [bankBranch, setBankBranch] = useState(userInfo?.bankBranch || '');
   const [listBank, setListBank] = useState([]);
 
   const actions = [
@@ -55,8 +56,6 @@ const AccountDetail = ({navigation}) => {
     },
   ];
 
-  console.log('bankCode', bankCode);
-
   useEffect(() => {
     const getListBank = () => {
       get(Const.API.baseURL + Const.API.Bank).then(res => {
@@ -68,7 +67,6 @@ const AccountDetail = ({navigation}) => {
             };
           });
           setListBank(convertData);
-          console.log('convertData', convertData);
         } else {
           SimpleToast.show(res.error, SimpleToast.SHORT);
         }
@@ -83,6 +81,7 @@ const AccountDetail = ({navigation}) => {
       dob: moment(dateOfBirth, 'DD-MM-YYYY').format(),
       bankNumber,
       bankCode,
+      bankBranch,
     };
 
     post(Const.API.baseURL + Const.API.UpdateProfile, params).then(res => {
@@ -145,7 +144,7 @@ const AccountDetail = ({navigation}) => {
           <FastImage
             source={
               userInfo.avatar
-                ? {uri: Const.API.baseURL + userInfo.avatar}
+                ? {uri: Const.API.baseUrlImage + userInfo.avatar}
                 : images.avatar
             }
             style={styles.image}
@@ -169,6 +168,7 @@ const AccountDetail = ({navigation}) => {
           }
         />
         <DropDown
+          title="NGÂN HÀNG"
           placeholder={trans('chooseBank')}
           open={modalBank}
           setOpen={setModalBank}
@@ -178,11 +178,12 @@ const AccountDetail = ({navigation}) => {
           setValue={setBankCode}
           searchable
           searchPlaceholder={trans('search')}
+          listMode="SCROLLVIEW"
         />
         <FormInput
           placeholder="Nhập chi nhánh"
-          value={bankNumber}
-          onChangeText={setBankNumber}
+          value={bankBranch}
+          onChangeText={setBankBranch}
           title={trans('branch').toUpperCase()}
         />
         <FormInput

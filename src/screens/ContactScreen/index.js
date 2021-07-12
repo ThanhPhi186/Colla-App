@@ -1,10 +1,12 @@
-import React from 'react';
+import React, {useState} from 'react';
 import {ScrollView, TextInput, TouchableOpacity, View} from 'react-native';
 import FastImage from 'react-native-fast-image';
 import {Appbar} from 'react-native-paper';
+import SimpleToast from 'react-native-simple-toast';
 import {images} from '../../assets';
 import {AppText} from '../../components/atoms';
 import {Button} from '../../components/molecules';
+import {post} from '../../services/ServiceHandle';
 import {Colors} from '../../styles';
 import {
   container,
@@ -12,9 +14,51 @@ import {
   NAVIGATION_BOTTOM_TABS_HEIGHT,
 } from '../../styles/GlobalStyles';
 import {device_height} from '../../styles/Mixin';
-import {trans} from '../../utils';
+import {Const, trans} from '../../utils';
 
-const ContactScreen = () => {
+const ContactScreen = ({navigation}) => {
+  const [title, setTitle] = useState('');
+  const [name, setName] = useState('');
+  const [content, setContent] = useState('');
+
+  const handelCheckValue = () => {
+    if (!name) {
+      SimpleToast.show('Vui lòng nhập tên của bạn', SimpleToast.SHORT);
+      return true;
+    }
+    if (!title) {
+      SimpleToast.show('Vui lòng nhập chủ đề phản hồi', SimpleToast.SHORT);
+      return true;
+    }
+    if (!content) {
+      SimpleToast.show('Vui lòng nhập nội dung phản hồi', SimpleToast.SHORT);
+      return true;
+    }
+    return false;
+  };
+
+  const sendFeedback = () => {
+    if (handelCheckValue()) {
+      return;
+    }
+    const params = {
+      title,
+      name,
+      content,
+    };
+    post(Const.API.baseURL + Const.API.Contact, params).then(res => {
+      if (res.ok) {
+        SimpleToast.show('Gửi phản hồi thành công', SimpleToast.SHORT);
+        navigation.reset({
+          index: 0,
+          routes: [{name: trans('contact')}],
+        });
+      } else {
+        SimpleToast.show(res.error, SimpleToast.SHORT);
+      }
+    });
+  };
+
   return (
     <View style={container}>
       <Appbar.Header>
@@ -84,7 +128,27 @@ const ContactScreen = () => {
             <TextInput
               style={{fontStyle: 'italic'}}
               placeholderTextColor={Colors.BLACK}
+              placeholder="Tên của bạn"
+              value={name}
+              onChangeText={setName}
+            />
+          </View>
+          <View
+            style={{
+              height: 40,
+              width: '100%',
+              backgroundColor: Colors.GREEN_2,
+              justifyContent: 'center',
+              paddingLeft: 16,
+              borderBottomWidth: 1,
+              borderBottomColor: Colors.WHITE,
+            }}>
+            <TextInput
+              style={{fontStyle: 'italic'}}
+              placeholderTextColor={Colors.BLACK}
               placeholder="Chủ đề phản hồi của bạn"
+              value={title}
+              onChangeText={setTitle}
             />
           </View>
           <View
@@ -104,9 +168,12 @@ const ContactScreen = () => {
               multiline
               placeholderTextColor={Colors.BLACK}
               placeholder="Nội dung phản hồi của bạn"
+              value={content}
+              onChangeText={setContent}
             />
           </View>
           <Button
+            onPress={sendFeedback}
             title="Gửi phản hồi"
             titleStyle={{fontSize: 16}}
             containerStyle={{

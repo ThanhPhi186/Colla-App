@@ -14,9 +14,26 @@ import {
 import {trans} from '../../utils';
 import numeral from 'numeral';
 import {useSelector} from 'react-redux';
+import Share from 'react-native-share';
 
 const ShareScreen = () => {
   const userInfo = useSelector(state => state.AuthenOverallReducer.userAuthen);
+
+  const shareOption = () => {
+    const options = {
+      title: 'Share via',
+      message: 'some message',
+      url: 'some share url',
+      social: Share.Social.FACEBOOK,
+    };
+    Share.open(options)
+      .then(res => {
+        console.log(res);
+      })
+      .catch(err => {
+        err && console.log(err);
+      });
+  };
 
   return (
     <View style={container}>
@@ -82,7 +99,7 @@ const ShareScreen = () => {
               alignItems: 'center',
             }}
             style={{fontWeight: 'bold'}}>
-            {userInfo.username}
+            {userInfo.affiliateCode}
           </AppText>
           <AppText style={{marginTop: 16}}>Chia sẻ</AppText>
           <View
@@ -91,7 +108,7 @@ const ShareScreen = () => {
               justifyContent: 'space-between',
               marginTop: 8,
             }}>
-            <TouchableOpacity>
+            <TouchableOpacity onPress={shareOption}>
               <FastImage
                 source={images.facebook}
                 style={{width: 50, height: 50}}

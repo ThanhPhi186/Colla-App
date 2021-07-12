@@ -14,15 +14,15 @@ import {useDispatch, useSelector} from 'react-redux';
 import {CartRedux} from '../../../redux';
 
 const ListProduct = ({navigation, route}) => {
-  const numberProductCart = useSelector(
-    state => state.CartReducer.numberProductCart,
+  const numberPurchaseCart = useSelector(
+    state => state.CartReducer.numberPurchaseCart,
   );
   const dispatch = useDispatch();
   const [listProduct, setListProduct] = useState([]);
 
   useEffect(() => {
     const getListProduct = () => {
-      get(Const.API.baseURL + Const.API.ImportProduct).then(res => {
+      get(Const.API.baseURL + Const.API.Product).then(res => {
         if (res.ok) {
           setListProduct(res.data.data);
         }
@@ -33,9 +33,9 @@ const ListProduct = ({navigation, route}) => {
 
   const addToCart = item => {
     const dataProduct = {product_id: item.id, amount: 1};
-    post(Const.API.baseURL + Const.API.ImportCart, dataProduct).then(res => {
+    post(Const.API.baseURL + Const.API.Cart, dataProduct).then(res => {
       if (res.ok) {
-        dispatch(CartRedux.Actions.getCart.request());
+        dispatch(CartRedux.Actions.getPurchaseCart.request());
       }
     });
   };
@@ -56,7 +56,7 @@ const ListProduct = ({navigation, route}) => {
         <Appbar.BackAction color="white" onPress={() => navigation.goBack()} />
         <Appbar.Content color="white" title={trans('listProduct')} />
         <IconCart
-          number={numberProductCart}
+          number={numberPurchaseCart}
           onPress={() => navigation.navigate('CartScreen')}
         />
       </Appbar.Header>

@@ -3,12 +3,12 @@ import {Provider as PaperProvider, DefaultTheme} from 'react-native-paper';
 import {Provider} from 'react-redux';
 import {PersistGate} from 'redux-persist/integration/react';
 import configureStore from './src/config/store/configureStore';
-import MainNavigator from './src/navigations/MainNavigator';
 import {RootView} from './src/screens';
 import {NavigationContainer} from '@react-navigation/native';
 
 import {Colors} from './src/styles';
 import {navigationRef} from './src/navigations/RootNavigation';
+import RNBootSplash from 'react-native-bootsplash';
 
 const {persistor, store} = configureStore();
 // persistor.purge();
@@ -22,6 +22,10 @@ const theme = {
 };
 
 const App = () => {
+  useEffect(() => {
+    RNBootSplash.hide({duration: 250});
+  }, []);
+
   return (
     <Provider store={store}>
       <PaperProvider theme={theme}>

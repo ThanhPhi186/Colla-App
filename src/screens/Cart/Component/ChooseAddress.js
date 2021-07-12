@@ -129,7 +129,7 @@ const ChooseAddress = forwardRef((props, ref) => {
         }}>
         <Appbar.Header>
           <Appbar.BackAction color="white" onPress={closeModal} />
-          <Appbar.Content color="white" title={trans('purchase')} />
+          <Appbar.Content color="white" title={trans('payment')} />
         </Appbar.Header>
         <View style={styles.containerSearch}>
           <Searchbar

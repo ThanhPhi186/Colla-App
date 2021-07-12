@@ -16,7 +16,7 @@ const ItemProduct = props => {
       <TouchableOpacity {...props} style={styles.container}>
         <FastImage
           resizeMode="contain"
-          source={{uri: Const.API.baseURL + item.photo}}
+          source={{uri: Const.API.baseUrlImage + item.photo}}
           style={styles.image}
         />
         <View style={styles.viewNamePrice}>
@@ -34,6 +34,7 @@ const ItemProduct = props => {
     </View>
   );
 };
+
 const styles = {
   container: {
     backgroundColor: Colors.WHITE,

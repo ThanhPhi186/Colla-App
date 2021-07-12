@@ -45,7 +45,7 @@ const MainAccount = ({navigation}) => {
         backGround={images.ic_Background}
         avatar={
           userInfo.avatar
-            ? {uri: Const.API.baseURL + userInfo.avatar}
+            ? {uri: Const.API.baseUrlImage + userInfo.avatar}
             : images.avatar
         }
         goAccountDetail={() => navigation.navigate('AccountDetail')}
@@ -84,17 +84,27 @@ const MainAccount = ({navigation}) => {
             title="Doanh số bán hàng"
             onPress={() => navigation.navigate('ReportScreen')}
           />
+          <ItemAccount
+            icon="hand-heart"
+            title="Nạp tiền"
+            onPress={() => navigation.navigate('Recharge')}
+          />
+          <ItemAccount
+            icon="hand-heart"
+            title="Rút tiền"
+            onPress={() => navigation.navigate('Withdrawal')}
+          />
           <View style={styles.smallIndicate} />
           <ItemAccount
             icon="clock-outline"
-            title="Lịch sử nhập hàng"
-            onPress={() => navigation.navigate('ImportHistory')}
+            title="Lịch sử mua hàng"
+            onPress={() => navigation.navigate('PurchaseHistory')}
           />
           <ItemAccount
             icon="clock-outline"
             title="Lịch sử bán hàng"
             onPress={() =>
-              navigation.navigate('SalesHistory', {type: 'SALES_ONLINE'})
+              navigation.navigate('SalesHistory', {type: 'ONLINE'})
             }
           />
           <View style={styles.smallIndicate} />

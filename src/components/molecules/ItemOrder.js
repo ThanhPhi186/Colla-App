@@ -6,7 +6,7 @@ import moment from 'moment';
 import numeral from 'numeral';
 
 const ItemOrder = props => {
-  const {item, confirmOrder, cancelOrder} = props;
+  const {item, confirmOrder, cancelOrder, type} = props;
 
   const renderStatus = status => {
     switch (status) {
@@ -39,6 +39,49 @@ const ItemOrder = props => {
         return Colors.GREEN_1;
       case 'cancel':
         return Colors.RED_CODE.red500;
+    }
+  };
+
+  const renderTitleBtn = () => {
+    switch (item.status) {
+      case 'verifing':
+        return 'Xác nhận';
+      case 'verified':
+        return 'Giao hàng';
+      case 'shipping':
+        return 'Đã giao hàng';
+      case 'shipped':
+        return 'Đã hoàn thành';
+      default:
+        return null;
+    }
+  };
+
+  const handleStatus = () => {
+    switch (item.status) {
+      case 'verifing':
+        return 'verified';
+      case 'verified':
+        return 'shipping';
+      case 'shipping':
+        return 'shipped';
+      case 'shipped':
+        return 'finish';
+      default:
+        return null;
+    }
+  };
+
+  const renderBtnCancel = () => {
+    if (
+      (type === 'SALES_OFFLINE' &&
+        item.status !== 'cancel' &&
+        item.status !== 'finish') ||
+      (type === 'SALES_ONLINE' && item.status === 'verifing')
+    ) {
+      return true;
+    } else {
+      return false;
     }
   };
 
@@ -85,20 +128,26 @@ const ItemOrder = props => {
           Tổng: {numeral(item.total).format()} đ
         </AppText>
       </View>
-      {confirmOrder && (
-        <View style={styles.viewGroupBtn}>
+      <View style={styles.viewGroupBtn}>
+        {renderTitleBtn() && confirmOrder ? (
+          <TouchableOpacity
+            style={styles.btnConfirm}
+            onPress={() => confirmOrder(handleStatus())}>
+            <AppText style={{color: Colors.WHITE, fontWeight: 'bold'}}>
+              {renderTitleBtn()}
+            </AppText>
+          </TouchableOpacity>
+        ) : (
+          <View />
+        )}
+        {renderBtnCancel() && (
           <TouchableOpacity style={styles.btnCancel} onPress={cancelOrder}>
             <AppText style={{color: Colors.GREEN_1, fontWeight: 'bold'}}>
               Huỷ
             </AppText>
           </TouchableOpacity>
-          <TouchableOpacity style={styles.btnConfirm} onPress={confirmOrder}>
-            <AppText style={{color: Colors.WHITE, fontWeight: 'bold'}}>
-              Xác nhận
-            </AppText>
-          </TouchableOpacity>
-        </View>
-      )}
+        )}
+      </View>
     </View>
   );
 };
@@ -133,7 +182,7 @@ const styles = {
   },
   btnConfirm: {
     backgroundColor: Colors.GREEN_1,
-    width: '46%',
+    width: '48%',
     height: 30,
     justifyContent: 'center',
     alignItems: 'center',
@@ -144,6 +193,7 @@ const styles = {
     marginTop: 8,
     width: '60%',
     justifyContent: 'space-between',
+    alignSelf: 'flex-end',
   },
 };
 

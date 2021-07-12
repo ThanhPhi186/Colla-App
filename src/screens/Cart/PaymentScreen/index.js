@@ -18,8 +18,17 @@ import {sum} from 'lodash';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import {Colors} from '../../../styles';
 
-const PaymentScreen = ({navigation}) => {
-  const dataCart = useSelector(state => state.CartReducer.listProductCart);
+const PaymentScreen = ({navigation, route}) => {
+  const {type} = route.params;
+
+  const API_ORDER =
+    type === 'PURCHASE' ? Const.API.Order : Const.API.ImportOrder;
+
+  const dataCart = useSelector(state =>
+    type === 'PURCHASE'
+      ? state.CartReducer.listPurchaseCart
+      : state.CartReducer.listImportCart,
+  );
 
   const userInfo = useSelector(state => state.AuthenOverallReducer.userAuthen);
 
@@ -42,11 +51,16 @@ const PaymentScreen = ({navigation}) => {
       ship_method: '',
       carts,
     };
-    post(Const.API.baseURL + Const.API.ImportOrder, params).then(res => {
+    post(Const.API.baseURL + API_ORDER, params).then(res => {
       if (res.ok) {
-        dispatch(CartRedux.Actions.getCart.request());
+        dispatch(CartRedux.Actions.getPurchaseCart.request());
         SimpleToast.show('Đặt hàng thành công', SimpleToast.SHORT);
-        navigation.popToTop();
+        navigation.reset({
+          index: 0,
+          routes: [
+            {name: type === 'PURCHASE' ? trans('home') : trans('personal')},
+          ],
+        });
       }
     });
   };
@@ -59,7 +73,7 @@ const PaymentScreen = ({navigation}) => {
     <View style={container}>
       <Appbar.Header>
         <Appbar.BackAction color="white" onPress={() => navigation.goBack()} />
-        <Appbar.Content color="white" title={trans('purchase')} />
+        <Appbar.Content color="white" title={trans('payment')} />
       </Appbar.Header>
 
       <View style={{flex: 1}}>

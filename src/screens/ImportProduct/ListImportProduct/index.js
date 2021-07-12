@@ -3,19 +3,21 @@ import {FlatList, View} from 'react-native';
 import {Appbar} from 'react-native-paper';
 import SimpleToast from 'react-native-simple-toast';
 import {useDispatch, useSelector} from 'react-redux';
-import {ItemProduct} from '../../../components/molecules';
+import {Button, ItemProduct} from '../../../components/molecules';
 import IconCart from '../../../components/molecules/IconCart';
 import ModalChangeQuantity from '../../../components/molecules/ModalChangeQuantity';
+import {getBottomSpace} from '../../../helpers/iphoneXHelper';
 import {CartRedux} from '../../../redux';
 
 import {get, post} from '../../../services/ServiceHandle';
-import {Colors} from '../../../styles';
+import {Colors, Mixin} from '../../../styles';
 import {container} from '../../../styles/GlobalStyles';
 import {Const, trans} from '../../../utils';
+import styles from './styles';
 
 const ListImportProduct = ({navigation}) => {
-  const numberProductCart = useSelector(
-    state => state.CartReducer.numberProductCart,
+  const numberImportCart = useSelector(
+    state => state.CartReducer.numberImportCart,
   );
   const dispatch = useDispatch();
   const refModal = useRef();
@@ -36,7 +38,7 @@ const ListImportProduct = ({navigation}) => {
   }, []);
 
   useEffect(() => {
-    dispatch(CartRedux.Actions.getCart.request());
+    dispatch(CartRedux.Actions.getImportCart.request());
   }, [dispatch]);
 
   const addToImportCard = () => {
@@ -46,7 +48,7 @@ const ListImportProduct = ({navigation}) => {
     };
     post(Const.API.baseURL + Const.API.ImportCart, dataProduct).then(res => {
       if (res.ok) {
-        dispatch(CartRedux.Actions.getCart.request());
+        dispatch(CartRedux.Actions.getImportCart.request());
         setVisibleModal(false);
         setTimeout(() => {
           SimpleToast.show('Thêm sản phẩm thành công', SimpleToast.SHORT);
@@ -55,6 +57,10 @@ const ListImportProduct = ({navigation}) => {
         SimpleToast.show(res.error, SimpleToast.SHORT);
       }
     });
+  };
+
+  const goCart = () => {
+    navigation.navigate('ImportCart');
   };
 
   const renderItem = item => {
@@ -84,7 +90,7 @@ const ListImportProduct = ({navigation}) => {
           title={trans('listProduct')}
         />
         <IconCart
-          number={numberProductCart}
+          number={numberImportCart}
           onPress={() => navigation.navigate('ImportCart')}
         />
       </Appbar.Header>
@@ -98,6 +104,7 @@ const ListImportProduct = ({navigation}) => {
           keyExtractor={(item, index) => index.toString()}
           contentContainerStyle={{
             paddingVertical: 10,
+            paddingBottom: Mixin.moderateSize(80),
           }}
         />
       </View>
@@ -108,6 +115,13 @@ const ListImportProduct = ({navigation}) => {
           detailProduct={itemProduct}
           isVisible={visibleModal}
           onBackdropPress={() => setVisibleModal(false)}
+        />
+      )}
+      {numberImportCart > 0 && (
+        <Button
+          containerStyle={styles.btnGoCart}
+          title="Đi tới giỏ hàng"
+          onPress={goCart}
         />
       )}
     </View>

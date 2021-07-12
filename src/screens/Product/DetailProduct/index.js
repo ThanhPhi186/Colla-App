@@ -18,8 +18,8 @@ import {post} from '../../../services/ServiceHandle';
 import ModalChangeQuantity from '../../../components/molecules/ModalChangeQuantity';
 
 const DetailProduct = ({navigation, route}) => {
-  const numberProductCart = useSelector(
-    state => state.CartReducer.numberProductCart,
+  const numberPurchaseCart = useSelector(
+    state => state.CartReducer.numberPurchaseCart,
   );
 
   const dispatch = useDispatch();
@@ -35,9 +35,9 @@ const DetailProduct = ({navigation, route}) => {
       product_id: item.id,
       amount: refModal.current,
     };
-    post(Const.API.baseURL + Const.API.ImportCart, dataProduct).then(res => {
+    post(Const.API.baseURL + Const.API.Cart, dataProduct).then(res => {
       if (res.ok) {
-        dispatch(CartRedux.Actions.getCart.request());
+        dispatch(CartRedux.Actions.getPurchaseCart.request());
       }
     });
 
@@ -53,7 +53,7 @@ const DetailProduct = ({navigation, route}) => {
         <Appbar.BackAction color="white" onPress={() => navigation.goBack()} />
         <Appbar.Content color="white" title={trans('detailProduct')} />
         <IconCart
-          number={numberProductCart}
+          number={numberPurchaseCart}
           onPress={() => navigation.navigate('CartScreen')}
         />
       </Appbar.Header>
@@ -61,7 +61,7 @@ const DetailProduct = ({navigation, route}) => {
         <View style={{height: device_height / 2.6}}>
           <FastImage
             resizeMode="contain"
-            source={{uri: Const.API.baseURL + item.photo}}
+            source={{uri: Const.API.baseUrlImage + item.photo}}
             style={container}
           />
         </View>

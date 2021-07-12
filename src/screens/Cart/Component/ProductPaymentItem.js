@@ -14,7 +14,7 @@ const ProductPaymentItem = props => {
       <View style={styles.left}>
         <FastImage
           source={{
-            uri: Const.API.baseURL + (item.product?.photo || item.photo),
+            uri: Const.API.baseUrlImage + (item.product?.photo || item.photo),
           }}
           style={styles.avt}
         />

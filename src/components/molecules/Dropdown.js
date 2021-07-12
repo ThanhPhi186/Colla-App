@@ -99,10 +99,10 @@ const styles = {
     // backgroundColor: color.primary,
   },
   txtTitle: {
-    fontWeight: '600',
     paddingVertical: Mixin.moderateSize(4),
     fontSize: FONT_SIZE_14,
-    marginTop: Mixin.moderateSize(12),
-    color: Colors.PRIMARY,
+    marginTop: Mixin.moderateSize(16),
+    marginBottom: 4,
+    // color: Colors.PRIMARY,
   },
 };

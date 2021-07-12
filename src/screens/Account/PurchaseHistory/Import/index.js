@@ -1,16 +1,14 @@
 import React from 'react';
 import {FlatList, View} from 'react-native';
-import {Appbar} from 'react-native-paper';
-import {AppLoading} from '../../../components/atoms';
-import {container} from '../../../styles/GlobalStyles';
-import {Const, trans} from '../../../utils';
+import {AppLoading} from '../../../../components/atoms';
+import {container} from '../../../../styles/GlobalStyles';
+import {Const, trans} from '../../../../utils';
 import {useEffect} from 'react';
-import {get} from '../../../services/ServiceHandle';
+import {get} from '../../../../services/ServiceHandle';
 import {useState} from 'react';
+import {ItemOrder} from '../../../../components/molecules';
 
-import {ItemOrder} from '../../../components/molecules';
-
-const ImportHistory = ({navigation}) => {
+const Import = ({navigation}) => {
   const [dataOrder, setDataOrder] = useState([]);
   const [loading, setLoading] = useState(false);
 
@@ -36,10 +34,6 @@ const ImportHistory = ({navigation}) => {
 
   return (
     <View style={container}>
-      <Appbar.Header>
-        <Appbar.BackAction color="white" onPress={() => navigation.goBack()} />
-        <Appbar.Content color="white" title={trans('importHistory')} />
-      </Appbar.Header>
       <AppLoading isVisible={loading} />
       <View style={{flex: 1}}>
         <FlatList
@@ -54,4 +48,4 @@ const ImportHistory = ({navigation}) => {
   );
 };
 
-export default ImportHistory;
+export default Import;

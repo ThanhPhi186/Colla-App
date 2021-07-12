@@ -44,9 +44,10 @@ const ModalChangeQuantity = forwardRef((props, ref) => {
             alignItems: 'center',
             justifyContent: 'flex-end',
           }}>
-          <TouchableOpacity onPress={addQuantity}>
-            <Icon name="menu-up" size={40} color={Colors.PRIMARY} />
+          <TouchableOpacity onPress={lessQuantity}>
+            <Icon name="menu-down" size={40} color={Colors.PRIMARY} />
           </TouchableOpacity>
+
           <TextInput
             onChangeText={onChangeQuantity}
             style={styles.textInput}
@@ -54,8 +55,8 @@ const ModalChangeQuantity = forwardRef((props, ref) => {
             {count}
           </TextInput>
 
-          <TouchableOpacity onPress={lessQuantity}>
-            <Icon name="menu-down" size={40} color={Colors.PRIMARY} />
+          <TouchableOpacity onPress={addQuantity}>
+            <Icon name="menu-up" size={40} color={Colors.PRIMARY} />
           </TouchableOpacity>
         </View>
       </View>
@@ -71,7 +72,7 @@ const ModalChangeQuantity = forwardRef((props, ref) => {
         <View style={styles.avatar}>
           <FastImage
             source={{
-              uri: Const.API.baseURL + detailProduct.photo,
+              uri: Const.API.baseUrlImage + detailProduct.photo,
             }}
             style={styles.images}
           />

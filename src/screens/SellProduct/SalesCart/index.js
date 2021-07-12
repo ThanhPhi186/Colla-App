@@ -120,7 +120,7 @@ const SalesCart = ({navigation, route}) => {
       </View>
       <Button
         containerStyle={styles.btnPurchase}
-        title={trans('purchase')}
+        title={trans('payment')}
         onPress={goPayment}
       />
       {itemCart && (

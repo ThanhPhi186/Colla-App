@@ -1,37 +1,28 @@
-import React, {useCallback, useState} from 'react';
+import React, {useState} from 'react';
 import {FlatList, TouchableOpacity, View} from 'react-native';
-import {Appbar, TextInput} from 'react-native-paper';
+import {Appbar} from 'react-native-paper';
 import {container} from '../../../styles/GlobalStyles';
 import {Const, trans} from '../../../utils';
 import styles from './styles';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import {Colors} from '../../../styles';
 import {AppText} from '../../../components/atoms';
-import {useDispatch, useSelector} from 'react-redux';
+
 import numeral from 'numeral';
 import {Button} from '../../../components/molecules';
 import ProductPaymentItem from '../../Cart/Component/ProductPaymentItem';
 import {sum} from 'lodash';
 import SimpleToast from 'react-native-simple-toast';
 import {post} from '../../../services/ServiceHandle';
-import {CartRedux} from '../../../redux';
 
 const PaymentOfSales = ({navigation, route}) => {
   const {type} = route.params;
+  const {dataProducts} = route.params;
 
-  const API_ORDER = type === 'ONLINE' ? Const.API.OnlineOrder : Const.API.Order;
+  const API_ORDER =
+    type === 'ONLINE' ? Const.API.OnlineOrder : Const.API.OfflineOrder;
 
-  const dispatch = useDispatch();
-
-  const dataSalesProducts = useSelector(state =>
-    type === 'ONLINE'
-      ? state.CartReducer.listCartOnline
-      : state.CartReducer.listSalesCart,
-  );
-
-  const totalPrice = sum(
-    dataSalesProducts?.map(elm => elm.product.price * elm.amount),
-  );
+  const totalPrice = sum(dataProducts?.map(elm => elm.price * elm.amount));
 
   const [customer, setCustomer] = useState();
 
@@ -44,25 +35,27 @@ const PaymentOfSales = ({navigation, route}) => {
       return SimpleToast.show('Vui lòng chọn khách hàng', SimpleToast.SHORT);
     }
 
-    const carts = dataSalesProducts.map(elm => elm.id);
+    const products = dataProducts.map(elm => {
+      return {
+        product_id: elm.id,
+        amount: elm.amount,
+      };
+    });
 
     const params = {
-      phone: customer.phone,
+      phone: `+84${Number(customer.phone)}`,
       address_ship: customer.address_ship,
       fullname: customer.fullname,
       payment_method: 'cod',
       ship_method: '',
-      carts,
+      products,
     };
     post(Const.API.baseURL + API_ORDER, params).then(res => {
       if (res.ok) {
-        dispatch(
-          type === 'ONLINE'
-            ? CartRedux.Actions.getOnlineCart.request()
-            : CartRedux.Actions.getSalesCart.request(),
-        );
         SimpleToast.show('Lên đơn thành công', SimpleToast.SHORT);
-        navigation.popToTop();
+        navigation.navigate('SalesHistory', {type});
+      } else {
+        SimpleToast.show(res.error, SimpleToast.SHORT);
       }
     });
   };
@@ -78,92 +71,59 @@ const PaymentOfSales = ({navigation, route}) => {
         <Appbar.Content
           style={{alignItems: 'center'}}
           color="white"
-          title={trans('purchase')}
+          title={trans('payment')}
         />
       </Appbar.Header>
       <View style={{flex: 1}}>
         <View style={styles.locationArea}>
-          <View style={{width: '9%', alignItems: 'center'}}>
-            <Icon
-              name="map-marker"
-              size={24}
-              style={{marginTop: 10}}
-              color={Colors.GRAY}
-            />
-          </View>
-
           <View style={{flex: 1, paddingVertical: 10}}>
-            <View
+            <TouchableOpacity
+              onPress={() =>
+                navigation.navigate('ListSalesCustomer', {
+                  chooseCustomer,
+                })
+              }
               style={{
                 width: '100%',
                 justifyContent: 'space-between',
                 flexDirection: 'row',
               }}>
-              <AppText
-                style={{fontSize: 17, fontWeight: '500', color: 'black'}}>
-                Khách hàng
-              </AppText>
-              <TouchableOpacity
-                style={{width: 30, aspectRatio: 1 / 1}}
-                onPress={() =>
-                  navigation.navigate('ListSalesCustomer', {
-                    chooseCustomer,
-                  })
-                }>
+              <View style={{flexDirection: 'row'}}>
+                <View>
+                  <AppText
+                    style={{
+                      fontSize: 17,
+                      fontWeight: '500',
+                      color: 'black',
+                    }}>
+                    {customer ? trans('customer') : trans('chooseCustomer')} :
+                  </AppText>
+                  {customer && (
+                    <>
+                      <AppText style={{marginRight: 10, marginTop: 3}}>
+                        {customer?.fullname}
+                      </AppText>
+                      <AppText style={{marginRight: 10, marginTop: 3}}>
+                        {customer?.phone}
+                      </AppText>
+                      <AppText style={{marginRight: 10, marginTop: 3}}>
+                        {customer?.address_ship}
+                      </AppText>
+                    </>
+                  )}
+                </View>
+              </View>
+              {customer && (
                 <Icon
                   name="square-edit-outline"
                   size={24}
                   color={Colors.GRAY}
                 />
-              </TouchableOpacity>
-            </View>
-
-            {customer && (
-              <>
-                <AppText style={{marginRight: 10, marginTop: 3}}>
-                  {customer?.fullname}
-                </AppText>
-                <AppText style={{marginRight: 10, marginTop: 3}}>
-                  {customer?.phone}
-                </AppText>
-                <AppText style={{marginRight: 10, marginTop: 3}}>
-                  {customer?.address_ship}
-                </AppText>
-              </>
-            )}
+              )}
+            </TouchableOpacity>
           </View>
         </View>
 
-        {/* <View style={styles.vitien}>
-          <View style={{width: '9%', alignItems: 'center'}}>
-            <Icon
-              name="credit-card"
-              size={24}
-              style={{marginTop: 10}}
-              color={Colors.GRAY}
-            />
-          </View>
-
-          <TouchableOpacity
-            style={{flex: 1, paddingVertical: 10}}
-            // onPress={this.onHandleMethod}
-          >
-            <View
-              style={{
-                width: '100%',
-                justifyContent: 'space-between',
-                flexDirection: 'row',
-              }}>
-              <AppText
-                style={{fontSize: 17, fontWeight: '500', color: 'black'}}>
-                {trans('paymentMethods')}
-              </AppText>
-            </View>
-            <AppText style={{marginRight: 10}}>
-              {trans('paymentOnDelivery')} ({trans('excludingShippingCharges')})
-            </AppText>
-          </TouchableOpacity>
-        </View> */}
         <AppText
           style={{
             fontSize: 17,
@@ -176,7 +136,7 @@ const PaymentOfSales = ({navigation, route}) => {
         </AppText>
 
         <FlatList
-          data={dataSalesProducts}
+          data={dataProducts}
           renderItem={({item}) => renderItem(item)}
           keyExtractor={(item, index) => index.toString()}
         />

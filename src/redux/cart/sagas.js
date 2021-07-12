@@ -3,30 +3,36 @@ import {get, post} from '../../services/ServiceHandle';
 
 import {Const} from '../../utils';
 
-import {getCart, getOnlineCart, getSalesCart} from './action';
+import {
+  getCart,
+  getImportCart,
+  getOnlineCart,
+  getPurchaseCart,
+  getSalesCart,
+} from './action';
 
-function* getCartAsync(action) {
+function* getPurchaseCartAsync(action) {
   try {
-    const url = Const.API.baseURL + Const.API.ImportCart;
+    const url = Const.API.baseURL + Const.API.Cart;
     const response = yield call(get, url);
     if (response.ok) {
-      yield put(getCart.success(response.data.data));
+      yield put(getPurchaseCart.success(response.data.data));
     } else {
-      yield put(getCart.failed(response.error));
+      yield put(getPurchaseCart.failed(response.error));
     }
   } catch (error) {
     // yield put(login.failed(error));
   }
 }
 
-function* getSalesCartAsync(action) {
+function* getImportCartAsync(action) {
   try {
-    const url = Const.API.baseURL + Const.API.Cart;
+    const url = Const.API.baseURL + Const.API.ImportCart;
     const response = yield call(get, url);
     if (response.ok) {
-      yield put(getSalesCart.success(response.data.data));
+      yield put(getImportCart.success(response.data.data));
     } else {
-      yield put(getSalesCart.failed(response.error));
+      yield put(getImportCart.failed(response.error));
     }
   } catch (error) {
     // yield put(login.failed(error));
@@ -48,7 +54,7 @@ function* getOnlineCartAsync(action) {
 }
 
 export function* CartWatcher() {
-  [yield takeEvery(getCart.requestName, getCartAsync)];
-  [yield takeEvery(getSalesCart.requestName, getSalesCartAsync)];
+  [yield takeEvery(getPurchaseCart.requestName, getPurchaseCartAsync)];
+  [yield takeEvery(getImportCart.requestName, getImportCartAsync)];
   [yield takeEvery(getOnlineCart.requestName, getOnlineCartAsync)];
 }

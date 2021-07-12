@@ -1,9 +1,19 @@
 import React, {useEffect, useRef, useState} from 'react';
-import {FlatList, View} from 'react-native';
+import {
+  Animated,
+  FlatList,
+  Text,
+  TouchableWithoutFeedback,
+  View,
+} from 'react-native';
 import {Appbar} from 'react-native-paper';
 import SimpleToast from 'react-native-simple-toast';
 import {useDispatch, useSelector} from 'react-redux';
-import {ItemProduct} from '../../../components/molecules';
+import {
+  Button,
+  ItemProduct,
+  SearchProduct,
+} from '../../../components/molecules';
 import IconCart from '../../../components/molecules/IconCart';
 import ModalChangeQuantity from '../../../components/molecules/ModalChangeQuantity';
 import {CartRedux} from '../../../redux';
@@ -11,28 +21,29 @@ import {CartRedux} from '../../../redux';
 import {get, post} from '../../../services/ServiceHandle';
 import {container} from '../../../styles/GlobalStyles';
 import {Const, trans} from '../../../utils';
+import {SwipeListView} from 'react-native-swipe-list-view';
+import CardItem from '../../../components/molecules/CardItem';
+import {Mixin} from '../../../styles';
+import styles from './styles';
 
 const ListSalesProduct = ({navigation, route}) => {
   const {type} = route.params;
 
-  const numberProductCart = useSelector(state =>
-    type === 'ONLINE'
-      ? state.CartReducer.numberCartOnline
-      : state.CartReducer.numberSalesCart,
-  );
+  console.log('typetypetype', type);
 
-  console.log('numberProductCart', numberProductCart);
-
-  const dispatch = useDispatch();
-  const refModal = useRef();
+  const animationIsRunning = useRef(false);
 
   const [listProduct, setListProduct] = useState([]);
-  const [visibleModal, setVisibleModal] = useState(false);
-  const [itemProduct, setItemProduct] = useState();
+  const [listChooseProduct, setListChooseProduct] = useState([]);
+
+  const rowTranslateAnimatedValues = {};
+  listChooseProduct.map(elm => {
+    rowTranslateAnimatedValues[elm.id] = new Animated.Value(1);
+  });
 
   useEffect(() => {
     const apiGetProduct =
-      type === 'ONLINE' ? Const.API.OnlineProduct : Const.API.GetListProduct;
+      type === 'ONLINE' ? Const.API.OnlineProduct : Const.API.OfflineProduct;
     const getListProduct = () => {
       get(Const.API.baseURL + apiGetProduct).then(res => {
         if (res.ok) {
@@ -43,59 +54,102 @@ const ListSalesProduct = ({navigation, route}) => {
     getListProduct();
   }, [type]);
 
-  useEffect(() => {
-    type === 'ONLINE'
-      ? dispatch(CartRedux.Actions.getOnlineCart.request())
-      : dispatch(CartRedux.Actions.getSalesCart.request());
-  }, [dispatch, type]);
+  const chooseProduct = item => {
+    if (
+      !listChooseProduct
+        .map(elm => {
+          return elm.id;
+        })
+        .includes(item.id)
+    ) {
+      const newList = [...listChooseProduct];
+      newList.push({...item, ...{amount: 1}});
+      setListChooseProduct(newList);
+    }
+  };
 
-  const addToSalesCart = () => {
-    const dataProduct = {
-      product_id: itemProduct.id,
-      amount: refModal.current,
-    };
-    post(Const.API.baseURL + Const.API.Cart, dataProduct).then(res => {
-      if (res.ok) {
-        dispatch(CartRedux.Actions.getSalesCart.request());
-        setVisibleModal(false);
-        setTimeout(() => {
-          SimpleToast.show('Thêm sản phẩm thành công', SimpleToast.SHORT);
-        }, 500);
-      } else {
-        SimpleToast.show(res.error, SimpleToast.SHORT);
+  const addAmount = item => {
+    const newData = [...listChooseProduct].map(elm => {
+      if (elm?.id === item?.id) {
+        elm.amount += 1;
       }
+      return elm;
+    });
+    setListChooseProduct(newData);
+  };
+
+  const lessAmount = item => {
+    if (item.amount > 1) {
+      const newData = [...listChooseProduct].map(elm => {
+        if (elm?.id === item?.id) {
+          elm.amount -= 1;
+        }
+        return elm;
+      });
+      setListChooseProduct(newData);
+    }
+  };
+
+  const changeAmount = (valueInput, item) => {
+    const newData = [...listChooseProduct].map(elm => {
+      if (elm?.id === item?.id) {
+        elm.amount = Number(valueInput);
+      }
+      return elm;
+    });
+    setListChooseProduct(newData);
+  };
+
+  const onSwipeValueChange = swipeData => {
+    const {key, value} = swipeData;
+    if (value < -Mixin.device_width && !animationIsRunning.current) {
+      animationIsRunning.current = true;
+      Animated.timing(rowTranslateAnimatedValues[key], {
+        toValue: 0,
+        duration: 200,
+      }).start(() => {
+        const newData = [...listChooseProduct].filter(item => item.id !== key);
+        setListChooseProduct(newData);
+        animationIsRunning.current = false;
+      });
+    }
+  };
+  const goPayment = () => {
+    navigation.navigate('PaymentOfSales', {
+      dataProducts: listChooseProduct,
+      type,
     });
   };
 
-  const addToOnlineCart = () => {
-    const dataProduct = {
-      product_id: itemProduct.id,
-      amount: refModal.current,
-    };
-    post(Const.API.baseURL + Const.API.OnlineCart, dataProduct).then(res => {
-      if (res.ok) {
-        dispatch(CartRedux.Actions.getOnlineCart.request());
-        setVisibleModal(false);
-        setTimeout(() => {
-          SimpleToast.show('Thêm sản phẩm thành công', SimpleToast.SHORT);
-        }, 500);
-      } else {
-        SimpleToast.show(res.error, SimpleToast.SHORT);
-      }
-    });
-  };
+  const renderHiddenItem = () => (
+    <View style={styles.rowBack}>
+      <View style={[styles.backRightBtn, styles.backRightBtnRight]}>
+        <Text style={styles.backTextWhite}>Delete</Text>
+      </View>
+    </View>
+  );
 
   const renderItem = item => {
     return (
-      <ItemProduct
-        disabled
-        item={item}
-        // onPress={() => navigation.navigate('DetailProduct', {item})}
-        addToCart={() => {
-          setItemProduct(item);
-          setVisibleModal(true);
-        }}
-      />
+      <Animated.View
+        style={[
+          styles.rowFrontContainer,
+          {
+            height: rowTranslateAnimatedValues[item.id].interpolate({
+              inputRange: [0, 1],
+              outputRange: [0, 80],
+            }),
+          },
+        ]}>
+        <CardItem
+          item={item}
+          type="choose"
+          addAmountProps={addAmount}
+          lessAmountProps={lessAmount}
+          onPress={() => addAmount(item)}
+          changeAmountProps={changeAmount}
+        />
+      </Animated.View>
     );
   };
 
@@ -106,33 +160,32 @@ const ListSalesProduct = ({navigation, route}) => {
         <Appbar.Content
           style={{alignItems: 'center'}}
           color="white"
-          title={type === 'ONLINE' ? 'Lên đơn online' : 'Lên đơn offline'}
-        />
-        <IconCart
-          number={numberProductCart}
-          onPress={() => navigation.navigate('SalesCart', {type})}
+          title={type === 'ONLINE' ? 'Lên đơn online' : 'Bán tại cửa hàng'}
         />
       </Appbar.Header>
+      {/* <TouchableWithoutFeedback> */}
+      <SearchProduct data={listProduct} selectProduct={chooseProduct} />
+      {/* </TouchableWithoutFeedback> */}
       <View style={{flex: 1}}>
-        <FlatList
-          data={listProduct}
-          columnWrapperStyle={{flexWrap: 'wrap'}}
-          numColumns={2}
-          showsVerticalScrollIndicator={false}
+        <SwipeListView
+          disableRightSwipe
+          data={listChooseProduct}
           renderItem={({item}) => renderItem(item)}
-          keyExtractor={(item, index) => index.toString()}
-          contentContainerStyle={{
-            paddingVertical: 10,
-          }}
+          renderHiddenItem={renderHiddenItem}
+          rightOpenValue={-Mixin.device_width}
+          previewRowKey={'0'}
+          previewOpenValue={-40}
+          previewOpenDelay={3000}
+          onSwipeValueChange={onSwipeValueChange}
+          useNativeDriver={false}
+          keyExtractor={(item, index) => item.id}
         />
       </View>
-      {itemProduct && (
-        <ModalChangeQuantity
-          ref={refModal}
-          addToCart={type === 'ONLINE' ? addToOnlineCart : addToSalesCart}
-          detailProduct={itemProduct}
-          isVisible={visibleModal}
-          onBackdropPress={() => setVisibleModal(false)}
+      {listChooseProduct.length >= 1 && (
+        <Button
+          containerStyle={styles.btnPurchase}
+          title={trans('payment')}
+          onPress={goPayment}
         />
       )}
     </View>

@@ -17,7 +17,7 @@ import ModalChangeQuantity from '../../../components/molecules/ModalChangeQuanti
 
 const CartScreen = ({navigation}) => {
   const dispatch = useDispatch();
-  const dataCart = useSelector(state => state.CartReducer.listProductCart);
+  const dataCart = useSelector(state => state.CartReducer.listPurchaseCart);
   const totalPrice = sum(dataCart?.map(elm => elm.product.price * elm.amount));
 
   const [visibleModal, setVisibleModal] = useState(false);
@@ -25,42 +25,39 @@ const CartScreen = ({navigation}) => {
   const refModal = useRef();
 
   const removeCartItem = item => {
-    deleteApi(`${Const.API.baseURL + Const.API.ImportCart}/${item.id}`).then(
-      res => {
-        if (res.ok) {
-          dispatch(CartRedux.Actions.getCart.request());
-          SimpleToast.show(
-            'Xóa sản phẩm khỏi giỏ hàng thành công!',
-            SimpleToast.SHORT,
-          );
-        } else {
-          SimpleToast.show(res.error, SimpleToast.SHORT);
-        }
-      },
-    );
+    deleteApi(`${Const.API.baseURL + Const.API.Cart}/${item.id}`).then(res => {
+      if (res.ok) {
+        dispatch(CartRedux.Actions.getPurchaseCart.request());
+        SimpleToast.show(
+          'Xóa sản phẩm khỏi giỏ hàng thành công!',
+          SimpleToast.SHORT,
+        );
+      } else {
+        SimpleToast.show(res.error, SimpleToast.SHORT);
+      }
+    });
   };
 
   const editCartItem = () => {
     const params = {
       amount: refModal.current,
     };
-    put(
-      `${Const.API.baseURL + Const.API.ImportCart}/${itemCart.id}`,
-      params,
-    ).then(res => {
-      if (res.ok) {
-        setVisibleModal(false);
-        dispatch(CartRedux.Actions.getCart.request());
-        setTimeout(() => {
-          SimpleToast.show('Cập nhật sản phẩm thành công', SimpleToast.SHORT);
-        }, 700);
-      }
-    });
+    put(`${Const.API.baseURL + Const.API.Cart}/${itemCart.id}`, params).then(
+      res => {
+        if (res.ok) {
+          setVisibleModal(false);
+          dispatch(CartRedux.Actions.getPurchaseCart.request());
+          setTimeout(() => {
+            SimpleToast.show('Cập nhật sản phẩm thành công', SimpleToast.SHORT);
+          }, 700);
+        }
+      },
+    );
   };
 
   const goPayment = () => {
     if (!isEmpty(dataCart)) {
-      navigation.navigate('PaymentScreen');
+      navigation.navigate('PaymentScreen', {type: 'PURCHASE'});
     } else {
       SimpleToast.show('Giỏ hàng trống');
     }
@@ -83,7 +80,7 @@ const CartScreen = ({navigation}) => {
     <View style={container}>
       <Appbar.Header>
         <Appbar.BackAction color="white" onPress={() => navigation.goBack()} />
-        <Appbar.Content color="white" title={trans('importCart')} />
+        <Appbar.Content color="white" title={trans('myCart')} />
       </Appbar.Header>
       <View style={container}>
         <FlatList
@@ -100,7 +97,7 @@ const CartScreen = ({navigation}) => {
       </View>
       <Button
         containerStyle={styles.btnPurchase}
-        title={trans('purchase')}
+        title={trans('payment')}
         onPress={goPayment}
       />
       {itemCart && (
