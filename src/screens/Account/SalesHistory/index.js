@@ -18,7 +18,7 @@ const SalesHistory = ({navigation, route}) => {
         <Appbar.BackAction color="white" onPress={() => navigation.goBack()} />
         <Appbar.Content color="white" title={trans('salesHistory')} />
       </Appbar.Header>
-      <Tab.Navigator initialRouteName={type}>
+      <Tab.Navigator initialRouteName={type.toUpperCase()}>
         <Tab.Screen name="ONLINE" component={SalesOnlineHistory} />
         <Tab.Screen name="OFFLINE" component={SalesOfflineHistory} />
       </Tab.Navigator>

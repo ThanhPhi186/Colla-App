@@ -3,7 +3,7 @@ import {Text, TouchableOpacity, View} from 'react-native';
 import FastImage from 'react-native-fast-image';
 import {Appbar} from 'react-native-paper';
 import {AppText} from '../../../components/atoms';
-import {Colors} from '../../../styles';
+import {Colors, Mixin} from '../../../styles';
 import {container} from '../../../styles/GlobalStyles';
 import {device_height} from '../../../styles/Mixin';
 import {Const, trans} from '../../../utils';
@@ -16,6 +16,9 @@ import {CartRedux} from '../../../redux';
 import IconCart from '../../../components/molecules/IconCart';
 import {post} from '../../../services/ServiceHandle';
 import ModalChangeQuantity from '../../../components/molecules/ModalChangeQuantity';
+import ImageSlider from 'react-native-image-slider';
+import CardItem from '../../../components/molecules/CardItem';
+import {images} from '../../../assets';
 
 const DetailProduct = ({navigation, route}) => {
   const numberPurchaseCart = useSelector(
@@ -24,6 +27,11 @@ const DetailProduct = ({navigation, route}) => {
 
   const dispatch = useDispatch();
   const {item} = route.params;
+
+  console.log(
+    'itemteim',
+    item.photos.map(elm => Const.API.baseUrlImage + elm.photo),
+  );
 
   const [visibleModal, setVisibleModal] = useState(false);
 
@@ -59,11 +67,30 @@ const DetailProduct = ({navigation, route}) => {
       </Appbar.Header>
       <View style={container}>
         <View style={{height: device_height / 2.6}}>
-          <FastImage
-            resizeMode="contain"
-            source={{uri: Const.API.baseUrlImage + item.photo}}
-            style={container}
-          />
+          {item.photos.length > 1 ? (
+            <ImageSlider
+              loopBothSides
+              autoPlayWithInterval={3000}
+              images={item.photos.map(
+                elm => Const.API.baseUrlImage + elm.photo,
+              )}
+              customSlide={({index, item, style, width}) => (
+                <View key={index} style={[style, {backgroundColor: 'white'}]}>
+                  <FastImage
+                    resizeMode="contain"
+                    source={{uri: item}}
+                    style={{flex: 1}}
+                  />
+                </View>
+              )}
+            />
+          ) : (
+            <FastImage
+              resizeMode="contain"
+              source={{uri: Const.API.baseUrlImage + item.photos[0].photo}}
+              style={container}
+            />
+          )}
         </View>
         <View style={styles.viewInfo}>
           <AppText title>{item.name}</AppText>
@@ -71,6 +98,46 @@ const DetailProduct = ({navigation, route}) => {
             {numeral(item.price).format()} đ
           </AppText>
         </View>
+        {item.combo_products.length > 0 && (
+          <>
+            <View style={styles.largeIndicate} />
+            <View style={styles.boxTitleProduct}>
+              <AppText title style={styles.textInfo}>
+                Sản phẩm tặng kèm
+              </AppText>
+              {item.combo_products.map((elm, index) => {
+                return (
+                  <View key={index} style={styles.container}>
+                    <View style={styles.viewImg}>
+                      <FastImage
+                        resizeMode="contain"
+                        style={styles.img}
+                        source={
+                          item.photos.length > 0
+                            ? {
+                                uri:
+                                  Const.API.baseUrlImage + item.photos[0].photo,
+                              }
+                            : images.noImage
+                        }
+                      />
+                    </View>
+                    <View style={styles.leftContent}>
+                      <AppText style={styles.nameProduct}>{elm.name}</AppText>
+                    </View>
+                    <AppText
+                      containerStyle={[
+                        styles.boxAmount,
+                        {marginRight: Mixin.moderateSize(16)},
+                      ]}>
+                      {elm.quantity}
+                    </AppText>
+                  </View>
+                );
+              })}
+            </View>
+          </>
+        )}
         <View style={styles.largeIndicate} />
         <View style={styles.boxTitleProduct}>
           <AppText title style={styles.textInfo}>

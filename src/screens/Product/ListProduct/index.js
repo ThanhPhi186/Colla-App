@@ -12,6 +12,7 @@ import {ItemProduct} from '../../../components/molecules';
 import IconCart from '../../../components/molecules/IconCart';
 import {useDispatch, useSelector} from 'react-redux';
 import {CartRedux} from '../../../redux';
+import SimpleToast from 'react-native-simple-toast';
 
 const ListProduct = ({navigation, route}) => {
   const numberPurchaseCart = useSelector(
@@ -22,7 +23,7 @@ const ListProduct = ({navigation, route}) => {
 
   useEffect(() => {
     const getListProduct = () => {
-      get(Const.API.baseURL + Const.API.Product).then(res => {
+      get(`${Const.API.baseURL + Const.API.Product}?type=retail`).then(res => {
         if (res.ok) {
           setListProduct(res.data.data);
         }
@@ -32,10 +33,12 @@ const ListProduct = ({navigation, route}) => {
   }, []);
 
   const addToCart = item => {
-    const dataProduct = {product_id: item.id, amount: 1};
+    const dataProduct = {product_id: item.id, amount: 1, type: 'retail'};
     post(Const.API.baseURL + Const.API.Cart, dataProduct).then(res => {
       if (res.ok) {
         dispatch(CartRedux.Actions.getPurchaseCart.request());
+      } else {
+        SimpleToast.show(res.error, SimpleToast.SHORT);
       }
     });
   };

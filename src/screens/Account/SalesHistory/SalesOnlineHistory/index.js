@@ -19,7 +19,7 @@ const SalesOnlineHistory = ({navigation}) => {
   useEffect(() => {
     const getData = () => {
       setLoading(true);
-      get(Const.API.baseURL + Const.API.OnlineOrder).then(res => {
+      get(`${Const.API.baseURL + Const.API.Order}?type=online`).then(res => {
         if (res.ok) {
           setLoading(false);
           setDataOrder(res.data.data);
@@ -34,7 +34,7 @@ const SalesOnlineHistory = ({navigation}) => {
 
   const onRefresh = () => {
     setRefresh(true);
-    get(Const.API.baseURL + Const.API.OnlineOrder).then(res => {
+    get(`${Const.API.baseURL + Const.API.Order}?type=online`).then(res => {
       if (res.ok) {
         setRefresh(false);
         setDataOrder(res.data.data);
@@ -46,7 +46,7 @@ const SalesOnlineHistory = ({navigation}) => {
   };
 
   const changeStatus = (item, status) => {
-    put(`${Const.API.baseURL + Const.API.OnlineOrder}/${item.id}`, {
+    put(`${Const.API.baseURL + Const.API.Order}/${item.id}`, {
       status,
     }).then(res => {
       if (res.ok) {

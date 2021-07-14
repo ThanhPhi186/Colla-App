@@ -59,7 +59,7 @@ const MainAccount = ({navigation}) => {
       </View>
       <View style={{flex: 1}}>
         <View style={styles.largeIndicate} />
-        <ItemAccount point={userInfo.point} />
+        <ItemAccount point />
         <View style={styles.largeIndicate} />
         <ScrollView
           showsVerticalScrollIndicator={false}
@@ -67,11 +67,13 @@ const MainAccount = ({navigation}) => {
             paddingBottom:
               NAVIGATION_BOTTOM_TABS_HEIGHT + HEIGHT_MIDDLE_HOME_BTN,
           }}>
-          <ItemAccount
-            icon="cart-arrow-down"
-            title="Nhập hàng"
-            onPress={() => navigation.navigate('ListImportProduct')}
-          />
+          {userInfo.member_type !== 'member' && (
+            <ItemAccount
+              icon="cart-arrow-down"
+              title="Nhập hàng"
+              onPress={() => navigation.navigate('ListImportProduct')}
+            />
+          )}
           <View style={styles.smallIndicate} />
           <ItemAccount
             icon="file"
@@ -104,7 +106,7 @@ const MainAccount = ({navigation}) => {
             icon="clock-outline"
             title="Lịch sử bán hàng"
             onPress={() =>
-              navigation.navigate('SalesHistory', {type: 'ONLINE'})
+              navigation.navigate('SalesHistory', {type: 'online'})
             }
           />
           <View style={styles.smallIndicate} />

@@ -86,10 +86,11 @@ const RegisterScreen = ({navigation}) => {
     };
     post(Const.API.baseURL + Const.API.VerifyOtp, params).then(res => {
       if (res.ok) {
-        dispatch(AuthenOverallRedux.Actions.loginSuccess(res.data.data));
+        console.log('thanh cong');
         navigation.navigate('NameRegister', {
           tokenState: res.data.data.access_token,
         });
+        dispatch(AuthenOverallRedux.Actions.loginSuccess(res.data.data));
         setLoading(false);
       } else {
         setLoading(false);

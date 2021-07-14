@@ -1,5 +1,5 @@
 import React from 'react';
-import {FlatList, View} from 'react-native';
+import {FlatList, RefreshControl, View} from 'react-native';
 import {container} from '../../../../styles/GlobalStyles';
 import {Const, trans} from '../../../../utils';
 import {useEffect} from 'react';
@@ -12,11 +12,12 @@ import {AppLoading} from '../../../../components/atoms';
 const Purchase = ({navigation}) => {
   const [dataOrder, setDataOrder] = useState([]);
   const [loading, setLoading] = useState(false);
+  const [refresh, setRefresh] = useState(false);
 
   useEffect(() => {
     const getData = () => {
       setLoading(true);
-      get(Const.API.baseURL + Const.API.Order).then(res => {
+      get(`${Const.API.baseURL + Const.API.Order}?type=retail`).then(res => {
         if (res.ok) {
           setLoading(false);
           setDataOrder(res.data.data);
@@ -28,6 +29,19 @@ const Purchase = ({navigation}) => {
     };
     getData();
   }, []);
+
+  const onRefresh = () => {
+    setRefresh(true);
+    get(`${Const.API.baseURL + Const.API.Order}?type=retail`).then(res => {
+      if (res.ok) {
+        setRefresh(false);
+        setDataOrder(res.data.data);
+      } else {
+        setRefresh(false);
+        console.log(res.error);
+      }
+    });
+  };
 
   const renderItem = ({item}) => {
     return <ItemOrder item={item} />;
@@ -43,6 +57,9 @@ const Purchase = ({navigation}) => {
           keyExtractor={(item, index) => index.toString()}
           contentContainerStyle={{paddingBottom: 16}}
           showsVerticalScrollIndicator={false}
+          refreshControl={
+            <RefreshControl refreshing={refresh} onRefresh={onRefresh} />
+          }
         />
       </View>
     </View>

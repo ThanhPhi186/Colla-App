@@ -19,9 +19,6 @@ const PaymentOfSales = ({navigation, route}) => {
   const {type} = route.params;
   const {dataProducts} = route.params;
 
-  const API_ORDER =
-    type === 'ONLINE' ? Const.API.OnlineOrder : Const.API.OfflineOrder;
-
   const totalPrice = sum(dataProducts?.map(elm => elm.price * elm.amount));
 
   const [customer, setCustomer] = useState();
@@ -49,8 +46,9 @@ const PaymentOfSales = ({navigation, route}) => {
       payment_method: 'cod',
       ship_method: '',
       products,
+      type,
     };
-    post(Const.API.baseURL + API_ORDER, params).then(res => {
+    post(Const.API.baseURL + Const.API.Order, params).then(res => {
       if (res.ok) {
         SimpleToast.show('Lên đơn thành công', SimpleToast.SHORT);
         navigation.navigate('SalesHistory', {type});

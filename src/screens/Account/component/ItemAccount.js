@@ -10,6 +10,7 @@ import numeral from 'numeral';
 
 const ItemAccount = props => {
   const {icon, title, onPress, point} = props;
+
   if (point) {
     return (
       <View style={styles.container}>

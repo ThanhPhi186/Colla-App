@@ -19,7 +19,7 @@ const SalesOfflineHistory = ({navigation}) => {
   useEffect(() => {
     const getData = () => {
       setLoading(true);
-      get(Const.API.baseURL + Const.API.Order).then(res => {
+      get(`${Const.API.baseURL + Const.API.Order}?type=offline`).then(res => {
         if (res.ok) {
           setLoading(false);
           setDataOrder(res.data.data);
@@ -34,7 +34,7 @@ const SalesOfflineHistory = ({navigation}) => {
 
   const onRefresh = () => {
     setRefresh(true);
-    get(Const.API.baseURL + Const.API.Order).then(res => {
+    get(`${Const.API.baseURL + Const.API.Order}?type=offline`).then(res => {
       if (res.ok) {
         setRefresh(false);
         setDataOrder(res.data.data);

@@ -28,7 +28,7 @@ const ListImportProduct = ({navigation}) => {
 
   useEffect(() => {
     const getListProduct = () => {
-      get(Const.API.baseURL + Const.API.ImportProduct).then(res => {
+      get(`${Const.API.baseURL + Const.API.Product}?type=import`).then(res => {
         if (res.ok) {
           setListProduct(res.data.data);
         }
@@ -45,8 +45,9 @@ const ListImportProduct = ({navigation}) => {
     const dataProduct = {
       product_id: itemProduct.id,
       amount: refModal.current,
+      type: 'import',
     };
-    post(Const.API.baseURL + Const.API.ImportCart, dataProduct).then(res => {
+    post(Const.API.baseURL + Const.API.Cart, dataProduct).then(res => {
       if (res.ok) {
         dispatch(CartRedux.Actions.getImportCart.request());
         setVisibleModal(false);

@@ -21,11 +21,8 @@ import {Colors} from '../../../styles';
 const PaymentScreen = ({navigation, route}) => {
   const {type} = route.params;
 
-  const API_ORDER =
-    type === 'PURCHASE' ? Const.API.Order : Const.API.ImportOrder;
-
   const dataCart = useSelector(state =>
-    type === 'PURCHASE'
+    type === 'retail'
       ? state.CartReducer.listPurchaseCart
       : state.CartReducer.listImportCart,
   );
@@ -50,15 +47,16 @@ const PaymentScreen = ({navigation, route}) => {
       payment_method: 'cod',
       ship_method: '',
       carts,
+      type,
     };
-    post(Const.API.baseURL + API_ORDER, params).then(res => {
+    post(Const.API.baseURL + Const.API.Order, params).then(res => {
       if (res.ok) {
         dispatch(CartRedux.Actions.getPurchaseCart.request());
         SimpleToast.show('Đặt hàng thành công', SimpleToast.SHORT);
         navigation.reset({
           index: 0,
           routes: [
-            {name: type === 'PURCHASE' ? trans('home') : trans('personal')},
+            {name: type === 'retail' ? trans('home') : trans('personal')},
           ],
         });
       }

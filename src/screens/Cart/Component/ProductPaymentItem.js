@@ -1,5 +1,5 @@
 import React from 'react';
-import {TouchableOpacity, View} from 'react-native';
+import {Text, TouchableOpacity, View} from 'react-native';
 import FastImage from 'react-native-fast-image';
 import {AppText} from '../../../components/atoms';
 import {Colors} from '../../../styles';
@@ -9,32 +9,63 @@ import numeral from 'numeral';
 
 const ProductPaymentItem = props => {
   const {item} = props;
+  console.log('itemitem', item);
+
   return (
     <View style={styles.containerItem}>
       <View style={styles.left}>
         <FastImage
           source={{
-            uri: Const.API.baseUrlImage + (item.product?.photo || item.photo),
+            uri:
+              Const.API.baseUrlImage +
+              (item?.product?.photo?.photo || item.photos[0].photo),
           }}
           style={styles.avt}
         />
       </View>
-      <View style={styles.right}>
-        <AppText style={styles.textName}>
-          {item.product?.name || item.name}
-        </AppText>
-        <View
-          style={{
-            flexDirection: 'row',
-            justifyContent: 'space-between',
-            paddingRight: 16,
-          }}>
-          <AppText style={styles.textPrice}>
-            {numeral(item.product?.price || item.price).format()} đ
+      {item.is_combo ? (
+        <View style={styles.right}>
+          <AppText style={styles.textName}>
+            {item.main_product_id.name || item.product.name}
           </AppText>
-          <AppText style={styles.textPrice}>X {item.amount}</AppText>
+          {item.combo_products.length > 0 && (
+            <Text style={{flex: 1}}>
+              Tặng kèm:{' '}
+              <Text>
+                {item.combo_products.map(elm => elm.name).join(' + ')}
+              </Text>
+            </Text>
+          )}
+          <View
+            style={{
+              flexDirection: 'row',
+              justifyContent: 'space-between',
+              paddingRight: 16,
+            }}>
+            <AppText style={styles.textPrice}>
+              {numeral(item.main_product_id.price).format()} đ
+            </AppText>
+            <AppText style={styles.textPrice}>X {item.amount}</AppText>
+          </View>
         </View>
-      </View>
+      ) : (
+        <View style={styles.right}>
+          <AppText style={styles.textName}>
+            {item.name || item.product.name}
+          </AppText>
+          <View
+            style={{
+              flexDirection: 'row',
+              justifyContent: 'space-between',
+              paddingRight: 16,
+            }}>
+            <AppText style={styles.textPrice}>
+              {numeral(item.price || item.product.price).format()} đ
+            </AppText>
+            <AppText style={styles.textPrice}>X {item.amount}</AppText>
+          </View>
+        </View>
+      )}
     </View>
   );
 };

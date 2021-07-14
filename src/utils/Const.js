@@ -1,8 +1,10 @@
 export default {
   LIST_CHIP: [1, 5, 10, 25, 100, 500, 1000, 5000],
   API: {
-    baseURL: 'https://colla-api.playtime.work/api/',
-    baseUrlImage: 'https://colla-api.playtime.work/',
+    baseURL: 'https://colla-api-v2.playtime.work/api/',
+    baseUrlImage: 'https://colla-api-v2.playtime.work/',
+    // baseURL: 'https://colla-api.playtime.work/api/',
+    // baseUrlImage: 'https://colla-api.playtime.work/',
     CheckPhone: 'auth/check-phone',
     VerifyPhone: 'auth/verify-phone',
     CheckAuth: 'auth/me',

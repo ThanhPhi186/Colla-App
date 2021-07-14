@@ -13,7 +13,7 @@ import {
 
 function* getPurchaseCartAsync(action) {
   try {
-    const url = Const.API.baseURL + Const.API.Cart;
+    const url = `${Const.API.baseURL + Const.API.Cart}?type=retail`;
     const response = yield call(get, url);
     if (response.ok) {
       yield put(getPurchaseCart.success(response.data.data));
@@ -27,7 +27,7 @@ function* getPurchaseCartAsync(action) {
 
 function* getImportCartAsync(action) {
   try {
-    const url = Const.API.baseURL + Const.API.ImportCart;
+    const url = `${Const.API.baseURL + Const.API.Cart}?type=import`;
     const response = yield call(get, url);
     if (response.ok) {
       yield put(getImportCart.success(response.data.data));

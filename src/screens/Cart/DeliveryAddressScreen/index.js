@@ -38,6 +38,8 @@ const DeliveryAddressScreen = ({navigation}) => {
         if (res.ok) {
           dispatch(AuthenOverallRedux.Actions.getProfile.request());
           SimpleToast.show('Cập nhật địa chỉ thành công', SimpleToast.SHORT);
+        } else {
+          SimpleToast.show(res.error, SimpleToast.SHORT);
         }
       },
     );
@@ -49,6 +51,8 @@ const DeliveryAddressScreen = ({navigation}) => {
         if (res.ok) {
           dispatch(AuthenOverallRedux.Actions.getProfile.request());
           SimpleToast.show('Xoá địa chỉ thành công', SimpleToast.SHORT);
+        } else {
+          SimpleToast.show(res.error, SimpleToast.SHORT);
         }
       },
     );

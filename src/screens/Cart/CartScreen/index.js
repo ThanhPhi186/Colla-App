@@ -57,7 +57,7 @@ const CartScreen = ({navigation}) => {
 
   const goPayment = () => {
     if (!isEmpty(dataCart)) {
-      navigation.navigate('PaymentScreen', {type: 'PURCHASE'});
+      navigation.navigate('PaymentScreen', {type: 'retail'});
     } else {
       SimpleToast.show('Giỏ hàng trống');
     }

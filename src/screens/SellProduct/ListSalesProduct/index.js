@@ -42,10 +42,8 @@ const ListSalesProduct = ({navigation, route}) => {
   });
 
   useEffect(() => {
-    const apiGetProduct =
-      type === 'ONLINE' ? Const.API.OnlineProduct : Const.API.OfflineProduct;
     const getListProduct = () => {
-      get(Const.API.baseURL + apiGetProduct).then(res => {
+      get(`${Const.API.baseURL + Const.API.Product}?type=${type}`).then(res => {
         if (res.ok) {
           setListProduct(res.data.data);
         }
@@ -53,6 +51,13 @@ const ListSalesProduct = ({navigation, route}) => {
     };
     getListProduct();
   }, [type]);
+
+  const goPayment = () => {
+    navigation.navigate('PaymentOfSales', {
+      dataProducts: listChooseProduct,
+      type,
+    });
+  };
 
   const chooseProduct = item => {
     if (
@@ -114,12 +119,6 @@ const ListSalesProduct = ({navigation, route}) => {
       });
     }
   };
-  const goPayment = () => {
-    navigation.navigate('PaymentOfSales', {
-      dataProducts: listChooseProduct,
-      type,
-    });
-  };
 
   const renderHiddenItem = () => (
     <View style={styles.rowBack}>
@@ -160,7 +159,7 @@ const ListSalesProduct = ({navigation, route}) => {
         <Appbar.Content
           style={{alignItems: 'center'}}
           color="white"
-          title={type === 'ONLINE' ? 'Lên đơn online' : 'Bán tại cửa hàng'}
+          title={type === 'online' ? 'Lên đơn online' : 'Bán tại cửa hàng'}
         />
       </Appbar.Header>
       {/* <TouchableWithoutFeedback> */}

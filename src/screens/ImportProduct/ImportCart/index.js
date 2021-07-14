@@ -28,39 +28,36 @@ const ImportCart = ({navigation}) => {
     const params = {
       amount: refModal.current,
     };
-    put(
-      `${Const.API.baseURL + Const.API.ImportCart}/${itemCart.id}`,
-      params,
-    ).then(res => {
-      if (res.ok) {
-        setVisibleModal(false);
-        dispatch(CartRedux.Actions.getImportCart.request());
-        setTimeout(() => {
-          SimpleToast.show('Cập nhật sản phẩm thành công', SimpleToast.SHORT);
-        }, 500);
-      }
-    });
-  };
-
-  const removeCartItem = item => {
-    deleteApi(`${Const.API.baseURL + Const.API.ImportCart}/${item.id}`).then(
+    put(`${Const.API.baseURL + Const.API.Cart}/${itemCart.id}`, params).then(
       res => {
         if (res.ok) {
+          setVisibleModal(false);
           dispatch(CartRedux.Actions.getImportCart.request());
-          SimpleToast.show(
-            'Xóa sản phẩm khỏi giỏ hàng thành công!',
-            SimpleToast.SHORT,
-          );
-        } else {
-          SimpleToast.show(res.error, SimpleToast.SHORT);
+          setTimeout(() => {
+            SimpleToast.show('Cập nhật sản phẩm thành công', SimpleToast.SHORT);
+          }, 500);
         }
       },
     );
   };
 
+  const removeCartItem = item => {
+    deleteApi(`${Const.API.baseURL + Const.API.Cart}/${item.id}`).then(res => {
+      if (res.ok) {
+        dispatch(CartRedux.Actions.getImportCart.request());
+        SimpleToast.show(
+          'Xóa sản phẩm khỏi giỏ hàng thành công!',
+          SimpleToast.SHORT,
+        );
+      } else {
+        SimpleToast.show(res.error, SimpleToast.SHORT);
+      }
+    });
+  };
+
   const goPayment = () => {
     if (!isEmpty(dataCart)) {
-      navigation.navigate('PaymentScreen', {type: 'IMPORT'});
+      navigation.navigate('PaymentScreen', {type: 'import'});
     } else {
       SimpleToast.show('Giỏ hàng trống');
     }

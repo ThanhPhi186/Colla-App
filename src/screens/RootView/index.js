@@ -22,6 +22,7 @@ const RootView = () => {
   );
   const idToken = useSelector(state => state.AuthenOverallReducer.idToken);
   const userInfo = useSelector(state => state.AuthenOverallReducer.userAuthen);
+  console.log('idtoken', idToken);
 
   useEffect(() => {
     // Assume a message-notification contains a "type" property in the data payload of the screen to open
@@ -110,7 +111,7 @@ const RootView = () => {
               <Button
                 title="Bán hàng online"
                 onPress={() => {
-                  RootNavigation.navigate('ListSalesProduct', {type: 'ONLINE'});
+                  RootNavigation.navigate('ListSalesProduct', {type: 'online'});
                   dispatch(CartRedux.Actions.handelModalTypeSales(false));
                 }}
               />
@@ -119,7 +120,7 @@ const RootView = () => {
                 title="Bán tại cửa hàng"
                 onPress={() => {
                   RootNavigation.navigate('ListSalesProduct', {
-                    type: 'OFFLINE',
+                    type: 'offline',
                   });
                   dispatch(CartRedux.Actions.handelModalTypeSales(false));
                 }}

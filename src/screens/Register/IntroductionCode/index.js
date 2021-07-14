@@ -21,9 +21,9 @@ const IntroductionCode = ({navigation, route}) => {
 
   const dispatch = useDispatch();
 
-  useEffect(() => {
-    dispatch(AuthenOverallRedux.Actions.getProfile.request());
-  }, [dispatch]);
+  // useEffect(() => {
+  //   dispatch(AuthenOverallRedux.Actions.getProfile.request());
+  // }, []);
 
   const sendPhoneNumber = () => {
     const regex =

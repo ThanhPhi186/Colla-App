@@ -18,13 +18,13 @@ import ModalChangeQuantity from '../../../components/molecules/ModalChangeQuanti
 const SalesCart = ({navigation, route}) => {
   const {type} = route.params;
 
-  const API_CART = type === 'ONLINE' ? Const.API.OnlineCart : Const.API.Cart;
+  const API_CART = type === 'online' ? Const.API.OnlineCart : Const.API.Cart;
 
   const dispatch = useDispatch();
 
   console.log('type', type);
   const dataSalesCart = useSelector(state =>
-    type === 'ONLINE'
+    type === 'online'
       ? state.CartReducer.listCartOnline
       : state.CartReducer.listSalesCart,
   );
@@ -44,7 +44,7 @@ const SalesCart = ({navigation, route}) => {
       if (res.ok) {
         setVisibleModal(false);
         dispatch(
-          type === 'ONLINE'
+          type === 'online'
             ? CartRedux.Actions.getOnlineCart.request()
             : CartRedux.Actions.getSalesCart.request(),
         );
@@ -59,7 +59,7 @@ const SalesCart = ({navigation, route}) => {
     deleteApi(`${Const.API.baseURL + API_CART}/${item.id}`).then(res => {
       if (res.ok) {
         dispatch(
-          type === 'ONLINE'
+          type === 'online'
             ? CartRedux.Actions.getOnlineCart.request()
             : CartRedux.Actions.getSalesCart.request(),
         );
@@ -102,7 +102,7 @@ const SalesCart = ({navigation, route}) => {
         <Appbar.Content
           style={{alignItems: 'center'}}
           color="white"
-          title={type === 'ONLINE' ? 'Giỏ hàng online' : 'Giỏ hàng offline'}
+          title={type === 'online' ? 'Giỏ hàng online' : 'Giỏ hàng offline'}
         />
       </Appbar.Header>
       <View style={container}>

@@ -1,5 +1,5 @@
 import React from 'react';
-import {TextInput, TouchableOpacity, View} from 'react-native';
+import {Text, TextInput, TouchableOpacity, View} from 'react-native';
 import FastImage from 'react-native-fast-image';
 import {images} from '../../assets';
 import {Colors, Mixin} from '../../styles';
@@ -19,15 +19,71 @@ const CardItem = props => {
     changeAmountProps,
   } = props;
 
-  return (
+  console.log('item', item);
+
+  return item.is_combo ? (
     <TouchableOpacity style={[styles.container, styleProps]} {...props}>
       <View style={styles.viewImg}>
         <FastImage
           resizeMode="contain"
           style={styles.img}
           source={
-            item.photo
-              ? {uri: Const.API.baseUrlImage + item.photo}
+            item.photos.length > 0
+              ? {uri: Const.API.baseUrlImage + item.photos[0].photo}
+              : images.noImage
+          }
+        />
+      </View>
+      <View style={styles.leftContent}>
+        <AppText style={styles.nameProduct}>
+          {item.main_product_id.name}
+        </AppText>
+
+        <AppText style={styles.txtPrice}>
+          {numeral(item.main_product_id.price).format()} đ
+        </AppText>
+        {item.combo_products.length > 0 && (
+          <Text style={{marginTop: Mixin.moderateSize(4)}}>
+            Tặng kèm:{' '}
+            <Text>{item.combo_products.map(elm => elm.name).join(' + ')}</Text>
+          </Text>
+        )}
+      </View>
+      {type === 'choose' && (
+        <View style={styles.viewQuantity}>
+          <TouchableOpacity onPress={() => lessAmountProps(item)}>
+            <Icon name="minus-circle" size={28} color={Colors.PRIMARY} />
+          </TouchableOpacity>
+          <TextInput
+            style={styles.boxAmount}
+            value={item.amount.toString()}
+            keyboardType="number-pad"
+            onChangeText={valueInput => changeAmountProps(valueInput, item)}
+          />
+          <TouchableOpacity onPress={() => addAmountProps(item)}>
+            <Icon name="plus-circle" size={28} color={Colors.PRIMARY} />
+          </TouchableOpacity>
+        </View>
+      )}
+      {type === 'readOnly' && (
+        <AppText
+          containerStyle={[
+            styles.boxAmount,
+            {marginRight: Mixin.moderateSize(16)},
+          ]}>
+          {item.quantity}
+        </AppText>
+      )}
+    </TouchableOpacity>
+  ) : (
+    <TouchableOpacity style={[styles.container, styleProps]} {...props}>
+      <View style={styles.viewImg}>
+        <FastImage
+          resizeMode="contain"
+          style={styles.img}
+          source={
+            item.photos.length > 0
+              ? {uri: Const.API.baseUrlImage + item.photos[0].photo}
               : images.noImage
           }
         />
@@ -99,6 +155,7 @@ const styles = {
   },
   leftContent: {
     flex: 3,
+    justifyContent: 'center',
   },
   nameProduct: {
     fontWeight: 'bold',
