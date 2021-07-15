@@ -2,10 +2,12 @@
 
 buildscript {
     ext {
+        firebaseIidVersion = "19.0.1"
         buildToolsVersion = "29.0.3"
         minSdkVersion = 21
         compileSdkVersion = 29
         targetSdkVersion = 29
+        supportLibVersion   = "29.0.0"
         ndkVersion = "20.1.5948944"
     }
     repositories {

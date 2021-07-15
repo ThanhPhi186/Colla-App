@@ -19,20 +19,16 @@ import Share from 'react-native-share';
 const ShareScreen = () => {
   const userInfo = useSelector(state => state.AuthenOverallReducer.userAuthen);
 
-  const shareOption = () => {
-    const options = {
+  const shareOption = async () => {
+    const shareOptions = {
       title: 'Share via',
       message: 'some message',
       url: 'some share url',
-      social: Share.Social.FACEBOOK,
+      subject: 'Share Link',
+      // social: Share.Social.FACEBOOK,
     };
-    Share.open(options)
-      .then(res => {
-        console.log(res);
-      })
-      .catch(err => {
-        err && console.log(err);
-      });
+
+    await Share.open(shareOptions);
   };
 
   return (
@@ -147,6 +143,7 @@ const ShareScreen = () => {
               style={{
                 width: '42%',
                 height: 100,
+                borderRadius: 12,
                 justifyContent: 'center',
                 alignItems: 'center',
                 backgroundColor: Colors.WHITE,
@@ -171,6 +168,7 @@ const ShareScreen = () => {
               style={{
                 width: '42%',
                 height: 100,
+                borderRadius: 12,
                 justifyContent: 'center',
                 alignItems: 'center',
                 backgroundColor: Colors.WHITE,

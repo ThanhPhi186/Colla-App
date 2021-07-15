@@ -2,6 +2,7 @@ import React, {useEffect, useState} from 'react';
 import {
   Keyboard,
   KeyboardAvoidingView,
+  Platform,
   ScrollView,
   TextInput,
   TouchableOpacity,
@@ -21,6 +22,7 @@ import {post} from '../../services/ServiceHandle';
 import {useDispatch} from 'react-redux';
 import {AuthenOverallRedux} from '../../redux';
 import messaging from '@react-native-firebase/messaging';
+import DeviceInfo from 'react-native-device-info';
 
 const LoginScreen = ({navigation}) => {
   const [phoneNumber, setPhoneNumber] = useState('');
@@ -28,6 +30,8 @@ const LoginScreen = ({navigation}) => {
   const [loading, setLoading] = useState(false);
 
   const [password, setPassword] = useState('');
+
+  const [fcmToken, setFcmToken] = useState('');
 
   const dispatch = useDispatch();
 
@@ -37,8 +41,9 @@ const LoginScreen = ({navigation}) => {
   //       const fcmToken = await messaging().getToken();
 
   //       if (fcmToken) {
+  //         setFcmToken(fcmToken);
   //         // user has a device token
-  //         return Promise.resolve(fcmToken);
+  //         // return Promise.resolve(fcmToken);
   //       }
   //     } catch (error) {
   //       SimpleToast.show(error, SimpleToast.SHORT);
@@ -79,6 +84,11 @@ const LoginScreen = ({navigation}) => {
       username: convertPhone,
       password: password,
     };
+    const paramsDevice = {
+      device_id: DeviceInfo.getUniqueId(),
+      push_token: fcmToken,
+      os: Platform.OS,
+    };
     post(Const.API.baseURL + Const.API.SignIn, params).then(res => {
       if (res.ok) {
         dispatch(
@@ -86,6 +96,18 @@ const LoginScreen = ({navigation}) => {
         );
         dispatch(AuthenOverallRedux.Actions.loginSuccess(res.data.data));
         setLoading(false);
+        // post(Const.API.baseURL + Const.API.Device, paramsDevice).then(
+        //   resDevice => {
+        //     if (resDevice.ok) {
+        //       setLoading(false);
+        //     } else {
+        //       setLoading(false);
+        //       setTimeout(() => {
+        //         SimpleToast.show(resDevice.error, SimpleToast.SHORT);
+        //       }, 700);
+        //     }
+        //   },
+        // );
       } else {
         setLoading(false);
         setTimeout(() => {

@@ -76,4 +76,7 @@ export default {
   purchaseHistory: 'Lịch sử mua hàng',
   purchase: 'Mua hàng',
   import: 'Nhập hàng',
+  yes: 'Có',
+  no: 'Không',
+  confirmLogout: 'Bạn có chắc chắn muốn đăng xuất?',
 };

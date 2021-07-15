@@ -1,9 +1,9 @@
-import React from 'react';
+import React, {useState} from 'react';
 import {ScrollView, TouchableOpacity, View} from 'react-native';
 import {Appbar} from 'react-native-paper';
 import {useDispatch, useSelector} from 'react-redux';
 import {AppText} from '../../../components/atoms';
-import {Button} from '../../../components/molecules';
+import {AppDialog, Button} from '../../../components/molecules';
 import {AuthenOverallRedux} from '../../../redux';
 import {setToken} from '../../../services/ServiceHandle';
 import {
@@ -24,6 +24,8 @@ const MainAccount = ({navigation}) => {
   const dispatch = useDispatch();
 
   const userInfo = useSelector(state => state.AuthenOverallReducer.userAuthen);
+
+  const [modalLogout, setModalLogout] = useState(false);
 
   const logout = () => {
     // auth()
@@ -128,9 +130,19 @@ const MainAccount = ({navigation}) => {
             onPress={() => navigation.navigate('Policy')}
           />
           <View style={styles.smallIndicate} />
-          <ItemAccount icon="logout" title="Đăng xuất" onPress={logout} />
+          <ItemAccount
+            icon="logout"
+            title="Đăng xuất"
+            onPress={() => setModalLogout(true)}
+          />
         </ScrollView>
       </View>
+      <AppDialog
+        content={trans('confirmLogout')}
+        isVisible={modalLogout}
+        onPressClose={() => setModalLogout(false)}
+        onPressConfirm={logout}
+      />
     </View>
   );
 };
