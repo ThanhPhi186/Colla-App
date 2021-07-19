@@ -25,7 +25,7 @@ const ShareScreen = () => {
       message: 'some message',
       url: 'some share url',
       subject: 'Share Link',
-      // social: Share.Social.FACEBOOK,
+      social: Share.Social.FACEBOOK,
     };
 
     await Share.open(shareOptions);
@@ -67,7 +67,6 @@ const ShareScreen = () => {
                 https://www.google.com/url?sa=i&url=http%3A%2F%2Fwww.shivramgroup.com%2Fcontact%2F&psig=AOvVaw1MwyZ-E6KjPplVsCf8DPzj&ust=1622519122961000&source=images&cd=vfe&ved=0CAIQjRxqFwoTCLj4oMqB8_ACFQAAAAAdAAAAABAS
               </Text>
             </View>
-
             <TouchableOpacity
               style={{
                 flex: 1,
@@ -104,7 +103,9 @@ const ShareScreen = () => {
               justifyContent: 'space-between',
               marginTop: 8,
             }}>
-            <TouchableOpacity onPress={shareOption}>
+            <TouchableOpacity
+            //  onPress={shareOption}
+            >
               <FastImage
                 source={images.facebook}
                 style={{width: 50, height: 50}}

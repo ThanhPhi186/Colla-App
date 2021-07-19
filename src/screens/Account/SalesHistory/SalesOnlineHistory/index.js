@@ -1,10 +1,8 @@
 import React from 'react';
 import {FlatList, RefreshControl, View} from 'react-native';
-import {Appbar} from 'react-native-paper';
 import {AppLoading} from '../../../../components/atoms';
-
 import {container} from '../../../../styles/GlobalStyles';
-import {Const, trans} from '../../../../utils';
+import {Const} from '../../../../utils';
 import {useEffect} from 'react';
 import {get, put} from '../../../../services/ServiceHandle';
 import {useState} from 'react';

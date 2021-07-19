@@ -48,7 +48,7 @@ const ListProduct = ({navigation, route}) => {
       <ItemProduct
         item={item}
         onPress={() => navigation.navigate('DetailProduct', {item})}
-        addToCart={() => addToCart(item)}
+        // addToCart={() => addToCart(item)}
       />
     );
   };

@@ -37,6 +37,7 @@ export default {
     OfflineProduct: 'offline/product',
     Recharge: 'recharge',
     Contact: 'contact',
+    Revenue: 'statistics/revenue',
   },
   RESPONSE_CODES: {
     SUCCESS: {

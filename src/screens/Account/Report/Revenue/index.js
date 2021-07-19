@@ -1,12 +1,13 @@
 import React, {useEffect, useState} from 'react';
 import {processColor, View} from 'react-native';
 import {AppText} from '../../../../components/atoms';
-import {container} from '../../../../styles/GlobalStyles';
 import {BarChart} from 'react-native-charts-wrapper';
 import styles from './styles';
-import {trans} from '../../../../utils';
+import {Const, trans} from '../../../../utils';
 import numeral from 'numeral';
 import {Colors} from '../../../../styles';
+import {get} from '../../../../services/ServiceHandle';
+import moment from 'moment';
 
 const Revenue = () => {
   const [legend] = useState({
@@ -30,6 +31,14 @@ const Revenue = () => {
       enabled: false,
     },
   });
+
+  useEffect(() => {
+    get(Const.API.baseURL + Const.API.Revenue).then(res => {
+      if (res.ok) {
+      } else {
+      }
+    });
+  }, []);
 
   useEffect(() => {
     const amountArr = [100, 90, 80, 60, 50, 40, 30, 20, 10];

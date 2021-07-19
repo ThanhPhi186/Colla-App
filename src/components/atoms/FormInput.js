@@ -33,7 +33,11 @@ const FormInput = props => {
           <TouchableOpacity
             onPress={() => setModalDatePicker(true)}
             style={styles.btnSelect}>
-            <AppText style={styles.txtSelect}>{valueDate}</AppText>
+            {valueDate ? (
+              <AppText style={styles.txtSelect}>{valueDate}</AppText>
+            ) : (
+              <AppText style={styles.placeholder}>Ngày sinh của bạn</AppText>
+            )}
           </TouchableOpacity>
         );
       default:
@@ -108,5 +112,9 @@ const styles = {
   },
   txtSelect: {
     fontSize: FONT_SIZE_14,
+  },
+  placeholder: {
+    fontSize: FONT_SIZE_14,
+    color: Colors.GRAY,
   },
 };

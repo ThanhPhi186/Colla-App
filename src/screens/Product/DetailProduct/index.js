@@ -125,13 +125,13 @@ const DetailProduct = ({navigation, route}) => {
                     <View style={styles.leftContent}>
                       <AppText style={styles.nameProduct}>{elm.name}</AppText>
                     </View>
-                    <AppText
+                    {/* <AppText
                       containerStyle={[
                         styles.boxAmount,
                         {marginRight: Mixin.moderateSize(16)},
                       ]}>
                       {elm.quantity}
-                    </AppText>
+                    </AppText> */}
                   </View>
                 );
               })}
@@ -143,13 +143,7 @@ const DetailProduct = ({navigation, route}) => {
           <AppText title style={styles.textInfo}>
             {trans('productInfo')}
           </AppText>
-          <AppText>
-            Áo thun nam cổ tròn với điểm nhấn độc đáo là hàng nút ở ngực áo giúp
-            bạn nam linh hoạt điều chỉnh độ thoải mái để phù hợp với từng hoàn
-            cảnh khác nhau. Bên cạnh đó, với chức năng kháng khuẩn, áo còn hỗ
-            trợ hạn chế các tác nhân gây mùi hôi khó chịu cho chàng tự tin suốt
-            ngày dài.
-          </AppText>
+          <AppText>{item.description}</AppText>
         </View>
       </View>
       <ButtonBottom

@@ -39,7 +39,6 @@ const LoginScreen = ({navigation}) => {
   //   const currentToken = async () => {
   //     try {
   //       const fcmToken = await messaging().getToken();
-
   //       if (fcmToken) {
   //         setFcmToken(fcmToken);
   //         // user has a device token

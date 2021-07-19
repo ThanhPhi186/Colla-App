@@ -8,9 +8,8 @@ import {AppImage, AppText} from '../../../components/atoms';
 import {Button} from '../../../components/molecules';
 import AppInput from '../../../components/molecules/AppInput';
 import {AuthenOverallRedux} from '../../../redux';
-import {get, post} from '../../../services/ServiceHandle';
+import {post} from '../../../services/ServiceHandle';
 import {container} from '../../../styles/GlobalStyles';
-import {statusBar} from '../../../styles/Mixin';
 import {Const, trans} from '../../../utils';
 import styles from '../styles';
 
@@ -66,7 +65,7 @@ const IntroductionCode = ({navigation, route}) => {
           <AppInput
             value={phoneNumber}
             onChangeText={setPhoneNumber}
-            placeholder="Sđt người giới thiệu bạn"
+            placeholder="Mã của người giới thiệu bạn"
             keyboardType="numeric"
           />
           <View style={styles.viewBtnConfirm}>

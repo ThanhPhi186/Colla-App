@@ -2,19 +2,20 @@ import React, {useState} from 'react';
 import {View} from 'react-native';
 import {Appbar} from 'react-native-paper';
 import SimpleToast from 'react-native-simple-toast';
+import {useDispatch} from 'react-redux';
 import {images} from '../../../assets';
-import {AppImage, AppText} from '../../../components/atoms';
+import {AppImage, AppLoading, AppText} from '../../../components/atoms';
 import {Button} from '../../../components/molecules';
 import AppInput from '../../../components/molecules/AppInput';
+import {AuthenOverallRedux} from '../../../redux';
 import {post} from '../../../services/ServiceHandle';
 import {container} from '../../../styles/GlobalStyles';
-import {statusBar} from '../../../styles/Mixin';
 import {Const, trans} from '../../../utils';
 import styles from '../styles';
 
 const NameRegister = ({navigation, route}) => {
+  const dispatch = useDispatch();
   const [userName, setUserName] = useState('');
-
   const {tokenState} = route.params;
 
   const nameRegister = () => {
@@ -26,7 +27,10 @@ const NameRegister = ({navigation, route}) => {
     };
     post(Const.API.baseURL + Const.API.UpdateProfile, params).then(res => {
       if (res.ok) {
-        navigation.navigate('IntroductionCode', {tokenState});
+        dispatch(AuthenOverallRedux.Actions.getProfile.request());
+        setTimeout(() => {
+          navigation.navigate('IntroductionCode', {tokenState});
+        }, 500);
       } else {
         SimpleToast.show(res.error, SimpleToast.SHORT);
       }

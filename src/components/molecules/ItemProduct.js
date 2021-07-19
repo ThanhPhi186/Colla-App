@@ -21,14 +21,14 @@ const ItemProduct = props => {
         />
         <View style={styles.viewNamePrice}>
           <AppText numberOfLines={1} style={styles.txtName}>
-            {item.main_product_id.name}
+            {item.name}
           </AppText>
 
           <AppText style={styles.txtPrice}>
-            {numeral(item.main_product_id.price).format()} đ
+            {numeral(item.price).format()} đ
           </AppText>
           {item.combo_products.length > 0 && (
-            <Text style={{flex: 1}}>
+            <Text style={{flex: 1, marginBottom: 12}}>
               Tặng kèm:{' '}
               <Text>
                 {item.combo_products.map(elm => elm.name).join(' + ')}
@@ -36,9 +36,11 @@ const ItemProduct = props => {
             </Text>
           )}
         </View>
-        <TouchableOpacity style={styles.btnCart} onPress={addToCart}>
-          <Icon name="cart-plus" size={18} color={Colors.WHITE} />
-        </TouchableOpacity>
+        {addToCart && (
+          <TouchableOpacity style={styles.btnCart} onPress={addToCart}>
+            <Icon name="cart-plus" size={18} color={Colors.WHITE} />
+          </TouchableOpacity>
+        )}
       </TouchableOpacity>
     </View>
   ) : (
@@ -57,9 +59,11 @@ const ItemProduct = props => {
             {numeral(item.price).format()} đ
           </AppText>
         </View>
-        <TouchableOpacity style={styles.btnCart} onPress={addToCart}>
-          <Icon name="cart-plus" size={18} color={Colors.WHITE} />
-        </TouchableOpacity>
+        {addToCart && (
+          <TouchableOpacity style={styles.btnCart} onPress={addToCart}>
+            <Icon name="cart-plus" size={18} color={Colors.WHITE} />
+          </TouchableOpacity>
+        )}
       </TouchableOpacity>
     </View>
   );
@@ -98,7 +102,7 @@ const styles = {
   txtPrice: {
     fontWeight: 'bold',
     color: Colors.GREEN_1,
-    marginTop: Mixin.moderateSize(4),
+    marginVertical: Mixin.moderateSize(4),
   },
   viewNamePrice: {
     paddingHorizontal: 10,

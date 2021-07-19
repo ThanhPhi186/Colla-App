@@ -9,10 +9,8 @@ import {container} from '../../../styles/GlobalStyles';
 import {Const, trans} from '../../../utils';
 import styles from '../styles';
 import SimpleToast from 'react-native-simple-toast';
-import {statusBar} from '../../../styles/Mixin';
-import auth from '@react-native-firebase/auth';
 import {useDispatch} from 'react-redux';
-import {post, setToken} from '../../../services/ServiceHandle';
+import {post} from '../../../services/ServiceHandle';
 import {AuthenOverallRedux} from '../../../redux';
 
 const RegisterScreen = ({navigation}) => {
@@ -86,7 +84,6 @@ const RegisterScreen = ({navigation}) => {
     };
     post(Const.API.baseURL + Const.API.VerifyOtp, params).then(res => {
       if (res.ok) {
-        console.log('thanh cong');
         navigation.navigate('NameRegister', {
           tokenState: res.data.data.access_token,
         });

@@ -24,7 +24,7 @@ const AccountDetail = ({navigation}) => {
 
   const [fullName, setFullName] = useState(userInfo?.fullname);
   const [dateOfBirth, setDateOfBird] = useState(
-    moment(userInfo?.dob).format('DD-MM-YYYY'),
+    userInfo.dob ? moment(userInfo.dob).format('DD-MM-YYYY') : '',
   );
   const [bankNumber, setBankNumber] = useState(userInfo?.bankNumber);
   const [modalAvatar, setModalAvatar] = useState(false);
