@@ -9,16 +9,20 @@ import Inventory from './Inventory';
 
 const ReportScreen = ({navigation}) => {
   const Tab = createMaterialTopTabNavigator();
+
+  const openModalType = () => {};
+
   return (
     <View style={container}>
       <Appbar.Header>
         <Appbar.BackAction color="white" onPress={() => navigation.goBack()} />
         <Appbar.Content color="white" title={trans('report')} />
       </Appbar.Header>
-      <Tab.Navigator>
+      {/* <Tab.Navigator>
         <Tab.Screen name={trans('revenue')} component={Revenue} />
         <Tab.Screen name={trans('inventory')} component={Inventory} />
-      </Tab.Navigator>
+      </Tab.Navigator> */}
+      <Revenue />
     </View>
   );
 };

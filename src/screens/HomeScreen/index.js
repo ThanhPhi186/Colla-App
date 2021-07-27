@@ -1,4 +1,4 @@
-import React, {useEffect} from 'react';
+import React, {useEffect, useState} from 'react';
 import {
   View,
   Text,
@@ -12,7 +12,13 @@ import {
 
 import {images} from '../../assets';
 import {AppImage, AppText} from '../../components/atoms';
-import {container, viewRow, rowSpaceBetween} from '../../styles/GlobalStyles';
+import {
+  container,
+  viewRow,
+  rowSpaceBetween,
+  NAVIGATION_BOTTOM_TABS_HEIGHT,
+  HEIGHT_MIDDLE_HOME_BTN,
+} from '../../styles/GlobalStyles';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import IconMaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import styles from './styles';
@@ -24,7 +30,12 @@ import numeral from 'numeral';
 import {CartRedux} from '../../redux';
 import {device_width} from '../../styles/Mixin';
 import ItemCategory from './component/ItemCategory';
+import ItemBlog from './component/ItemBlog';
 import {Const} from '../../utils';
+import LinearGradient from 'react-native-linear-gradient';
+import {ItemProduct} from '../../components/molecules';
+import {get} from '../../services/ServiceHandle';
+import ItemPopular from './component/ItemPopular';
 
 const HomeScreen = ({navigation}) => {
   const numberPurchaseCart = useSelector(
@@ -33,42 +44,72 @@ const HomeScreen = ({navigation}) => {
   const userInfo = useSelector(state => state.AuthenOverallReducer.userAuthen);
   const dispatch = useDispatch();
 
-  const categoryData = [
-    {
-      name: 'Mẹ và bé',
-      img: 'https://yt.cdnxbvn.com/medias/uploads/205/205537-binh-sua-tommee-tippee-500x340.jpg',
-    },
-    {
-      name: 'Công nghệ',
-      img: 'https://www.zonegroup.vn/wp-content/uploads/2019/03/option5-300x300.jpg',
-    },
-    {
-      name: 'Sức khoẻ',
-      img: 'https://printgo.vn/uploads/media/772948/4-nguyen-tac-trong-thiet-ke-logo-nganh-y-duoc1_1585664899.jpg',
-    },
-    {
-      name: 'Làm đẹp',
-      img: 'https://yt.cdnxbvn.com/medias/uploads/188/188616-da-hon-hop.jpg',
-    },
-    {
-      name: 'Đồ gia dụng',
-      img: 'https://static2.yan.vn/YanNews/201909/201909270932104845-05e95836-8fd5-4a78-899f-d311c9754d3b.png',
-    },
-    {
-      name: 'Thời trang nam',
-      img: 'https://ann.com.vn/wp-content/uploads/shop-quan-ao-nam.jpg',
-    },
-  ];
+  const [blogData, setBlogData] = useState([]);
+  const [listProduct, setListProduct] = useState([]);
+
+  const [categoryData, setCategoryData] = useState([]);
+
+  console.log('Math.ceil', Math.ceil(5 / 2));
 
   useEffect(() => {
     dispatch(CartRedux.Actions.getPurchaseCart.request());
   }, [dispatch]);
 
+  useEffect(() => {
+    const getBlog = () => {
+      get(Const.API.baseURL + Const.API.Blog).then(res => {
+        if (res.ok) {
+          setBlogData(res.data.data);
+        }
+      });
+    };
+    getBlog();
+  }, []);
+
+  useEffect(() => {
+    const getCategoryBlog = () => {
+      get(Const.API.baseURL + Const.API.BlogCategory).then(res => {
+        if (res.ok) {
+          setCategoryData(res.data.data);
+        }
+      });
+    };
+    getCategoryBlog();
+  }, []);
+
+  // useEffect(() => {
+  //   const getListProduct = () => {
+  //     get(`${Const.API.baseURL + Const.API.Product}?type=retail`).then(res => {
+  //       if (res.ok) {
+  //         setListProduct(res.data.data);
+  //       }
+  //     });
+  //   };
+  //   getListProduct();
+  // }, []);
+
   const renderCategory = ({item}) => {
     return (
       <View style={{width: device_width / 3.5, alignItems: 'center'}}>
-        <ItemCategory item={item} />
+        <ItemCategory
+          onPress={() => navigation.navigate('ListBlog', {categoryId: item.id})}
+          item={item}
+        />
       </View>
+    );
+  };
+
+  const renderBlog = ({item}) => {
+    return <ItemBlog item={item} />;
+  };
+
+  const renderProductPopular = ({item}) => {
+    return (
+      <ItemPopular
+        item={item}
+        onPress={() => navigation.navigate('DetailProduct', {item})}
+        // addToCart={() => addToCart(item)}
+      />
     );
   };
 
@@ -220,17 +261,62 @@ const HomeScreen = ({navigation}) => {
 
       <View style={{flex: 4, paddingHorizontal: 20, marginTop: 20}}>
         {/* Category */}
-        <ScrollView horizontal showsHorizontalScrollIndicator={false}>
+
+        <ScrollView
+          showsVerticalScrollIndicator={false}
+          contentContainerStyle={{
+            paddingBottom:
+              NAVIGATION_BOTTOM_TABS_HEIGHT + HEIGHT_MIDDLE_HOME_BTN,
+          }}>
+          <FastImage
+            resizeMode="stretch"
+            source={images.demoBanner}
+            style={styles.banner}
+          />
+          <ScrollView horizontal showsHorizontalScrollIndicator={false}>
+            <FlatList
+              data={categoryData}
+              renderItem={renderCategory}
+              keyExtractor={(item, index) => index.toString()}
+              // numColumns={Math.ceil(categoryData.length / 2)}
+              numColumns={3}
+              scrollEnabled={false}
+            />
+          </ScrollView>
+          {/* <LinearGradient
+          start={{x: 0, y: 0}}
+          end={{x: 1, y: 0}}
+          colors={['#FF9900', '#F47D01', '#E65C03']}
+          style={styles.containerPopular}>
+          <AppText
+            title
+            style={{textAlign: 'center', color: 'white', marginTop: 8}}>
+            Sản phẩm nổi bật
+          </AppText>
           <FlatList
-            data={categoryData}
-            renderItem={renderCategory}
+            horizontal
+            data={listProduct}
+            renderItem={renderProductPopular}
             keyExtractor={(item, index) => index.toString()}
-            numColumns={Math.ceil(categoryData.length / 2)}
-            scrollEnabled={false}
+          />
+        </LinearGradient> */}
+
+          {/* <View style={styles.largeIndicate} /> */}
+          <AppText style={{color: Colors.PRIMARY}} title>
+            Tin tức
+          </AppText>
+          <FlatList
+            nestedScrollEnabled
+            showsVerticalScrollIndicator={false}
+            data={blogData}
+            renderItem={renderBlog}
+            keyExtractor={(item, index) => index.toString()}
+            contentContainerStyle={{
+              paddingHorizontal: 4,
+              paddingBottom: 4,
+            }}
           />
         </ScrollView>
-
-        {/* <FastImage source={images.test1} style={{width: '100%', height: 200}} /> */}
       </View>
     </View>
   );

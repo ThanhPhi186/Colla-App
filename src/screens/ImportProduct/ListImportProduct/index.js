@@ -105,6 +105,7 @@ const ListImportProduct = ({navigation}) => {
           keyExtractor={(item, index) => index.toString()}
           contentContainerStyle={{
             paddingVertical: 10,
+            paddingHorizontal: 8,
             paddingBottom: Mixin.moderateSize(80),
           }}
         />

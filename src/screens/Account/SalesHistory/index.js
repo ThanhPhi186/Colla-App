@@ -9,13 +9,21 @@ import SalesOfflineHistory from './SalesOfflineHistory';
 
 const SalesHistory = ({navigation, route}) => {
   const {type} = route.params;
-  console.log('type', type);
+
   const Tab = createMaterialTopTabNavigator();
 
   return (
     <View style={container}>
       <Appbar.Header>
-        <Appbar.BackAction color="white" onPress={() => navigation.goBack()} />
+        <Appbar.BackAction
+          color="white"
+          onPress={() =>
+            navigation.reset({
+              index: 0,
+              routes: [{name: trans('personal')}],
+            })
+          }
+        />
         <Appbar.Content color="white" title={trans('salesHistory')} />
       </Appbar.Header>
       <Tab.Navigator initialRouteName={type.toUpperCase()}>

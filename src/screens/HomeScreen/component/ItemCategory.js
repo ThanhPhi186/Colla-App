@@ -3,15 +3,19 @@ import {View, Text, TouchableOpacity} from 'react-native';
 import FastImage from 'react-native-fast-image';
 
 import {images} from '../../../assets';
+import {Const} from '../../../utils';
 
 const ItemCategory = props => {
   const {item} = props;
 
   return (
     <View style={styles.container}>
-      <TouchableOpacity style={styles.button}>
+      <TouchableOpacity {...props} style={styles.button}>
         <View style={styles.circle}>
-          <FastImage source={{uri: item.img}} style={styles.item} />
+          <FastImage
+            source={{uri: Const.API.baseUrlImage + item.feature_image}}
+            style={styles.item}
+          />
         </View>
         <View style={{width: '100%'}}>
           <Text

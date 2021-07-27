@@ -8,9 +8,14 @@ import {Colors} from '../../styles';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import {device_width} from '../../styles/Mixin';
 import {Button} from '.';
+import {isUndefined} from 'lodash';
 
 const ModalChangeQuantity = forwardRef((props, ref) => {
   const {detailProduct, addToCart} = props;
+
+  let showProduct = detailProduct.product
+    ? detailProduct.product
+    : detailProduct;
 
   const [count, setCount] = useState(detailProduct.amount || 1);
 
@@ -72,20 +77,20 @@ const ModalChangeQuantity = forwardRef((props, ref) => {
         <View style={styles.avatar}>
           <FastImage
             source={{
-              uri: Const.API.baseUrlImage + detailProduct.photo,
+              uri: Const.API.baseUrlImage + showProduct.photos[0].photo,
             }}
             style={styles.images}
           />
           <View style={{flex: 1, paddingLeft: 10}}>
             <AppText style={styles.textName} numberOfLines={2}>
-              {detailProduct.name}
+              {showProduct.name}
             </AppText>
             <View style={{}}>
-              <AppText style={styles.price}>{detailProduct.price}đ</AppText>
+              <AppText style={styles.price}>{showProduct.price}đ</AppText>
             </View>
 
             <AppText style={styles.textKho}>
-              {trans('quantityInStock')}: {detailProduct.quantity}
+              {trans('quantityInStock')}: {showProduct.quantity}
             </AppText>
           </View>
         </View>

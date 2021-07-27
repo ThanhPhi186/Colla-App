@@ -29,7 +29,7 @@ import styles from './styles';
 const ListSalesProduct = ({navigation, route}) => {
   const {type} = route.params;
 
-  console.log('typetypetype', type);
+  console.log('typetypetype', route);
 
   const animationIsRunning = useRef(false);
 
@@ -155,7 +155,15 @@ const ListSalesProduct = ({navigation, route}) => {
   return (
     <View style={container}>
       <Appbar.Header>
-        <Appbar.BackAction color="white" onPress={() => navigation.goBack()} />
+        <Appbar.BackAction
+          color="white"
+          onPress={() =>
+            navigation.reset({
+              index: 0,
+              routes: [{name: trans('home')}],
+            })
+          }
+        />
         <Appbar.Content
           style={{alignItems: 'center'}}
           color="white"

@@ -22,6 +22,18 @@ const ItemOrder = props => {
         return 'Hoàn thành';
       case 'cancel':
         return 'Đã huỷ';
+      case 'delivered':
+        return 'Đã giao vận chuyển';
+      case 'transporting':
+        return 'Đang vận chuyển';
+      case 'issue':
+        return 'Có vấn đề';
+      case 'paid':
+        return 'Đã thanh toán';
+      case 'wait-payment':
+        return 'Chờ thanh toán';
+      case 'return':
+        return 'Trả lại';
     }
   };
 
@@ -39,6 +51,8 @@ const ItemOrder = props => {
         return Colors.GREEN_1;
       case 'cancel':
         return Colors.RED_CODE.red500;
+      default:
+        return Colors.ORANGE_CODE.orange600;
     }
   };
 
@@ -112,7 +126,7 @@ const ItemOrder = props => {
       </AppText>
       <View style={{flexDirection: 'row'}}>
         <AppText>Sản phẩm: </AppText>
-        <View>
+        <View style={{flex: 1}}>
           <AppText />
           {item.order_details.map((elm, index) => {
             return (

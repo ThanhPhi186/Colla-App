@@ -10,10 +10,10 @@ import {AppText} from '../../../components/atoms';
 
 import numeral from 'numeral';
 import {Button} from '../../../components/molecules';
-import ProductPaymentItem from '../../Cart/Component/ProductPaymentItem';
 import {sum} from 'lodash';
 import SimpleToast from 'react-native-simple-toast';
 import {post} from '../../../services/ServiceHandle';
+import PaymentItem from '../component/PaymentItem';
 
 const PaymentOfSales = ({navigation, route}) => {
   const {type} = route.params;
@@ -31,14 +31,12 @@ const PaymentOfSales = ({navigation, route}) => {
     if (!customer) {
       return SimpleToast.show('Vui lòng chọn khách hàng', SimpleToast.SHORT);
     }
-
     const products = dataProducts.map(elm => {
       return {
         product_id: elm.id,
         amount: elm.amount,
       };
     });
-
     const params = {
       phone: `+84${Number(customer.phone)}`,
       address_ship: customer.address_ship,
@@ -51,7 +49,10 @@ const PaymentOfSales = ({navigation, route}) => {
     post(Const.API.baseURL + Const.API.Order, params).then(res => {
       if (res.ok) {
         SimpleToast.show('Lên đơn thành công', SimpleToast.SHORT);
-        navigation.navigate('SalesHistory', {type});
+        navigation.navigate(trans('personal'), {
+          screen: 'SalesHistory',
+          params: {type},
+        });
       } else {
         SimpleToast.show(res.error, SimpleToast.SHORT);
       }
@@ -59,7 +60,7 @@ const PaymentOfSales = ({navigation, route}) => {
   };
 
   const renderItem = item => {
-    return <ProductPaymentItem item={item} />;
+    return <PaymentItem item={item} />;
   };
 
   return (

@@ -7,7 +7,7 @@ import {RootView} from './src/screens';
 import {NavigationContainer} from '@react-navigation/native';
 
 import {Colors} from './src/styles';
-import {navigationRef} from './src/navigations/RootNavigation';
+import {navigationRef, isReadyRef} from './src/navigations/RootNavigation';
 import RNBootSplash from 'react-native-bootsplash';
 
 const {persistor, store} = configureStore();
@@ -22,6 +22,11 @@ const theme = {
 };
 
 const App = () => {
+  React.useEffect(() => {
+    return () => {
+      isReadyRef.current = false;
+    };
+  }, []);
   useEffect(() => {
     RNBootSplash.hide({duration: 250});
   }, []);
@@ -30,7 +35,11 @@ const App = () => {
     <Provider store={store}>
       <PaperProvider theme={theme}>
         <PersistGate persistor={persistor}>
-          <NavigationContainer ref={navigationRef}>
+          <NavigationContainer
+            ref={navigationRef}
+            onReady={() => {
+              isReadyRef.current = true;
+            }}>
             <RootView />
             {/* <MainNavigator /> */}
             {/* </RootView> */}

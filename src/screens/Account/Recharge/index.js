@@ -26,13 +26,13 @@ import {launchCamera, launchImageLibrary} from 'react-native-image-picker';
 import FastImage from 'react-native-fast-image';
 
 const Recharge = ({navigation}) => {
-  const userInfo = useSelector(state => state.AuthenOverallReducer.userAuthen);
-  const [listBank, setListBank] = useState([]);
-  const [modalBank, setModalBank] = useState(false);
-  const [bankCode, setBankCode] = useState(userInfo?.bankCode || '');
-  const [bankBranch, setBankBranch] = useState(userInfo?.bankBranch || '');
-  const [bankNumber, setBankNumber] = useState(userInfo?.bankNumber);
-  const [accountHolder, setAccountHolder] = useState('');
+  // const userInfo = useSelector(state => state.AuthenOverallReducer.userAuthen);
+  // const [listBank, setListBank] = useState([]);
+  // const [modalBank, setModalBank] = useState(false);
+  // const [bankCode, setBankCode] = useState(userInfo?.bankCode || '');
+  // const [bankBranch, setBankBranch] = useState(userInfo?.bankBranch || '');
+  // const [bankNumber, setBankNumber] = useState(userInfo?.bankNumber);
+  // const [accountHolder, setAccountHolder] = useState('');
   const [amount, setAmount] = useState('');
   const [modalImage, setModalImage] = useState(false);
   const [image, setImage] = useState(null);
@@ -60,42 +60,42 @@ const Recharge = ({navigation}) => {
     },
   ];
 
-  useEffect(() => {
-    const getListBank = () => {
-      get(Const.API.baseURL + Const.API.Bank).then(res => {
-        if (res.ok) {
-          const convertData = res.data.data.map(elm => {
-            return {
-              label: `${elm.vn_name} (${elm.shortName})`,
-              value: elm.bankCode,
-            };
-          });
-          setListBank(convertData);
-        } else {
-          SimpleToast.show(res.error, SimpleToast.SHORT);
-        }
-      });
-    };
-    getListBank();
-  }, []);
+  // useEffect(() => {
+  //   const getListBank = () => {
+  //     get(Const.API.baseURL + Const.API.Bank).then(res => {
+  //       if (res.ok) {
+  //         const convertData = res.data.data.map(elm => {
+  //           return {
+  //             label: `${elm.vn_name} (${elm.shortName})`,
+  //             value: elm.bankCode,
+  //           };
+  //         });
+  //         setListBank(convertData);
+  //       } else {
+  //         SimpleToast.show(res.error, SimpleToast.SHORT);
+  //       }
+  //     });
+  //   };
+  //   getListBank();
+  // }, []);
 
   const handelCheckValue = () => {
-    if (!bankCode) {
-      SimpleToast.show('Vui lòng chọn ngân hàng', SimpleToast.SHORT);
-      return true;
-    }
-    if (!bankBranch) {
-      SimpleToast.show('Chi nhánh không được để trống', SimpleToast.SHORT);
-      return true;
-    }
-    if (!bankNumber) {
-      SimpleToast.show('Số tài khoản không được để trống', SimpleToast.SHORT);
-      return true;
-    }
-    if (!accountHolder) {
-      SimpleToast.show('Chủ tài khoản không được để trống', SimpleToast.SHORT);
-      return true;
-    }
+    // if (!bankCode) {
+    //   SimpleToast.show('Vui lòng chọn ngân hàng', SimpleToast.SHORT);
+    //   return true;
+    // }
+    // if (!bankBranch) {
+    //   SimpleToast.show('Chi nhánh không được để trống', SimpleToast.SHORT);
+    //   return true;
+    // }
+    // if (!bankNumber) {
+    //   SimpleToast.show('Số tài khoản không được để trống', SimpleToast.SHORT);
+    //   return true;
+    // }
+    // if (!accountHolder) {
+    //   SimpleToast.show('Chủ tài khoản không được để trống', SimpleToast.SHORT);
+    //   return true;
+    // }
     if (!amount) {
       SimpleToast.show('Vui lòng chọn nhập số tiền cần nạp', SimpleToast.SHORT);
       return true;
@@ -115,10 +115,10 @@ const Recharge = ({navigation}) => {
       return;
     }
     const params = {
-      bankNumber,
-      bankBranch,
-      bankCode,
-      name: accountHolder,
+      // bankNumber,
+      // bankBranch,
+      // bankCode,
+      // name: accountHolder,
       amount: amount,
       proofOfTransfer: image.assets[0].base64,
     };
@@ -157,7 +157,7 @@ const Recharge = ({navigation}) => {
           <Appbar.Content color="white" title={trans('recharge')} />
         </Appbar.Header>
         <ScrollView style={{flex: 1, paddingHorizontal: 16, paddingTop: 16}}>
-          <DropDown
+          {/* <DropDown
             title="Ngân hàng"
             placeholder={trans('chooseBank')}
             open={modalBank}
@@ -194,7 +194,7 @@ const Recharge = ({navigation}) => {
             value={accountHolder}
             onChangeText={setAccountHolder}
             mode="outlined"
-          />
+          /> */}
           <TextInput
             placeholder={trans('amountOfMoney')}
             style={{backgroundColor: Colors.WHITE, marginTop: 16}}

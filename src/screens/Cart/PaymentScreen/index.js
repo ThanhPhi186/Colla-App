@@ -59,6 +59,9 @@ const PaymentScreen = ({navigation, route}) => {
             {name: type === 'retail' ? trans('home') : trans('personal')},
           ],
         });
+      } else {
+        SimpleToast.show(res.error, SimpleToast.SHORT);
+        console.log('params', params);
       }
     });
   };

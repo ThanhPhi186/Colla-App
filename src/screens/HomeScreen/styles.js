@@ -45,6 +45,14 @@ const styles = {
     height: 7,
     backgroundColor: Colors.LIGHT_GREY,
   },
+  banner: {
+    width: '100%',
+    height: 120,
+    marginBottom: 12,
+  },
+  containerPopular: {
+    height: 200,
+  },
 };
 
 export default styles;

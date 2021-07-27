@@ -1,5 +1,5 @@
 import React from 'react';
-import {TouchableOpacity, View} from 'react-native';
+import {Image, TouchableOpacity, View} from 'react-native';
 import {Colors} from '../../styles';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import {
@@ -7,6 +7,8 @@ import {
   NAVIGATION_BOTTOM_TABS_HEIGHT,
 } from '../../styles/GlobalStyles';
 import {isIphoneX} from '../../helpers/iphoneXHelper';
+import FastImage from 'react-native-fast-image';
+import {images} from '../../assets';
 
 const CustomButtonTab = (props, children) => {
   const {onPress} = props;
@@ -16,9 +18,16 @@ const CustomButtonTab = (props, children) => {
       style={styles.container}
       // activeOpacity={1}
       onPress={onPress}>
-      <View style={styles.circleInside}>
-        <Ionicons name="logo-usd" size={44} color={Colors.WHITE} />
+      {/* <View style={styles.circleInside}> */}
+      <View>
+        <Image
+          source={images.BtnSales}
+          style={styles.circleInside}
+          resizeMode="stretch"
+        />
       </View>
+      {/* <Ionicons name="logo-usd" size={44} color={Colors.WHITE} /> */}
+      {/* </View> */}
     </TouchableOpacity>
   );
 };
@@ -30,12 +39,15 @@ const styles = {
   },
 
   circleInside: {
+    // flex: 1,
     width: HEIGHT_MIDDLE_HOME_BTN,
     height: HEIGHT_MIDDLE_HOME_BTN,
+
     borderRadius: HEIGHT_MIDDLE_HOME_BTN / 2,
+    // aspectRatio: 1 / 1,
     backgroundColor: Colors.PRIMARY,
-    justifyContent: 'center',
-    alignItems: 'center',
+    // justifyContent: 'center',
+    // alignItems: 'center',
   },
 };
 export default CustomButtonTab;

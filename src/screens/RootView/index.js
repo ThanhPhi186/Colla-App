@@ -11,7 +11,7 @@ import LoginNavigator from '../../navigations/LoginNavigator';
 import {Button} from '../../components/molecules';
 import {AppText} from '../../components/atoms';
 import {post} from '../../services/ServiceHandle';
-import {Const} from '../../utils';
+import {Const, trans} from '../../utils';
 import SimpleToast from 'react-native-simple-toast';
 import messaging from '@react-native-firebase/messaging';
 
@@ -110,7 +110,10 @@ const RootView = () => {
               <Button
                 title="Bán hàng online"
                 onPress={() => {
-                  RootNavigation.navigate('ListSalesProduct', {type: 'online'});
+                  RootNavigation.navigate(trans('sellProduct'), {
+                    screen: 'ListSalesProduct',
+                    params: {type: 'online'},
+                  });
                   dispatch(CartRedux.Actions.handelModalTypeSales(false));
                 }}
               />
@@ -118,8 +121,9 @@ const RootView = () => {
                 containerStyle={{marginBottom: 0}}
                 title="Bán tại cửa hàng"
                 onPress={() => {
-                  RootNavigation.navigate('ListSalesProduct', {
-                    type: 'offline',
+                  RootNavigation.navigate(trans('sellProduct'), {
+                    screen: 'ListSalesProduct',
+                    params: {type: 'offline'},
                   });
                   dispatch(CartRedux.Actions.handelModalTypeSales(false));
                 }}

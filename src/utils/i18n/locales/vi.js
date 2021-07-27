@@ -79,4 +79,6 @@ export default {
   yes: 'Có',
   no: 'Không',
   confirmLogout: 'Bạn có chắc chắn muốn đăng xuất?',
+  listBlog: 'Danh sách Blog',
+  emptyBlog: 'Danh mục chưa có bài viết nào',
 };

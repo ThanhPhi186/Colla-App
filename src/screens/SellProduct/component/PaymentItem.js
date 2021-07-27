@@ -4,24 +4,22 @@ import FastImage from 'react-native-fast-image';
 import {AppText} from '../../../components/atoms';
 import {Colors} from '../../../styles';
 import {Const, trans} from '../../../utils';
-import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import numeral from 'numeral';
 
-const ProductPaymentItem = props => {
+const PaymentItem = props => {
   const {item} = props;
-  console.log('itemitem', item);
 
   return (
     <View style={styles.containerItem}>
       <View style={styles.left}>
         <FastImage
           source={{
-            uri: Const.API.baseUrlImage + item.product.photos[0].photo,
+            uri: Const.API.baseUrlImage + item?.photos[0].photo,
           }}
           style={styles.avt}
         />
       </View>
-      {item.product.is_combo ? (
+      {item.is_combo ? (
         <View style={styles.right}>
           <View
             style={{
@@ -31,19 +29,17 @@ const ProductPaymentItem = props => {
               flex: 1,
             }}>
             <View style={{justifyContent: 'space-around'}}>
-              <AppText style={styles.textName}>{item.product.name}</AppText>
-              {item.product.combo_products.length > 0 && (
+              <AppText style={styles.textName}>{item.name}</AppText>
+              {item.combo_products.length > 0 && (
                 <Text style={{flex: 1}}>
                   Tặng kèm:{' '}
                   <Text>
-                    {item.product.combo_products
-                      .map(elm => elm.name)
-                      .join(' + ')}
+                    {item.combo_products.map(elm => elm.name).join(' + ')}
                   </Text>
                 </Text>
               )}
               <AppText style={styles.textPrice}>
-                {numeral(item.product.price).format()} đ
+                {numeral(item.price).format()} đ
               </AppText>
             </View>
             <AppText
@@ -66,9 +62,9 @@ const ProductPaymentItem = props => {
               style={{
                 justifyContent: 'space-around',
               }}>
-              <AppText style={styles.textName}>{item.product.name}</AppText>
+              <AppText style={styles.textName}>{item.name}</AppText>
               <AppText style={styles.textPrice}>
-                {numeral(item.product.price).format()} đ
+                {numeral(item.price).format()} đ
               </AppText>
             </View>
 
@@ -141,4 +137,4 @@ const styles = {
     marginTop: 10,
   },
 };
-export default ProductPaymentItem;
+export default PaymentItem;

@@ -38,6 +38,8 @@ export default {
     Recharge: 'recharge',
     Contact: 'contact',
     Revenue: 'statistics/revenue',
+    Blog: 'blog',
+    BlogCategory: 'blogcategory',
   },
   RESPONSE_CODES: {
     SUCCESS: {

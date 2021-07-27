@@ -24,4 +24,6 @@ export const images = {
   discount: require('./images/discount.png'),
   TopSaleT7: require('./images/TopSaleT7.png'),
   BtnSales: require('./images/btnSales.png'),
+  call: require('./images/call.png'),
+  demoBanner: require('./images/demoBanner.jpeg'),
 };

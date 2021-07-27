@@ -72,7 +72,8 @@ const ListProduct = ({navigation, route}) => {
           renderItem={({item}) => renderItem(item)}
           keyExtractor={(item, index) => index.toString()}
           contentContainerStyle={{
-            paddingVertical: 10,
+            paddingVertical: 12,
+            paddingHorizontal: 8,
           }}
         />
       </View>

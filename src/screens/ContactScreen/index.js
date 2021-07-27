@@ -1,5 +1,12 @@
 import React, {useState} from 'react';
-import {ScrollView, TextInput, TouchableOpacity, View} from 'react-native';
+import {
+  ScrollView,
+  TextInput,
+  TouchableOpacity,
+  View,
+  Linking,
+  Platform,
+} from 'react-native';
 import FastImage from 'react-native-fast-image';
 import {Appbar} from 'react-native-paper';
 import SimpleToast from 'react-native-simple-toast';
@@ -59,6 +66,23 @@ const ContactScreen = ({navigation}) => {
     });
   };
 
+  const openFacebook = () => {
+    const pageID = 460699881054856;
+    const scheme = Platform.select({
+      ios: 'fb://profile/',
+      android: 'fb://page/',
+    });
+    Linking.openURL(`${scheme}${pageID}`);
+  };
+
+  const callPhone = () => {
+    Linking.openURL(`tel:0376871280`);
+  };
+
+  const openzalo = () => {
+    Linking.openURL('https://zalo.me/0376871280');
+  };
+
   return (
     <View style={container}>
       <Appbar.Header>
@@ -85,27 +109,25 @@ const ContactScreen = ({navigation}) => {
               justifyContent: 'space-between',
               marginTop: 8,
             }}>
-            <TouchableOpacity>
-              <FastImage
-                source={images.facebook}
-                style={{width: 50, height: 50}}
-              />
+            <TouchableOpacity onPress={callPhone}>
+              <FastImage source={images.call} style={{width: 50, height: 50}} />
             </TouchableOpacity>
-            <TouchableOpacity>
-              <FastImage source={images.zalo} style={{width: 50, height: 50}} />
-            </TouchableOpacity>
-            <TouchableOpacity>
-              <FastImage
-                source={images.gmail}
-                style={{width: 50, height: 50}}
-              />
-            </TouchableOpacity>
-            <TouchableOpacity>
+            <TouchableOpacity onPress={openFacebook}>
               <FastImage
                 source={images.message}
                 style={{width: 50, height: 50}}
               />
             </TouchableOpacity>
+            <TouchableOpacity onPress={openzalo}>
+              <FastImage source={images.zalo} style={{width: 50, height: 50}} />
+            </TouchableOpacity>
+            {/* <TouchableOpacity>
+              <FastImage
+                source={images.gmail}
+                style={{width: 50, height: 50}}
+              />
+            </TouchableOpacity> */}
+
             <View style={{width: 50, height: 50}} />
           </View>
           <AppText style={{marginTop: 20}}>

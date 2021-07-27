@@ -35,12 +35,12 @@ const CardItem = props => {
         />
       </View>
       <View style={styles.leftContent}>
-        <AppText style={styles.nameProduct}>
-          {item.main_product_id.name}
+        <AppText style={styles.nameProduct} numberOfLines={1}>
+          {item.name}
         </AppText>
 
         <AppText style={styles.txtPrice}>
-          {numeral(item.main_product_id.price).format()} đ
+          {numeral(item.price).format()} đ
         </AppText>
         {item.combo_products.length > 0 && (
           <Text style={{marginTop: Mixin.moderateSize(4)}}>

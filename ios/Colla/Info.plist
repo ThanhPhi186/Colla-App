@@ -78,7 +78,7 @@
 	  <key>LSApplicationQueriesSchemes</key>
   		<array>
     		<string>facebook</string>
-    		<string>mailto</string>
+    		<string>fb</string>
     		<string>instagram</string>
     		<string>instagram-stories</string>
 			<string>email</string>

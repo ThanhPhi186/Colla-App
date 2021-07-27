@@ -1,14 +1,16 @@
 import React from 'react';
 import {Text, TouchableOpacity, View} from 'react-native';
 import FastImage from 'react-native-fast-image';
-import {Const} from '../../utils';
-import {AppText} from '../atoms';
-import numeral from 'numeral';
-import {device_width} from '../../styles/Mixin';
-import {Colors, Mixin} from '../../styles';
-import Icon from 'react-native-vector-icons/FontAwesome5';
 
-const ItemProduct = props => {
+import numeral from 'numeral';
+
+import Icon from 'react-native-vector-icons/FontAwesome5';
+import {Const} from '../../../utils';
+import {AppText} from '../../../components/atoms';
+import {Colors, Mixin} from '../../../styles';
+import {device_width} from '../../../styles/Mixin';
+
+const ItemPopular = props => {
   const {item, addToCart} = props;
 
   return item.is_combo ? (
@@ -127,4 +129,4 @@ const styles = {
     marginBottom: -12,
   },
 };
-export default ItemProduct;
+export default ItemPopular;

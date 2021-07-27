@@ -42,6 +42,7 @@ const DetailProduct = ({navigation, route}) => {
     const dataProduct = {
       product_id: item.id,
       amount: refModal.current,
+      type: 'retail',
     };
     post(Const.API.baseURL + Const.API.Cart, dataProduct).then(res => {
       if (res.ok) {
