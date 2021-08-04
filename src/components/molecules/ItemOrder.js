@@ -8,6 +8,8 @@ import numeral from 'numeral';
 const ItemOrder = props => {
   const {item, confirmOrder, cancelOrder, type} = props;
 
+  console.log('itemitem', item);
+
   const renderStatus = status => {
     switch (status) {
       case 'verifing':
@@ -131,7 +133,8 @@ const ItemOrder = props => {
           {item.order_details.map((elm, index) => {
             return (
               <AppText style={{fontWeight: 'bold'}} key={index}>
-                - {elm.product.name} x {elm.amount}
+                - {elm.product ? elm.product.name : '[Sản phẩm đã bị xoá]'} x{' '}
+                {elm.amount}
               </AppText>
             );
           })}

@@ -11,12 +11,12 @@ import Icon from 'react-native-vector-icons/FontAwesome5';
 const ItemProduct = props => {
   const {item, addToCart} = props;
 
-  return item.is_combo ? (
+  return (
     <View style={{flex: 1 / 2}}>
       <TouchableOpacity {...props} style={styles.container}>
         <FastImage
           resizeMode="contain"
-          source={{uri: Const.API.baseUrlImage + item.photos[0].photo}}
+          source={{uri: Const.API.baseUrlImage + item?.photos[0]?.photo}}
           style={styles.image}
         />
         <View style={styles.viewNamePrice}>
@@ -35,29 +35,6 @@ const ItemProduct = props => {
               </Text>
             </Text>
           )}
-        </View>
-        {addToCart && (
-          <TouchableOpacity style={styles.btnCart} onPress={addToCart}>
-            <Icon name="cart-plus" size={18} color={Colors.WHITE} />
-          </TouchableOpacity>
-        )}
-      </TouchableOpacity>
-    </View>
-  ) : (
-    <View style={{flex: 1 / 2}}>
-      <TouchableOpacity {...props} style={styles.container}>
-        <FastImage
-          resizeMode="contain"
-          source={{uri: Const.API.baseUrlImage + item.photos[0].photo}}
-          style={styles.image}
-        />
-        <View style={styles.viewNamePrice}>
-          <AppText numberOfLines={1} style={styles.txtName}>
-            {item.name}
-          </AppText>
-          <AppText style={styles.txtPrice}>
-            {numeral(item.price).format()} đ
-          </AppText>
         </View>
         {addToCart && (
           <TouchableOpacity style={styles.btnCart} onPress={addToCart}>

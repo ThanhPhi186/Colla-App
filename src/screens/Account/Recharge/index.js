@@ -24,15 +24,11 @@ import styles from './styles';
 import Modal from 'react-native-modal';
 import {launchCamera, launchImageLibrary} from 'react-native-image-picker';
 import FastImage from 'react-native-fast-image';
+import {images} from '../../../assets';
 
 const Recharge = ({navigation}) => {
-  // const userInfo = useSelector(state => state.AuthenOverallReducer.userAuthen);
-  // const [listBank, setListBank] = useState([]);
-  // const [modalBank, setModalBank] = useState(false);
-  // const [bankCode, setBankCode] = useState(userInfo?.bankCode || '');
-  // const [bankBranch, setBankBranch] = useState(userInfo?.bankBranch || '');
-  // const [bankNumber, setBankNumber] = useState(userInfo?.bankNumber);
-  // const [accountHolder, setAccountHolder] = useState('');
+  const [listBank, setListBank] = useState([]);
+
   const [amount, setAmount] = useState('');
   const [modalImage, setModalImage] = useState(false);
   const [image, setImage] = useState(null);
@@ -60,42 +56,20 @@ const Recharge = ({navigation}) => {
     },
   ];
 
-  // useEffect(() => {
-  //   const getListBank = () => {
-  //     get(Const.API.baseURL + Const.API.Bank).then(res => {
-  //       if (res.ok) {
-  //         const convertData = res.data.data.map(elm => {
-  //           return {
-  //             label: `${elm.vn_name} (${elm.shortName})`,
-  //             value: elm.bankCode,
-  //           };
-  //         });
-  //         setListBank(convertData);
-  //       } else {
-  //         SimpleToast.show(res.error, SimpleToast.SHORT);
-  //       }
-  //     });
-  //   };
-  //   getListBank();
-  // }, []);
+  useEffect(() => {
+    const getListBank = () => {
+      get(Const.API.baseURL + Const.API.RechargeBank).then(res => {
+        if (res.ok) {
+          setListBank(res.data.data);
+        } else {
+          SimpleToast.show(res.error, SimpleToast.SHORT);
+        }
+      });
+    };
+    getListBank();
+  }, []);
 
   const handelCheckValue = () => {
-    // if (!bankCode) {
-    //   SimpleToast.show('Vui lòng chọn ngân hàng', SimpleToast.SHORT);
-    //   return true;
-    // }
-    // if (!bankBranch) {
-    //   SimpleToast.show('Chi nhánh không được để trống', SimpleToast.SHORT);
-    //   return true;
-    // }
-    // if (!bankNumber) {
-    //   SimpleToast.show('Số tài khoản không được để trống', SimpleToast.SHORT);
-    //   return true;
-    // }
-    // if (!accountHolder) {
-    //   SimpleToast.show('Chủ tài khoản không được để trống', SimpleToast.SHORT);
-    //   return true;
-    // }
     if (!amount) {
       SimpleToast.show('Vui lòng chọn nhập số tiền cần nạp', SimpleToast.SHORT);
       return true;
@@ -115,10 +89,6 @@ const Recharge = ({navigation}) => {
       return;
     }
     const params = {
-      // bankNumber,
-      // bankBranch,
-      // bankCode,
-      // name: accountHolder,
       amount: amount,
       proofOfTransfer: image.assets[0].base64,
     };
@@ -157,44 +127,43 @@ const Recharge = ({navigation}) => {
           <Appbar.Content color="white" title={trans('recharge')} />
         </Appbar.Header>
         <ScrollView style={{flex: 1, paddingHorizontal: 16, paddingTop: 16}}>
-          {/* <DropDown
-            title="Ngân hàng"
-            placeholder={trans('chooseBank')}
-            open={modalBank}
-            setOpen={setModalBank}
-            items={listBank}
-            setItems={setListBank}
-            value={bankCode}
-            setValue={setBankCode}
-            searchable
-            searchPlaceholder={trans('search')}
-            listMode="SCROLLVIEW"
-          />
-
-          <TextInput
-            placeholder="Nhập chi nhánh"
-            style={{backgroundColor: Colors.WHITE, marginTop: 16}}
-            label={trans('branch')}
-            value={bankBranch}
-            onChangeText={setBankBranch}
-            mode="outlined"
-          />
-          <TextInput
-            placeholder="Số tài khoản"
-            style={{backgroundColor: Colors.WHITE, marginTop: 16}}
-            label={trans('bankAccountNumber')}
-            value={bankNumber}
-            onChangeText={setBankNumber}
-            mode="outlined"
-          />
-          <TextInput
-            placeholder={trans('accountHolder')}
-            style={{backgroundColor: Colors.WHITE, marginTop: 16}}
-            label={trans('accountHolder')}
-            value={accountHolder}
-            onChangeText={setAccountHolder}
-            mode="outlined"
-          /> */}
+          {listBank.map((elm, idx) => {
+            return (
+              <View
+                key={idx}
+                style={{
+                  padding: 16,
+                  backgroundColor: Colors.WHITE,
+                  shadowColor: '#000',
+                  shadowOffset: {
+                    width: 0,
+                    height: 2,
+                  },
+                  shadowOpacity: 0.25,
+                  shadowRadius: 3.84,
+                  elevation: 5,
+                  marginTop: 8,
+                }}>
+                <FastImage
+                  style={{width: '60%', height: 60, alignSelf: 'center'}}
+                  resizeMode="contain"
+                  source={{uri: `data:image/png;base64,${elm.bank_logo}`}}
+                />
+                <Text style={{marginTop: 4}}>
+                  <Text style={{fontWeight: 'bold'}}>Chủ tài khoản: </Text>
+                  {elm.bank_account_name}
+                </Text>
+                <Text style={{marginTop: 4}}>
+                  <Text style={{fontWeight: 'bold'}}>Tên ngân hàng: </Text>
+                  {elm.bank_name}
+                </Text>
+                <Text style={{marginTop: 4}}>
+                  <Text style={{fontWeight: 'bold'}}>STK: </Text>
+                  {elm.bank_account_number}
+                </Text>
+              </View>
+            );
+          })}
           <TextInput
             placeholder={trans('amountOfMoney')}
             style={{backgroundColor: Colors.WHITE, marginTop: 16}}

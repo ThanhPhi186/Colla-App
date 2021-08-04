@@ -1,7 +1,7 @@
 import React, {useState} from 'react';
-import {FlatList, ScrollView, TouchableOpacity, View} from 'react-native';
+import {FlatList, ScrollView, TouchableOpacity, View, Text} from 'react-native';
 import FastImage from 'react-native-fast-image';
-import {Appbar} from 'react-native-paper';
+import {Appbar, Switch} from 'react-native-paper';
 import SimpleToast from 'react-native-simple-toast';
 import {useDispatch, useSelector} from 'react-redux';
 import {images} from '../../../assets';
@@ -20,18 +20,27 @@ import {Colors} from '../../../styles';
 
 const PaymentScreen = ({navigation, route}) => {
   const {type} = route.params;
+  const {dataProducts} = route.params;
 
   const dataCart = useSelector(state =>
-    type === 'retail'
-      ? state.CartReducer.listPurchaseCart
-      : state.CartReducer.listImportCart,
+    type === 'retail' ? state.CartReducer.listPurchaseCart : dataProducts,
   );
+
+  console.log('dataCart', dataProducts);
 
   const userInfo = useSelector(state => state.AuthenOverallReducer.userAuthen);
 
+  const [usePoint, setUsePoint] = useState(false);
+
   const dataAddress = userInfo?.addresses?.filter(elm => elm.is_default)[0];
 
-  const totalPrice = sum(dataCart.map(elm => elm.product.price * elm.amount));
+  const sumPrice = sum(dataCart.map(elm => elm.product.price * elm.amount));
+
+  const totalPrice = usePoint
+    ? sumPrice - userInfo.point < 0
+      ? 0
+      : sumPrice - userInfo.point
+    : sumPrice;
 
   const dispatch = useDispatch();
 
@@ -39,16 +48,28 @@ const PaymentScreen = ({navigation, route}) => {
     if (!dataAddress) {
       return SimpleToast.show('Chưa có địa chỉ nhận hàng', SimpleToast.SHORT);
     }
+
+    const products = dataCart.map(elm => {
+      return {
+        product_id: elm.id,
+        amount: elm.amount,
+      };
+    });
+
     const carts = dataCart.map(elm => elm.id);
+
     const params = {
       phone: dataAddress.phone,
       address_ship: dataAddress.address,
       fullname: dataAddress.fullname,
       payment_method: 'cod',
       ship_method: '',
-      carts,
       type,
+      use_point: usePoint,
     };
+
+    type === 'retail' ? (params.carts = carts) : (params.products = products);
+
     post(Const.API.baseURL + Const.API.Order, params).then(res => {
       if (res.ok) {
         dispatch(CartRedux.Actions.getPurchaseCart.request());
@@ -159,6 +180,31 @@ const PaymentScreen = ({navigation, route}) => {
           keyExtractor={(item, index) => index.toString()}
         />
       </View>
+      <View
+        style={{
+          flexDirection: 'row',
+          justifyContent: 'space-between',
+          width: '100%',
+          alignItems: 'center',
+          marginBottom: 8,
+          paddingHorizontal: 12,
+        }}>
+        <Text style={styles.textPay}>
+          Dùng{' '}
+          <Text style={styles.textPrice}>
+            {numeral(userInfo.point).format()}
+          </Text>{' '}
+          điểm
+        </Text>
+        <Switch
+          onValueChange={() => setUsePoint(!usePoint)}
+          value={usePoint}
+          trackColor="#0187E0"
+          thumbColor={Colors.WHITE}
+          ios_backgroundColor={Colors.WHITE_SMOKE}
+        />
+      </View>
+      <View style={styles.largeIndicate} />
       <View style={styles.showPrice}>
         <AppText style={styles.textPay}>{trans('totalPayment')}</AppText>
         <AppText style={styles.textPrice}>

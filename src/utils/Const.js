@@ -40,6 +40,7 @@ export default {
     Revenue: 'statistics/revenue',
     Blog: 'blog',
     BlogCategory: 'blogcategory',
+    RechargeBank: 'recharge-bank',
   },
   RESPONSE_CODES: {
     SUCCESS: {

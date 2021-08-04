@@ -18,16 +18,15 @@ const CustomButtonTab = (props, children) => {
       style={styles.container}
       // activeOpacity={1}
       onPress={onPress}>
-      {/* <View style={styles.circleInside}> */}
-      <View>
+      <View style={styles.circleInside}>
         <Image
           source={images.BtnSales}
-          style={styles.circleInside}
-          resizeMode="stretch"
+          style={styles.img}
+          resizeMode="contain"
         />
+
+        {/* <Ionicons name="logo-usd" size={44} color={Colors.WHITE} /> */}
       </View>
-      {/* <Ionicons name="logo-usd" size={44} color={Colors.WHITE} /> */}
-      {/* </View> */}
     </TouchableOpacity>
   );
 };
@@ -46,8 +45,13 @@ const styles = {
     borderRadius: HEIGHT_MIDDLE_HOME_BTN / 2,
     // aspectRatio: 1 / 1,
     backgroundColor: Colors.PRIMARY,
-    // justifyContent: 'center',
-    // alignItems: 'center',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  img: {
+    width: HEIGHT_MIDDLE_HOME_BTN / 1.3,
+    height: HEIGHT_MIDDLE_HOME_BTN / 1.3,
+    borderRadius: HEIGHT_MIDDLE_HOME_BTN / 2,
   },
 };
 export default CustomButtonTab;

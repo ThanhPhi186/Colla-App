@@ -88,7 +88,7 @@ const DetailProduct = ({navigation, route}) => {
           ) : (
             <FastImage
               resizeMode="contain"
-              source={{uri: Const.API.baseUrlImage + item.photos[0].photo}}
+              source={{uri: Const.API.baseUrlImage + item?.photos[0]?.photo}}
               style={container}
             />
           )}
@@ -117,7 +117,8 @@ const DetailProduct = ({navigation, route}) => {
                           item.photos.length > 0
                             ? {
                                 uri:
-                                  Const.API.baseUrlImage + item.photos[0].photo,
+                                  Const.API.baseUrlImage +
+                                  item?.photos[0]?.photo,
                               }
                             : images.noImage
                         }

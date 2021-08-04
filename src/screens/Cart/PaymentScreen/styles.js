@@ -25,8 +25,7 @@ const styles = {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    paddingHorizontal: 10,
-    marginTop: 10,
+    paddingHorizontal: 12,
     paddingVertical: 3,
   },
   textPay: {
@@ -36,6 +35,11 @@ const styles = {
   },
   textPrice: {
     color: Colors.GREEN_1,
+  },
+  largeIndicate: {
+    width: '100%',
+    height: 7,
+    backgroundColor: Colors.WHITE_SMOKE,
   },
 };
 export default styles;

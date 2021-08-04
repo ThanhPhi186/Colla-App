@@ -13,71 +13,47 @@ import {device_width} from '../../../styles/Mixin';
 const ItemPopular = props => {
   const {item, addToCart} = props;
 
-  return item.is_combo ? (
-    <View style={{flex: 1 / 2}}>
-      <TouchableOpacity {...props} style={styles.container}>
-        <FastImage
-          resizeMode="contain"
-          source={{uri: Const.API.baseUrlImage + item.photos[0].photo}}
-          style={styles.image}
-        />
-        <View style={styles.viewNamePrice}>
-          <AppText numberOfLines={2} style={styles.txtName}>
-            {item.name}
-          </AppText>
+  return (
+    // <View style={{marginRight: 12}}>
+    <TouchableOpacity {...props} style={styles.container}>
+      <FastImage
+        resizeMode="contain"
+        source={{uri: Const.API.baseUrlImage + item?.photos[0]?.photo}}
+        style={styles.image}
+      />
+      <View style={styles.viewNamePrice}>
+        <AppText numberOfLines={2} style={styles.txtName}>
+          {item.name}
+        </AppText>
 
-          <AppText style={styles.txtPrice}>
-            {numeral(item.price).format()} đ
-          </AppText>
-          {item.combo_products.length > 0 && (
-            <Text style={{flex: 1}}>
-              Tặng kèm:{' '}
-              <Text>
-                {item.combo_products.map(elm => elm.name).join(' + ')}
-              </Text>
-            </Text>
-          )}
-        </View>
-        {addToCart && (
-          <TouchableOpacity style={styles.btnCart} onPress={addToCart}>
-            <Icon name="cart-plus" size={18} color={Colors.WHITE} />
-          </TouchableOpacity>
+        <AppText style={styles.txtPrice}>
+          {numeral(item.price).format()} đ
+        </AppText>
+        {item.combo_products.length > 0 && (
+          <Text style={{flex: 1}}>
+            Tặng kèm:{' '}
+            <Text>{item.combo_products.map(elm => elm.name).join(' + ')}</Text>
+          </Text>
         )}
-      </TouchableOpacity>
-    </View>
-  ) : (
-    <View style={{flex: 1 / 2}}>
-      <TouchableOpacity {...props} style={styles.container}>
-        <FastImage
-          resizeMode="contain"
-          source={{uri: Const.API.baseUrlImage + item.photos[0].photo}}
-          style={styles.image}
-        />
-        <View style={styles.viewNamePrice}>
-          <AppText numberOfLines={1} style={styles.txtName}>
-            {item.name}
-          </AppText>
-          <AppText style={styles.txtPrice}>
-            {numeral(item.price).format()} đ
-          </AppText>
-        </View>
-        {addToCart && (
-          <TouchableOpacity style={styles.btnCart} onPress={addToCart}>
-            <Icon name="cart-plus" size={18} color={Colors.WHITE} />
-          </TouchableOpacity>
-        )}
-      </TouchableOpacity>
-    </View>
+      </View>
+      {addToCart && (
+        <TouchableOpacity style={styles.btnCart} onPress={addToCart}>
+          <Icon name="cart-plus" size={18} color={Colors.WHITE} />
+        </TouchableOpacity>
+      )}
+    </TouchableOpacity>
+    // </View>
   );
 };
 
 const styles = {
   container: {
+    marginRight: 12,
     backgroundColor: Colors.WHITE,
     borderRadius: 12,
     width: device_width / 2.2,
     paddingBottom: 12,
-    alignSelf: 'center',
+    // alignSelf: 'center',
     marginVertical: 8,
     shadowColor: '#000',
     shadowOffset: {

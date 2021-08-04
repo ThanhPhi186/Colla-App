@@ -77,16 +77,16 @@ const HomeScreen = ({navigation}) => {
     getCategoryBlog();
   }, []);
 
-  // useEffect(() => {
-  //   const getListProduct = () => {
-  //     get(`${Const.API.baseURL + Const.API.Product}?type=retail`).then(res => {
-  //       if (res.ok) {
-  //         setListProduct(res.data.data);
-  //       }
-  //     });
-  //   };
-  //   getListProduct();
-  // }, []);
+  useEffect(() => {
+    const getListProduct = () => {
+      get(`${Const.API.baseURL + Const.API.Product}?type=retail`).then(res => {
+        if (res.ok) {
+          setListProduct(res.data.data.slice(0, 7));
+        }
+      });
+    };
+    getListProduct();
+  }, []);
 
   const renderCategory = ({item}) => {
     return (
@@ -268,11 +268,6 @@ const HomeScreen = ({navigation}) => {
             paddingBottom:
               NAVIGATION_BOTTOM_TABS_HEIGHT + HEIGHT_MIDDLE_HOME_BTN,
           }}>
-          <FastImage
-            resizeMode="stretch"
-            source={images.demoBanner}
-            style={styles.banner}
-          />
           <ScrollView horizontal showsHorizontalScrollIndicator={false}>
             <FlatList
               data={categoryData}
@@ -283,6 +278,26 @@ const HomeScreen = ({navigation}) => {
               scrollEnabled={false}
             />
           </ScrollView>
+          <FastImage
+            resizeMode="stretch"
+            source={images.demoBanner}
+            style={styles.banner}
+          />
+          <AppText
+            containerStyle={{marginTop: 8}}
+            style={{color: Colors.PRIMARY}}
+            title>
+            Sản phẩm phân phối
+          </AppText>
+          <FlatList
+            showsHorizontalScrollIndicator={false}
+            horizontal
+            data={listProduct}
+            renderItem={renderProductPopular}
+            contentContainerStyle={{paddingHorizontal: 4}}
+            keyExtractor={(item, index) => index.toString()}
+          />
+
           {/* <LinearGradient
           start={{x: 0, y: 0}}
           end={{x: 1, y: 0}}

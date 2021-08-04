@@ -77,7 +77,7 @@ const ModalChangeQuantity = forwardRef((props, ref) => {
         <View style={styles.avatar}>
           <FastImage
             source={{
-              uri: Const.API.baseUrlImage + showProduct.photos[0].photo,
+              uri: Const.API.baseUrlImage + showProduct?.photos[0]?.photo,
             }}
             style={styles.images}
           />

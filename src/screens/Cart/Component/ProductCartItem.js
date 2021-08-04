@@ -15,14 +15,14 @@ const ProductCartItem = props => {
       <View style={styles.left}>
         <FastImage
           source={{
-            uri: Const.API.baseUrlImage + item.product.photos[0].photo,
+            uri: Const.API.baseUrlImage + item.product?.photos[0]?.photo,
           }}
           style={styles.avt}
         />
       </View>
       <View style={styles.right}>
         <AppText style={styles.textName}>
-          {item.product.name || item.name}
+          {item?.product?.name || item?.name}
         </AppText>
 
         <AppText style={styles.textPrice}>

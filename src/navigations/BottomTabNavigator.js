@@ -90,7 +90,8 @@ const BottomTabNavigator = () => {
       routeName === 'PurchaseHistory' ||
       routeName === 'SalesHistory' ||
       routeName === 'Recharge' ||
-      routeName === 'Withdrawal'
+      routeName === 'Withdrawal' ||
+      routeName === 'PaymentScreen'
     ) {
       return false;
     }
@@ -163,6 +164,7 @@ const BottomTabNavigator = () => {
         <Stack.Screen name="ImportCart" component={ImportCart} />
         <Stack.Screen name="Recharge" component={Recharge} />
         <Stack.Screen name="Withdrawal" component={Withdrawal} />
+        <Stack.Screen name="PaymentScreen" component={PaymentScreen} />
       </Stack.Navigator>
     );
   };

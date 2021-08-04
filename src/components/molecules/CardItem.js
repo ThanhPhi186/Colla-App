@@ -19,33 +19,37 @@ const CardItem = props => {
     changeAmountProps,
   } = props;
 
+  const showProduct = item.product ? item.product : item;
+
   console.log('item', item);
 
-  return item.is_combo ? (
+  return (
     <TouchableOpacity style={[styles.container, styleProps]} {...props}>
       <View style={styles.viewImg}>
         <FastImage
           resizeMode="contain"
           style={styles.img}
           source={
-            item.photos.length > 0
-              ? {uri: Const.API.baseUrlImage + item.photos[0].photo}
+            showProduct.photos.length > 0
+              ? {uri: Const.API.baseUrlImage + showProduct.photos[0].photo}
               : images.noImage
           }
         />
       </View>
       <View style={styles.leftContent}>
         <AppText style={styles.nameProduct} numberOfLines={1}>
-          {item.name}
+          {showProduct.name}
         </AppText>
 
         <AppText style={styles.txtPrice}>
-          {numeral(item.price).format()} đ
+          {numeral(showProduct.price).format()} đ
         </AppText>
-        {item.combo_products.length > 0 && (
+        {showProduct.combo_products.length > 0 && (
           <Text style={{marginTop: Mixin.moderateSize(4)}}>
             Tặng kèm:{' '}
-            <Text>{item.combo_products.map(elm => elm.name).join(' + ')}</Text>
+            <Text>
+              {showProduct.combo_products.map(elm => elm.name).join(' + ')}
+            </Text>
           </Text>
         )}
       </View>
@@ -71,53 +75,7 @@ const CardItem = props => {
             styles.boxAmount,
             {marginRight: Mixin.moderateSize(16)},
           ]}>
-          {item.quantity}
-        </AppText>
-      )}
-    </TouchableOpacity>
-  ) : (
-    <TouchableOpacity style={[styles.container, styleProps]} {...props}>
-      <View style={styles.viewImg}>
-        <FastImage
-          resizeMode="contain"
-          style={styles.img}
-          source={
-            item.photos.length > 0
-              ? {uri: Const.API.baseUrlImage + item.photos[0].photo}
-              : images.noImage
-          }
-        />
-      </View>
-      <View style={styles.leftContent}>
-        <AppText style={styles.nameProduct}>{item.name}</AppText>
-
-        <AppText style={styles.txtPrice}>
-          {numeral(item.price).format()} đ
-        </AppText>
-      </View>
-      {type === 'choose' && (
-        <View style={styles.viewQuantity}>
-          <TouchableOpacity onPress={() => lessAmountProps(item)}>
-            <Icon name="minus-circle" size={28} color={Colors.PRIMARY} />
-          </TouchableOpacity>
-          <TextInput
-            style={styles.boxAmount}
-            value={item.amount.toString()}
-            keyboardType="number-pad"
-            onChangeText={valueInput => changeAmountProps(valueInput, item)}
-          />
-          <TouchableOpacity onPress={() => addAmountProps(item)}>
-            <Icon name="plus-circle" size={28} color={Colors.PRIMARY} />
-          </TouchableOpacity>
-        </View>
-      )}
-      {type === 'readOnly' && (
-        <AppText
-          containerStyle={[
-            styles.boxAmount,
-            {marginRight: Mixin.moderateSize(16)},
-          ]}>
-          {item.quantity}
+          {showProduct.quantity}
         </AppText>
       )}
     </TouchableOpacity>

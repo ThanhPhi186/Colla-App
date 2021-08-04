@@ -26,4 +26,5 @@ export const images = {
   BtnSales: require('./images/btnSales.png'),
   call: require('./images/call.png'),
   demoBanner: require('./images/demoBanner.jpeg'),
+  agribank: require('./images/agribank.png'),
 };

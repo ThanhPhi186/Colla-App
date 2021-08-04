@@ -18,7 +18,9 @@ import ModalChangeQuantity from '../../../components/molecules/ModalChangeQuanti
 const CartScreen = ({navigation}) => {
   const dispatch = useDispatch();
   const dataCart = useSelector(state => state.CartReducer.listPurchaseCart);
-  const totalPrice = sum(dataCart?.map(elm => elm.product.price * elm.amount));
+  const totalPrice = sum(
+    dataCart?.map(elm => elm?.product?.price * elm.amount),
+  );
 
   const [visibleModal, setVisibleModal] = useState(false);
   const [itemCart, setItemCart] = useState();
