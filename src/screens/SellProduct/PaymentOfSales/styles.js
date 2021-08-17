@@ -27,7 +27,7 @@ const styles = {
     justifyContent: 'space-between',
     alignItems: 'center',
     paddingHorizontal: 10,
-    marginTop: 10,
+    // marginTop: 10,
     paddingVertical: 3,
   },
   textPay: {

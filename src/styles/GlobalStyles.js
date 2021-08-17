@@ -36,3 +36,7 @@ export const titleBold = {
 export const fontWeight600 = {
   fontWeight: '600',
 };
+
+export const fontWeightBold = {
+  fontWeight: 'bold',
+};

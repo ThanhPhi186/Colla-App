@@ -70,7 +70,7 @@ const PaymentOfSales = ({navigation, route}) => {
         <Appbar.Content
           style={{alignItems: 'center'}}
           color="white"
-          title={trans('payment')}
+          title={trans('confirmOrder')}
         />
       </Appbar.Header>
       <View style={{flex: 1}}>
@@ -141,11 +141,25 @@ const PaymentOfSales = ({navigation, route}) => {
         />
       </View>
       <View style={styles.showPrice}>
-        <AppText style={styles.textPay}>{trans('totalPayment')}</AppText>
+        <AppText style={styles.textPay}>{trans('payingCustomers')}</AppText>
         <AppText style={styles.textPrice}>
           {numeral(totalPrice).format()} đ
         </AppText>
       </View>
+      <View style={styles.showPrice}>
+        <AppText style={styles.textPay}>{trans('youWillGet')}</AppText>
+        <AppText style={styles.textPrice}>
+          {numeral('20000').format()} đ
+        </AppText>
+      </View>
+      {type === 'online' && (
+        <AppText
+          style={{paddingHorizontal: 10, color: 'red', fontStyle: 'italic'}}>
+          Lưu ý: Trường hợp khách hàng không nhận hàng bạn có thể bị trừ 10.000đ
+          trong quỹ điểm của bạn. Hãy liên hệ khách hàng và chắc chắn khách hàng
+          sẽ nhận hàng
+        </AppText>
+      )}
       <Button
         containerStyle={styles.btnOrdered}
         title={trans('confirm')}

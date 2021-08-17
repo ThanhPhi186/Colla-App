@@ -28,15 +28,12 @@ const DetailProduct = ({navigation, route}) => {
   const dispatch = useDispatch();
   const {item} = route.params;
 
-  console.log(
-    'itemteim',
-    item.photos.map(elm => Const.API.baseUrlImage + elm.photo),
-  );
-
   const [visibleModal, setVisibleModal] = useState(false);
 
   const [type, setType] = useState('');
   const refModal = useRef();
+
+  console.log('item', item);
 
   const addToCart = () => {
     const dataProduct = {
@@ -54,6 +51,20 @@ const DetailProduct = ({navigation, route}) => {
     if (type === 'buyNow') {
       navigation.navigate('CartScreen');
     }
+  };
+
+  const renderProductInfo = () => {
+    return (
+      <View>
+        <AppText title style={styles.textInfo}>
+          {trans('productInfo')}
+        </AppText>
+        <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
+          <AppText>Số lượng trong kho:</AppText>
+          <AppText>{item.quantity}</AppText>
+        </View>
+      </View>
+    );
   };
 
   return (
@@ -127,13 +138,6 @@ const DetailProduct = ({navigation, route}) => {
                     <View style={styles.leftContent}>
                       <AppText style={styles.nameProduct}>{elm.name}</AppText>
                     </View>
-                    {/* <AppText
-                      containerStyle={[
-                        styles.boxAmount,
-                        {marginRight: Mixin.moderateSize(16)},
-                      ]}>
-                      {elm.quantity}
-                    </AppText> */}
                   </View>
                 );
               })}
@@ -142,8 +146,9 @@ const DetailProduct = ({navigation, route}) => {
         )}
         <View style={styles.largeIndicate} />
         <View style={styles.boxTitleProduct}>
+          {renderProductInfo()}
           <AppText title style={styles.textInfo}>
-            {trans('productInfo')}
+            {trans('description')}
           </AppText>
           <AppText>{item.description}</AppText>
         </View>

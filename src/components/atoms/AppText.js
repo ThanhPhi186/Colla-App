@@ -10,10 +10,7 @@ const AppText = props => {
         {...props}
         allowFontScaling={false}
         textBreakStrategy={'simple'}
-        style={[
-          {fontSize: title ? Typography.FONT_SIZE_16 : Typography.FONT_SIZE_12},
-          style,
-        ]}>
+        style={[{fontSize: title && Typography.FONT_SIZE_16}, style]}>
         {children}
       </Text>
     </View>

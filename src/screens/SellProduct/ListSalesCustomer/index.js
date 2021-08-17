@@ -7,7 +7,7 @@ import {
   View,
 } from 'react-native';
 import FastImage from 'react-native-fast-image';
-import {Appbar} from 'react-native-paper';
+import {Appbar, Searchbar} from 'react-native-paper';
 import SimpleToast from 'react-native-simple-toast';
 import {useDispatch, useSelector} from 'react-redux';
 import {images} from '../../../assets';
@@ -59,6 +59,8 @@ const ListSalesCustomer = ({navigation, route}) => {
       },
     );
   };
+
+  const onChangeSearch = () => {};
 
   const renderItem = ({item}) => {
     return (
@@ -132,12 +134,30 @@ const ListSalesCustomer = ({navigation, route}) => {
           onPress={() => navigation.navigate('AddNewCustomer', {type: 'NEW'})}
         />
       </Appbar.Header>
+      <View style={{flex: 1}}>
+        <View
+          style={{
+            flexDirection: 'row',
+            justifyContent: 'space-around',
+            marginTop: 12,
+          }}>
+          <Searchbar
+            placeholder={trans('search')}
+            style={styles.containerSearch}
+            inputStyle={styles.input}
+            onChangeText={onChangeSearch}
+          />
+          <TouchableOpacity style={styles.btnAddNew}>
+            <AppText>{trans('addNew')}</AppText>
+          </TouchableOpacity>
+        </View>
 
-      <FlatList
-        data={dataCustomer}
-        renderItem={renderItem}
-        keyExtractor={(item, index) => index.toString()}
-      />
+        <FlatList
+          data={dataCustomer}
+          renderItem={renderItem}
+          keyExtractor={(item, index) => index.toString()}
+        />
+      </View>
     </View>
   );
 };
@@ -188,6 +208,23 @@ const styles = {
     borderRadius: 20,
     borderWidth: 1,
     borderColor: '#999999',
+  },
+  containerSearch: {
+    width: '60%',
+    height: 48,
+    borderRadius: 12,
+  },
+  input: {
+    fontStyle: 'italic',
+  },
+  btnAddNew: {
+    width: '30%',
+    height: 48,
+    borderColor: Colors.GRAY,
+    borderWidth: 1,
+    borderRadius: 12,
+    justifyContent: 'center',
+    alignItems: 'center',
   },
 };
 

@@ -35,21 +35,31 @@ const LoginScreen = ({navigation}) => {
 
   const dispatch = useDispatch();
 
-  // useEffect(() => {
-  //   const currentToken = async () => {
-  //     try {
-  //       const fcmToken = await messaging().getToken();
-  //       if (fcmToken) {
-  //         setFcmToken(fcmToken);
-  //         // user has a device token
-  //         // return Promise.resolve(fcmToken);
-  //       }
-  //     } catch (error) {
-  //       SimpleToast.show(error, SimpleToast.SHORT);
-  //     }
-  //   };
-  //   currentToken();
-  // }, []);
+  useEffect(() => {
+    const currentToken = async () => {
+      try {
+        messaging()
+          .requestPermission()
+          .then(value => {
+            messaging()
+              .getToken()
+              .then(token => {
+                setFcmToken(token);
+              });
+          });
+        // const fcmToken = await messaging().getToken();
+        // if (fcmToken) {
+        //   setFcmToken(fcmToken);
+        //   // user has a device token
+        //   // return Promise.resolve(fcmToken);
+        // }
+      } catch (error) {
+        console.log('error', error);
+        SimpleToast.show(error, SimpleToast.SHORT);
+      }
+    };
+    currentToken();
+  }, []);
 
   const handelCheckValue = () => {
     const regex =
@@ -95,18 +105,18 @@ const LoginScreen = ({navigation}) => {
         );
         dispatch(AuthenOverallRedux.Actions.loginSuccess(res.data.data));
         setLoading(false);
-        // post(Const.API.baseURL + Const.API.Device, paramsDevice).then(
-        //   resDevice => {
-        //     if (resDevice.ok) {
-        //       setLoading(false);
-        //     } else {
-        //       setLoading(false);
-        //       setTimeout(() => {
-        //         SimpleToast.show(resDevice.error, SimpleToast.SHORT);
-        //       }, 700);
-        //     }
-        //   },
-        // );
+        post(Const.API.baseURL + Const.API.Device, paramsDevice).then(
+          resDevice => {
+            if (resDevice.ok) {
+              setLoading(false);
+            } else {
+              setLoading(false);
+              setTimeout(() => {
+                SimpleToast.show(resDevice.error, SimpleToast.SHORT);
+              }, 700);
+            }
+          },
+        );
       } else {
         setLoading(false);
         setTimeout(() => {
@@ -138,14 +148,11 @@ const LoginScreen = ({navigation}) => {
             <AppText>Xin vui lòng đăng nhập bằng số điện thoại của bạn</AppText>
           </View>
           <View style={styles.viewInput}>
-            <View style={styles.viewPhone}>
-              <TextInput
-                value={phoneNumber}
-                onChangeText={setPhoneNumber}
-                placeholder="Số điện thoại của bạn"
-                keyboardType="numeric"
-              />
-            </View>
+            <AppInput
+              value={phoneNumber}
+              onChangeText={setPhoneNumber}
+              placeholder="Số điện thoại của bạn"
+            />
             <AppInput
               type="password"
               value={password}

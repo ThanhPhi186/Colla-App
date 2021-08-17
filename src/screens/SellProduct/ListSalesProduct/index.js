@@ -191,7 +191,7 @@ const ListSalesProduct = ({navigation, route}) => {
       {listChooseProduct.length >= 1 && (
         <Button
           containerStyle={styles.btnPurchase}
-          title={trans('payment')}
+          title={trans('createOrder')}
           onPress={goPayment}
         />
       )}

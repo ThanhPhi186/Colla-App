@@ -81,4 +81,10 @@ export default {
   confirmLogout: 'Bạn có chắc chắn muốn đăng xuất?',
   listBlog: 'Danh sách Blog',
   emptyBlog: 'Danh mục chưa có bài viết nào',
+  description: 'Mô tả',
+  createOrder: 'Tạo đơn',
+  addNew: 'Thêm mới',
+  payingCustomers: 'Khách hàng thanh toán',
+  youWillGet: 'Bạn sẽ nhận được',
+  confirmOrder: 'Xác nhận đơn hàng',
 };

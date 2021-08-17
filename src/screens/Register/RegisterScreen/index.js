@@ -46,6 +46,7 @@ const RegisterScreen = ({navigation}) => {
   };
 
   const checkPhone = () => {
+    setLoading(true);
     if (handelCheckValue()) {
       return;
     }
@@ -60,7 +61,10 @@ const RegisterScreen = ({navigation}) => {
       if (res.ok) {
         sendOtp();
       } else {
-        SimpleToast.show(res.error, SimpleToast.SHORT);
+        setLoading(false);
+        setTimeout(() => {
+          SimpleToast.show(res.error, SimpleToast.SHORT);
+        }, 500);
       }
     });
   };
@@ -71,13 +75,22 @@ const RegisterScreen = ({navigation}) => {
     };
     post(Const.API.baseURL + Const.API.SendOtp, params).then(res => {
       if (res.ok) {
-        SimpleToast.show('Gửi mã OTP thành công!', SimpleToast.SHORT);
+        setLoading(false);
         setConfirm('123456');
+        setTimeout(() => {
+          SimpleToast.show('Gửi mã OTP thành công!', SimpleToast.SHORT);
+        }, 500);
+      } else {
+        setLoading(false);
+        setTimeout(() => {
+          SimpleToast.show(res.error, SimpleToast.SHORT);
+        }, 500);
       }
     });
   };
 
   const confirmOTP = () => {
+    setLoading(true);
     const params = {
       phoneNumber: `+84${Number(phoneNumber)}`,
       otp: code,
@@ -116,14 +129,11 @@ const RegisterScreen = ({navigation}) => {
               <AppText>Vui lòng đăng ký bằng số điện thoại của bạn</AppText>
             </View>
             <View style={styles.viewInput}>
-              <View style={styles.viewPhone}>
-                <TextInput
-                  value={phoneNumber}
-                  onChangeText={setPhoneNumber}
-                  placeholder="Số điện thoại của bạn"
-                  keyboardType="numeric"
-                />
-              </View>
+              <AppInput
+                value={phoneNumber}
+                onChangeText={setPhoneNumber}
+                placeholder="Số điện thoại của bạn"
+              />
               <AppInput
                 type="password"
                 value={password}

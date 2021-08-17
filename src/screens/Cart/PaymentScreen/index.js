@@ -168,9 +168,28 @@ const PaymentScreen = ({navigation, route}) => {
                 {trans('paymentMethods')}
               </AppText>
             </View>
-            <AppText style={{marginRight: 10}}>
-              {trans('paymentOnDelivery')} ({trans('excludingShippingCharges')})
-            </AppText>
+            <View
+              style={{
+                flexDirection: 'row',
+                justifyContent: 'space-between',
+                alignItems: 'center',
+              }}>
+              <AppText>Thanh toán bằng điểm</AppText>
+              <TouchableOpacity
+                style={{
+                  backgroundColor: 'green',
+                  padding: 8,
+                  borderRadius: 8,
+                  marginRight: 8,
+                }}>
+                <AppText
+                  style={{
+                    color: 'white',
+                  }}>
+                  Nạp tiền
+                </AppText>
+              </TouchableOpacity>
+            </View>
           </TouchableOpacity>
         </View>
 

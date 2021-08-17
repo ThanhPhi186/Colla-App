@@ -100,6 +100,7 @@ const styles = {
     justifyContent: 'center',
     borderColor: Colors.PRIMARY,
     textAlign: 'center',
+    color: Colors.BLACK,
   },
   viewImg: {
     flex: 1,

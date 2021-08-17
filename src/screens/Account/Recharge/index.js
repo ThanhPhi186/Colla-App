@@ -10,7 +10,7 @@ import {
 } from 'react-native';
 import {Appbar, TextInput} from 'react-native-paper';
 import {AppLoading, AppText} from '../../../components/atoms';
-import {container} from '../../../styles/GlobalStyles';
+import {container, fontWeightBold} from '../../../styles/GlobalStyles';
 import {Const, trans} from '../../../utils';
 import {useEffect} from 'react';
 import {get, post} from '../../../services/ServiceHandle';
@@ -92,7 +92,7 @@ const Recharge = ({navigation}) => {
       amount: amount,
       proofOfTransfer: image.assets[0].base64,
     };
-    console.log('paramsss', params);
+
     post(Const.API.baseURL + Const.API.Recharge, params).then(res => {
       if (res.ok) {
         SimpleToast.show(
@@ -114,8 +114,6 @@ const Recharge = ({navigation}) => {
     }
   }, []);
 
-  console.log('image', image);
-
   return (
     <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
       <View style={container}>
@@ -126,44 +124,65 @@ const Recharge = ({navigation}) => {
           />
           <Appbar.Content color="white" title={trans('recharge')} />
         </Appbar.Header>
-        <ScrollView style={{flex: 1, paddingHorizontal: 16, paddingTop: 16}}>
-          {listBank.map((elm, idx) => {
-            return (
-              <View
-                key={idx}
-                style={{
-                  padding: 16,
-                  backgroundColor: Colors.WHITE,
-                  shadowColor: '#000',
-                  shadowOffset: {
-                    width: 0,
-                    height: 2,
-                  },
-                  shadowOpacity: 0.25,
-                  shadowRadius: 3.84,
-                  elevation: 5,
-                  marginTop: 8,
-                }}>
-                <FastImage
-                  style={{width: '60%', height: 60, alignSelf: 'center'}}
-                  resizeMode="contain"
-                  source={{uri: `data:image/png;base64,${elm.bank_logo}`}}
-                />
-                <Text style={{marginTop: 4}}>
-                  <Text style={{fontWeight: 'bold'}}>Chủ tài khoản: </Text>
-                  {elm.bank_account_name}
-                </Text>
-                <Text style={{marginTop: 4}}>
-                  <Text style={{fontWeight: 'bold'}}>Tên ngân hàng: </Text>
-                  {elm.bank_name}
-                </Text>
-                <Text style={{marginTop: 4}}>
-                  <Text style={{fontWeight: 'bold'}}>STK: </Text>
-                  {elm.bank_account_number}
-                </Text>
-              </View>
-            );
-          })}
+        <ScrollView style={{flex: 1}} contentContainerStyle={{padding: 16}}>
+          <AppText title style={{color: Colors.PRIMARY}}>
+            Tài khoản nhận nạp tiền
+          </AppText>
+          <View style={{paddingHorizontal: 4, marginBottom: 8}}>
+            {listBank.map((elm, idx) => {
+              return (
+                <View
+                  key={idx}
+                  style={{
+                    padding: 16,
+                    borderRadius: 8,
+                    backgroundColor: Colors.WHITE,
+                    shadowColor: '#000',
+                    shadowOffset: {
+                      width: 0,
+                      height: 2,
+                    },
+                    shadowOpacity: 0.25,
+                    shadowRadius: 3.84,
+                    elevation: 5,
+                    marginTop: 8,
+                  }}>
+                  <Text style={{marginTop: 4}}>
+                    <Text style={{fontWeight: 'bold'}}>Tên tài khoản: </Text>
+                    {elm.bank_account_name}
+                  </Text>
+                  <Text style={{marginTop: 4}}>
+                    <Text style={{fontWeight: 'bold'}}>Ngân hàng: </Text>
+                    {elm.bank_name}
+                  </Text>
+                  <Text style={{marginTop: 4}}>
+                    <Text style={{fontWeight: 'bold'}}>Số Tài Khoản: </Text>
+                    {elm.bank_account_number}
+                  </Text>
+                </View>
+              );
+            })}
+          </View>
+          <AppText title style={{color: Colors.PRIMARY}}>
+            Hướng dẫn nạp tiền
+          </AppText>
+          <Text>
+            <Text style={fontWeightBold}>* Bước 1: </Text>Chuyển khoản đến 1
+            trong những TK trên
+          </Text>
+          <Text>
+            Nội dung CK:
+            <Text style={fontWeightBold}> NAPTIEN sodienthoai</Text>
+          </Text>
+          <Text style={fontWeightBold}>
+            * Bước 2:{' '}
+            <Text style={{fontWeight: 'normal'}}>
+              Nhập số tiền đã chuyển khoản bên dưới và tải hình ảnh chụp màn
+              hình chuyển khoản thành công => bấm
+            </Text>{' '}
+            Nạp Tiền
+          </Text>
+
           <TextInput
             placeholder={trans('amountOfMoney')}
             style={{backgroundColor: Colors.WHITE, marginTop: 16}}

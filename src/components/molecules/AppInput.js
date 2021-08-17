@@ -16,8 +16,9 @@ const AppInput = props => {
       <View style={styles.viewInput}>
         <TextInput
           {...props}
-          style={{flex: 1, paddingRight: 8}}
+          style={styles.txtInput}
           secureTextEntry={secure}
+          placeholderTextColor={Colors.PLACE_HOLDER}
         />
         <TouchableOpacity onPress={() => setSecure(!secure)}>
           <Icon
@@ -31,16 +32,12 @@ const AppInput = props => {
     );
   }
   return (
-    <View
-      style={{
-        flexDirection: 'row',
-        alignItems: 'center',
-      }}>
-      <AppImage
-        source={images.noImage}
-        imageStyle={{width: 30, height: 30, marginRight: 20}}
+    <View style={styles.viewInput}>
+      <TextInput
+        {...props}
+        style={styles.txtInput}
+        placeholderTextColor={Colors.PLACE_HOLDER}
       />
-      <TextInput {...props} style={styles.txtInput} />
     </View>
   );
 };
@@ -58,13 +55,6 @@ const styles = {
     justifyContent: 'space-between',
     alignItems: 'center',
   },
-  txtInput: {
-    height: '100%',
-    flex: 1,
-    borderBottomWidth: 1,
-    borderColor: 'gray',
-    fontSize: FONT_SIZE_14,
-    color: Colors.BLACK,
-  },
+  txtInput: {flex: 1, color: Colors.BLACK},
 };
 export default AppInput;

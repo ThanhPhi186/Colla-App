@@ -8,5 +8,11 @@ const styles = {
     textAlign: 'center',
     marginTop: Mixin.moderateSize(80),
   },
+  line: {
+    width: 20,
+    backgroundColor: Colors.LIGHT_GREY,
+    height: 1,
+    alignSelf: 'center',
+  },
 };
 export default styles;
