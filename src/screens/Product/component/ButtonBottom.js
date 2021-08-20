@@ -39,7 +39,7 @@ const ButtonBottom = props => {
 const styles = {
   container: {
     width: device_width,
-    height: 45,
+    height: 48,
     position: 'absolute',
     bottom: 0,
     flexDirection: 'row',

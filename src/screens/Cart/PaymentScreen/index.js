@@ -34,6 +34,8 @@ const PaymentScreen = ({navigation, route}) => {
 
   const dataAddress = userInfo?.addresses?.filter(elm => elm.is_default)[0];
 
+  console.log('dataAddress', dataAddress);
+
   const sumPrice = sum(dataCart.map(elm => elm.product.price * elm.amount));
 
   const totalPrice = usePoint
@@ -66,6 +68,9 @@ const PaymentScreen = ({navigation, route}) => {
       ship_method: '',
       type,
       use_point: usePoint,
+      district: dataAddress.district,
+      province: dataAddress.province,
+      ward: dataAddress.ward,
     };
 
     type === 'retail' ? (params.carts = carts) : (params.products = products);

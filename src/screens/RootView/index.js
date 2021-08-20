@@ -1,5 +1,5 @@
-import React, {useEffect} from 'react';
-import {View} from 'react-native';
+import React, {useEffect, useState} from 'react';
+import {Alert, View} from 'react-native';
 import {SafeAreaProvider} from 'react-native-safe-area-context';
 import {Colors, Mixin} from '../../styles';
 import Modal from 'react-native-modal';
@@ -14,6 +14,7 @@ import {post} from '../../services/ServiceHandle';
 import {Const, trans} from '../../utils';
 import SimpleToast from 'react-native-simple-toast';
 import messaging from '@react-native-firebase/messaging';
+import notifee from '@notifee/react-native';
 
 const RootView = () => {
   const dispatch = useDispatch();
@@ -23,9 +24,37 @@ const RootView = () => {
   const idToken = useSelector(state => state.AuthenOverallReducer.idToken);
   const userInfo = useSelector(state => state.AuthenOverallReducer.userAuthen);
 
+  const onDisplayNotification = async (title, body) => {
+    // Create a channel
+    const channelId = await notifee.createChannel({
+      id: 'default',
+      name: 'Default Channel',
+    });
+
+    // Display a notification
+    await notifee.displayNotification({
+      title: title,
+      body: body,
+      android: {
+        channelId,
+        // smallIcon: 'name-of-a-small-icon', // optional, defaults to 'ic_launcher'.
+      },
+    });
+  };
+
+  useEffect(() => {
+    const unsubscribe = messaging().onMessage(remoteMessage => {
+      onDisplayNotification(
+        remoteMessage.notification.title,
+        remoteMessage.notification.body,
+      );
+    });
+
+    return unsubscribe;
+  }, []);
+
   useEffect(() => {
     // Assume a message-notification contains a "type" property in the data payload of the screen to open
-
     messaging().onNotificationOpenedApp(remoteMessage => {
       console.log(
         'Notification caused app to open from background state:',
@@ -33,7 +62,6 @@ const RootView = () => {
       );
       // navigation.navigate(remoteMessage.data.type);
     });
-
     // Check whether an initial notification is available
     messaging()
       .getInitialNotification()
@@ -72,7 +100,6 @@ const RootView = () => {
   return (
     <SafeAreaProvider>
       {idToken ? <BottomTabNavigator /> : <LoginNavigator />}
-
       <Modal
         isVisible={isVisibleModal}
         onBackdropPress={() =>

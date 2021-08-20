@@ -16,7 +16,7 @@ const styles = {
   },
   boxTitleProduct: {
     paddingHorizontal: Mixin.moderateSize(16),
-    marginTop: Mixin.moderateSize(12),
+    paddingTop: Mixin.moderateSize(12),
     marginBottom: Mixin.moderateSize(12),
   },
   textInfo: {

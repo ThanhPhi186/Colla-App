@@ -1294,6 +1294,11 @@
     "@babel/runtime" "^7.7.2"
     regenerator-runtime "^0.13.3"
 
+"@notifee/react-native@^1.10.1":
+  version "1.10.1"
+  resolved "https://registry.yarnpkg.com/@notifee/react-native/-/react-native-1.10.1.tgz#22ca663d0b83dd9cb015364d5d7a87b40e1198f9"
+  integrity sha512-/kyKyarDjWodNH02jyZlbdJ3nhlfNvAdh3Hg1wBnbrtU343R4sRMRMNUaF4qfySD8JITILEj/fVJliew65Xz6A==
+
 "@octokit/auth-token@^2.4.0":
   version "2.4.5"
   resolved "https://registry.npmjs.org/@octokit/auth-token/-/auth-token-2.4.5.tgz"

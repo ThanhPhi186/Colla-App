@@ -45,6 +45,9 @@ const PaymentOfSales = ({navigation, route}) => {
       ship_method: '',
       products,
       type,
+      district: customer.district,
+      province: customer.province,
+      ward: customer.ward,
     };
     post(Const.API.baseURL + Const.API.Order, params).then(res => {
       if (res.ok) {

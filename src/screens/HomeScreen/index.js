@@ -298,25 +298,6 @@ const HomeScreen = ({navigation}) => {
             keyExtractor={(item, index) => index.toString()}
           />
 
-          {/* <LinearGradient
-          start={{x: 0, y: 0}}
-          end={{x: 1, y: 0}}
-          colors={['#FF9900', '#F47D01', '#E65C03']}
-          style={styles.containerPopular}>
-          <AppText
-            title
-            style={{textAlign: 'center', color: 'white', marginTop: 8}}>
-            Sản phẩm nổi bật
-          </AppText>
-          <FlatList
-            horizontal
-            data={listProduct}
-            renderItem={renderProductPopular}
-            keyExtractor={(item, index) => index.toString()}
-          />
-        </LinearGradient> */}
-
-          {/* <View style={styles.largeIndicate} /> */}
           <AppText style={{color: Colors.PRIMARY}} title>
             Tin tức
           </AppText>

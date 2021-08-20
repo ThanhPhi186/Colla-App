@@ -41,9 +41,11 @@ const LoginScreen = ({navigation}) => {
         messaging()
           .requestPermission()
           .then(value => {
+            console.log('valuevalue', value);
             messaging()
               .getToken()
               .then(token => {
+                console.log('tokennnnnn', token);
                 setFcmToken(token);
               });
           });
@@ -108,6 +110,7 @@ const LoginScreen = ({navigation}) => {
         post(Const.API.baseURL + Const.API.Device, paramsDevice).then(
           resDevice => {
             if (resDevice.ok) {
+              console.log('paramsDevice', paramsDevice);
               setLoading(false);
             } else {
               setLoading(false);

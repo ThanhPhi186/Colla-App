@@ -1,5 +1,5 @@
 import React, {useRef, useState} from 'react';
-import {Text, TouchableOpacity, View} from 'react-native';
+import {ScrollView, Text, TouchableOpacity, View} from 'react-native';
 import FastImage from 'react-native-fast-image';
 import {Appbar} from 'react-native-paper';
 import {AppText} from '../../../components/atoms';
@@ -145,13 +145,15 @@ const DetailProduct = ({navigation, route}) => {
           </>
         )}
         <View style={styles.largeIndicate} />
-        <View style={styles.boxTitleProduct}>
+        <ScrollView
+          contentContainerStyle={{paddingBottom: 48}}
+          style={styles.boxTitleProduct}>
           {renderProductInfo()}
           <AppText title style={styles.textInfo}>
             {trans('description')}
           </AppText>
           <AppText>{item.description}</AppText>
-        </View>
+        </ScrollView>
       </View>
       <ButtonBottom
         goCart={() => setVisibleModal(true)}
