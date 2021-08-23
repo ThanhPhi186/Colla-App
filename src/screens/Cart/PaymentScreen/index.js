@@ -5,7 +5,7 @@ import {Appbar, Switch} from 'react-native-paper';
 import SimpleToast from 'react-native-simple-toast';
 import {useDispatch, useSelector} from 'react-redux';
 import {images} from '../../../assets';
-import {AppText} from '../../../components/atoms';
+import {AppLoading, AppText} from '../../../components/atoms';
 import {Button} from '../../../components/molecules';
 import {CartRedux} from '../../../redux';
 import {post} from '../../../services/ServiceHandle';
@@ -26,23 +26,14 @@ const PaymentScreen = ({navigation, route}) => {
     type === 'retail' ? state.CartReducer.listPurchaseCart : dataProducts,
   );
 
-  console.log('dataCart', dataProducts);
-
   const userInfo = useSelector(state => state.AuthenOverallReducer.userAuthen);
 
   const [usePoint, setUsePoint] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   const dataAddress = userInfo?.addresses?.filter(elm => elm.is_default)[0];
 
-  console.log('dataAddress', dataAddress);
-
   const sumPrice = sum(dataCart.map(elm => elm.product.price * elm.amount));
-
-  const totalPrice = usePoint
-    ? sumPrice - userInfo.point < 0
-      ? 0
-      : sumPrice - userInfo.point
-    : sumPrice;
 
   const dispatch = useDispatch();
 
@@ -50,6 +41,14 @@ const PaymentScreen = ({navigation, route}) => {
     if (!dataAddress) {
       return SimpleToast.show('Chưa có địa chỉ nhận hàng', SimpleToast.SHORT);
     }
+    if (type === 'import' && userInfo.point < sumPrice) {
+      return SimpleToast.show(
+        'Số tiền của bạn chưa đủ để nhập hàng',
+        SimpleToast.SHORT,
+      );
+    }
+
+    setLoading(true);
 
     const products = dataCart.map(elm => {
       return {
@@ -64,10 +63,9 @@ const PaymentScreen = ({navigation, route}) => {
       phone: dataAddress.phone,
       address_ship: dataAddress.address,
       fullname: dataAddress.fullname,
-      payment_method: 'cod',
+      payment_method: usePoint ? 'point' : 'cod',
       ship_method: '',
       type,
-      use_point: usePoint,
       district: dataAddress.district,
       province: dataAddress.province,
       ward: dataAddress.ward,
@@ -78,15 +76,21 @@ const PaymentScreen = ({navigation, route}) => {
     post(Const.API.baseURL + Const.API.Order, params).then(res => {
       if (res.ok) {
         dispatch(CartRedux.Actions.getPurchaseCart.request());
-        SimpleToast.show('Đặt hàng thành công', SimpleToast.SHORT);
-        navigation.reset({
-          index: 0,
-          routes: [
-            {name: type === 'retail' ? trans('home') : trans('personal')},
-          ],
-        });
+        setLoading(false);
+        setTimeout(() => {
+          SimpleToast.show('Đặt hàng thành công', SimpleToast.SHORT);
+          navigation.reset({
+            index: 0,
+            routes: [
+              {name: type === 'retail' ? trans('home') : trans('personal')},
+            ],
+          });
+        }, 700);
       } else {
-        SimpleToast.show(res.error, SimpleToast.SHORT);
+        setLoading(false);
+        setTimeout(() => {
+          SimpleToast.show(res.error, SimpleToast.SHORT);
+        }, 700);
         console.log('params', params);
       }
     });
@@ -98,6 +102,7 @@ const PaymentScreen = ({navigation, route}) => {
 
   return (
     <View style={container}>
+      <AppLoading isVisible={loading} />
       <Appbar.Header>
         <Appbar.BackAction color="white" onPress={() => navigation.goBack()} />
         <Appbar.Content color="white" title={trans('payment')} />
@@ -157,10 +162,9 @@ const PaymentScreen = ({navigation, route}) => {
               color={Colors.GRAY}
             />
           </View>
-
-          <TouchableOpacity
+          <View
             style={{flex: 1, paddingVertical: 10}}
-            // onPress={this.onHandleMethod}
+            // onPress={() => navigation.navigate('Recharge')}
           >
             <View
               style={{
@@ -173,29 +177,77 @@ const PaymentScreen = ({navigation, route}) => {
                 {trans('paymentMethods')}
               </AppText>
             </View>
-            <View
-              style={{
-                flexDirection: 'row',
-                justifyContent: 'space-between',
-                alignItems: 'center',
-              }}>
-              <AppText>Thanh toán bằng điểm</AppText>
-              <TouchableOpacity
-                style={{
-                  backgroundColor: 'green',
-                  padding: 8,
-                  borderRadius: 8,
-                  marginRight: 8,
-                }}>
-                <AppText
+            {type === 'retail' ? (
+              <View>
+                <View
                   style={{
-                    color: 'white',
+                    flexDirection: 'row',
+                    justifyContent: 'space-between',
+                    width: '94%',
+                    alignItems: 'center',
                   }}>
-                  Nạp tiền
-                </AppText>
-              </TouchableOpacity>
-            </View>
-          </TouchableOpacity>
+                  <AppText>Thanh toán khi nhận hàng (COD)</AppText>
+                  <Switch
+                    onValueChange={() => setUsePoint(!usePoint)}
+                    value={!usePoint}
+                    trackColor="#0187E0"
+                    thumbColor={Colors.WHITE}
+                    ios_backgroundColor={Colors.WHITE_SMOKE}
+                  />
+                </View>
+                <View
+                  style={{
+                    flexDirection: 'row',
+                    justifyContent: 'space-between',
+                    width: '94%',
+                    alignItems: 'center',
+                    marginTop: 8,
+                  }}>
+                  <AppText>Thanh toán bằng điểm</AppText>
+                  <Switch
+                    onValueChange={() => {
+                      if (userInfo.point < sumPrice) {
+                        SimpleToast.show(
+                          'Số điểm của bạn không đủ để thanh toán',
+                          SimpleToast.SHORT,
+                        );
+                      } else {
+                        setUsePoint(!usePoint);
+                      }
+                    }}
+                    value={usePoint}
+                    trackColor="#0187E0"
+                    thumbColor={Colors.WHITE}
+                    ios_backgroundColor={Colors.WHITE_SMOKE}
+                  />
+                </View>
+              </View>
+            ) : (
+              <View
+                style={{
+                  flexDirection: 'row',
+                  justifyContent: 'space-between',
+                  alignItems: 'center',
+                }}>
+                <AppText>Thanh toán bằng điểm</AppText>
+                <TouchableOpacity
+                  onPress={() => navigation.navigate('Recharge')}
+                  style={{
+                    backgroundColor: 'green',
+                    padding: 8,
+                    borderRadius: 8,
+                    marginRight: 8,
+                  }}>
+                  <AppText
+                    style={{
+                      color: 'white',
+                    }}>
+                    Nạp tiền
+                  </AppText>
+                </TouchableOpacity>
+              </View>
+            )}
+          </View>
         </View>
 
         <FlatList
@@ -204,35 +256,12 @@ const PaymentScreen = ({navigation, route}) => {
           keyExtractor={(item, index) => index.toString()}
         />
       </View>
-      <View
-        style={{
-          flexDirection: 'row',
-          justifyContent: 'space-between',
-          width: '100%',
-          alignItems: 'center',
-          marginBottom: 8,
-          paddingHorizontal: 12,
-        }}>
-        <Text style={styles.textPay}>
-          Dùng{' '}
-          <Text style={styles.textPrice}>
-            {numeral(userInfo.point).format()}
-          </Text>{' '}
-          điểm
-        </Text>
-        <Switch
-          onValueChange={() => setUsePoint(!usePoint)}
-          value={usePoint}
-          trackColor="#0187E0"
-          thumbColor={Colors.WHITE}
-          ios_backgroundColor={Colors.WHITE_SMOKE}
-        />
-      </View>
+
       <View style={styles.largeIndicate} />
       <View style={styles.showPrice}>
         <AppText style={styles.textPay}>{trans('totalPayment')}</AppText>
         <AppText style={styles.textPrice}>
-          {numeral(totalPrice).format()} đ
+          {numeral(sumPrice).format()} đ
         </AppText>
       </View>
       <Button

@@ -6,7 +6,7 @@ import {Const, trans} from '../../../utils';
 import styles from './styles';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import {Colors} from '../../../styles';
-import {AppText} from '../../../components/atoms';
+import {AppLoading, AppText} from '../../../components/atoms';
 
 import numeral from 'numeral';
 import {Button} from '../../../components/molecules';
@@ -14,14 +14,35 @@ import {sum} from 'lodash';
 import SimpleToast from 'react-native-simple-toast';
 import {post} from '../../../services/ServiceHandle';
 import PaymentItem from '../component/PaymentItem';
+import {useSelector} from 'react-redux';
 
 const PaymentOfSales = ({navigation, route}) => {
+  const userInfo = useSelector(state => state.AuthenOverallReducer.userAuthen);
   const {type} = route.params;
   const {dataProducts} = route.params;
 
   const totalPrice = sum(dataProducts?.map(elm => elm.price * elm.amount));
 
   const [customer, setCustomer] = useState();
+  const [loading, setLoading] = useState(false);
+
+  const typePoint = item => {
+    switch (userInfo.member_type) {
+      case 'collaborator':
+        return item.member_online_bonus_point;
+      case 'agency':
+        return type === 'online'
+          ? item.agency_online_bonus_point
+          : item.agency_offline_bonus_point;
+      case 'gold-agency':
+        return type === 'online'
+          ? item.gold_agency_online_bonus_point
+          : item.gold_agency_offline_bonus_point;
+    }
+  };
+  const pointsReceived = sum(
+    dataProducts.map(elm => typePoint(elm) * elm.amount),
+  );
 
   const chooseCustomer = item => {
     setCustomer(item);
@@ -31,6 +52,7 @@ const PaymentOfSales = ({navigation, route}) => {
     if (!customer) {
       return SimpleToast.show('Vui lòng chọn khách hàng', SimpleToast.SHORT);
     }
+    setLoading(true);
     const products = dataProducts.map(elm => {
       return {
         product_id: elm.id,
@@ -51,13 +73,19 @@ const PaymentOfSales = ({navigation, route}) => {
     };
     post(Const.API.baseURL + Const.API.Order, params).then(res => {
       if (res.ok) {
-        SimpleToast.show('Lên đơn thành công', SimpleToast.SHORT);
-        navigation.navigate(trans('personal'), {
-          screen: 'SalesHistory',
-          params: {type},
-        });
+        setLoading(false);
+        setTimeout(() => {
+          SimpleToast.show('Lên đơn thành công', SimpleToast.SHORT);
+          navigation.navigate(trans('personal'), {
+            screen: 'SalesHistory',
+            params: {type},
+          });
+        }, 700);
       } else {
-        SimpleToast.show(res.error, SimpleToast.SHORT);
+        setLoading(false);
+        setTimeout(() => {
+          SimpleToast.show(res.error, SimpleToast.SHORT);
+        }, 700);
       }
     });
   };
@@ -68,6 +96,7 @@ const PaymentOfSales = ({navigation, route}) => {
 
   return (
     <View style={container}>
+      <AppLoading isVisible={loading} />
       <Appbar.Header>
         <Appbar.BackAction color="white" onPress={() => navigation.goBack()} />
         <Appbar.Content
@@ -83,6 +112,7 @@ const PaymentOfSales = ({navigation, route}) => {
               onPress={() =>
                 navigation.navigate('ListSalesCustomer', {
                   chooseCustomer,
+                  type,
                 })
               }
               style={{
@@ -108,9 +138,11 @@ const PaymentOfSales = ({navigation, route}) => {
                       <AppText style={{marginRight: 10, marginTop: 3}}>
                         {customer?.phone}
                       </AppText>
-                      <AppText style={{marginRight: 10, marginTop: 3}}>
-                        {customer?.address_ship}
-                      </AppText>
+                      {type === 'online' && (
+                        <AppText style={{marginRight: 10, marginTop: 3}}>
+                          {customer?.address_ship}
+                        </AppText>
+                      )}
                     </>
                   )}
                 </View>
@@ -152,7 +184,7 @@ const PaymentOfSales = ({navigation, route}) => {
       <View style={styles.showPrice}>
         <AppText style={styles.textPay}>{trans('youWillGet')}</AppText>
         <AppText style={styles.textPrice}>
-          {numeral('20000').format()} đ
+          {numeral(pointsReceived).format()} đ
         </AppText>
       </View>
       {type === 'online' && (

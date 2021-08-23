@@ -9,7 +9,7 @@ import {
 import {Appbar, Switch, TextInput} from 'react-native-paper';
 import SimpleToast from 'react-native-simple-toast';
 import {useDispatch} from 'react-redux';
-import {AppText} from '../../../components/atoms';
+import {AppLoading, AppText} from '../../../components/atoms';
 import {Button} from '../../../components/molecules';
 import {AuthenOverallRedux} from '../../../redux';
 import {get, post, put} from '../../../services/ServiceHandle';
@@ -27,6 +27,7 @@ const AddNewCustomer = ({navigation, route}) => {
   const [fullname, setFullName] = useState(itemEdit?.fullname);
   const [phone, setPhone] = useState(itemEdit?.phone);
   const [address, setAddress] = useState(itemEdit?.address);
+  const [loading, setLoading] = useState(false);
 
   const handelCheckValue = () => {
     const regex =
@@ -63,6 +64,7 @@ const AddNewCustomer = ({navigation, route}) => {
     if (handelCheckValue()) {
       return;
     }
+    setLoading(true);
     const addressConvert =
       address +
       ', ' +
@@ -73,7 +75,7 @@ const AddNewCustomer = ({navigation, route}) => {
       refAddress.current.province.name;
 
     const params = {
-      phone,
+      phone: `+84${Number(phone)}`,
       fullname,
       address_ship: addressConvert,
       district: refAddress.current.districts.id,
@@ -86,18 +88,32 @@ const AddNewCustomer = ({navigation, route}) => {
         params,
       ).then(res => {
         if (res.ok) {
-          SimpleToast.show(
-            'Chỉnh sửa khách hàng thành công',
-            SimpleToast.SHORT,
-          );
-          navigation.pop();
+          setLoading(false);
+          setTimeout(() => {
+            SimpleToast.show(
+              'Chỉnh sửa khách hàng thành công',
+              SimpleToast.SHORT,
+            );
+            navigation.pop();
+          }, 700);
         }
       });
     } else {
       post(Const.API.baseURL + Const.API.UserCustomer, params).then(res => {
         if (res.ok) {
-          SimpleToast.show('Thêm mới khách hàng thành công', SimpleToast.SHORT);
-          navigation.pop();
+          setLoading(false);
+          setTimeout(() => {
+            SimpleToast.show(
+              'Thêm mới khách hàng thành công',
+              SimpleToast.SHORT,
+            );
+            navigation.pop();
+          }, 700);
+        } else {
+          setLoading(false);
+          setTimeout(() => {
+            SimpleToast.show(res.error, SimpleToast.SHORT);
+          }, 700);
         }
       });
     }
@@ -106,6 +122,7 @@ const AddNewCustomer = ({navigation, route}) => {
   return (
     <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
       <View style={container}>
+        <AppLoading isVisible={loading} />
         <Appbar.Header>
           <Appbar.BackAction
             color="white"
@@ -146,23 +163,6 @@ const AddNewCustomer = ({navigation, route}) => {
 
           <ChooseAddress ref={refAddress} />
           <View style={{marginTop: 16}}>
-            {/* <View
-              style={{
-                flexDirection: 'row',
-                justifyContent: 'space-between',
-                width: '100%',
-                alignItems: 'center',
-                marginBottom: 16,
-              }}>
-              <AppText>Đặt làm địa chỉ mặc định</AppText>
-              <Switch
-                onValueChange={() => setValueSwitch(!valueSwitch)}
-                value={valueSwitch}
-                trackColor="#0187E0"
-                thumbColor={Colors.WHITE}
-                ios_backgroundColor={Colors.WHITE_SMOKE}
-              />
-            </View> */}
             <Button
               containerStyle={{width: '100%'}}
               title={trans('save').toUpperCase()}

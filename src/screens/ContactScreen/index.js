@@ -10,6 +10,7 @@ import {
 import FastImage from 'react-native-fast-image';
 import {Appbar} from 'react-native-paper';
 import SimpleToast from 'react-native-simple-toast';
+import {useSelector} from 'react-redux';
 import {images} from '../../assets';
 import {AppText} from '../../components/atoms';
 import {Button} from '../../components/molecules';
@@ -24,6 +25,8 @@ import {device_height} from '../../styles/Mixin';
 import {Const, trans} from '../../utils';
 
 const ContactScreen = ({navigation}) => {
+  const appConfig = useSelector(state => state.AppConfigReducer.appConfig);
+
   const [title, setTitle] = useState('');
   const [name, setName] = useState('');
   const [content, setContent] = useState('');
@@ -98,7 +101,9 @@ const ContactScreen = ({navigation}) => {
           paddingBottom: NAVIGATION_BOTTOM_TABS_HEIGHT + HEIGHT_MIDDLE_HOME_BTN,
         }}>
         <FastImage
-          source={images.contactBG}
+          source={{
+            uri: Const.API.baseUrlImage + appConfig?.general?.contactBanner,
+          }}
           style={{width: '100%', height: 200}}
         />
         <View style={{flex: 1, paddingHorizontal: 16, marginTop: 16}}>

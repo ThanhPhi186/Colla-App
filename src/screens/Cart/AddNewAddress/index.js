@@ -78,7 +78,7 @@ const AddNewAddress = ({navigation, route}) => {
       refAddress.current.province.name;
 
     const params = {
-      phone,
+      phone: `+84${Number(phone)}`,
       fullname,
       address: addressConvert,
       is_default: valueSwitch,

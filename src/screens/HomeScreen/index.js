@@ -27,7 +27,7 @@ import FastImage from 'react-native-fast-image';
 import {useDispatch, useSelector} from 'react-redux';
 import IconCart from '../../components/molecules/IconCart';
 import numeral from 'numeral';
-import {CartRedux} from '../../redux';
+import {CartRedux, NotificationRedux} from '../../redux';
 import {device_width} from '../../styles/Mixin';
 import ItemCategory from './component/ItemCategory';
 import ItemBlog from './component/ItemBlog';
@@ -38,10 +38,16 @@ import {get} from '../../services/ServiceHandle';
 import ItemPopular from './component/ItemPopular';
 
 const HomeScreen = ({navigation}) => {
+  const countNotiUnread = useSelector(
+    state => state.NotificationReducer.countNotiUnread,
+  );
   const numberPurchaseCart = useSelector(
     state => state.CartReducer.numberPurchaseCart,
   );
   const userInfo = useSelector(state => state.AuthenOverallReducer.userAuthen);
+
+  const appConfig = useSelector(state => state.AppConfigReducer.appConfig);
+
   const dispatch = useDispatch();
 
   const [blogData, setBlogData] = useState([]);
@@ -49,10 +55,12 @@ const HomeScreen = ({navigation}) => {
 
   const [categoryData, setCategoryData] = useState([]);
 
-  console.log('Math.ceil', Math.ceil(5 / 2));
-
   useEffect(() => {
     dispatch(CartRedux.Actions.getPurchaseCart.request());
+  }, [dispatch]);
+
+  useEffect(() => {
+    dispatch(NotificationRedux.Actions.getCountNotiUnread.request());
   }, [dispatch]);
 
   useEffect(() => {
@@ -163,7 +171,7 @@ const HomeScreen = ({navigation}) => {
                   }}>
                   <Text
                     style={{fontSize: 12, color: 'white', fontWeight: '600'}}>
-                    8
+                    {countNotiUnread}
                   </Text>
                 </View>
               </View>
@@ -280,7 +288,9 @@ const HomeScreen = ({navigation}) => {
           </ScrollView>
           <FastImage
             resizeMode="stretch"
-            source={images.demoBanner}
+            source={{
+              uri: Const.API.baseUrlImage + appConfig?.general?.homeBanners[0],
+            }}
             style={styles.banner}
           />
           <AppText

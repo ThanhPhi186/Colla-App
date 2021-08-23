@@ -1,38 +1,64 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import {FlatList, TouchableOpacity, View} from 'react-native';
 import {Appbar} from 'react-native-paper';
-import {AppText} from '../../components/atoms';
+import {AppLoading, AppText} from '../../components/atoms';
 import {Colors, Mixin} from '../../styles';
 import {container} from '../../styles/GlobalStyles';
-import {trans} from '../../utils';
+import {Const, trans} from '../../utils';
 import styles from './styles';
 import moment from 'moment';
 import FastImage from 'react-native-fast-image';
 import {images} from '../../assets';
 
+import SimpleToast from 'react-native-simple-toast';
+import {get, post, put} from '../../services/ServiceHandle';
+import {NotificationRedux} from '../../redux';
+import {useDispatch} from 'react-redux';
+
 const NotificationScreen = ({navigation}) => {
-  const data = [
-    {
-      status: false,
-      message: 'Reminder: You better be ready! flight is tomorrow at 9am',
-      created_at: 1622619872597,
-    },
-    {
-      status: false,
-      message: 'Reminder: You have 1 invitation tonight at 17pm',
-      created_at: 1622586118597,
-    },
-    {
-      status: true,
-      message: 'Reminder: You transfer from the hotel to airport at 5pm',
-      created_at: 1622501213597,
-    },
-    {
-      status: false,
-      message: 'Offer: Off-Season will end in 20 Oct get it now',
-      created_at: 1622486118597,
-    },
-  ];
+  const dispatch = useDispatch();
+  const [data, setData] = useState([]);
+  const [loading, setLoading] = useState(false);
+
+  useEffect(() => {
+    const getNoti = () => {
+      get(Const.API.baseURL + Const.API.Notification).then(res => {
+        if (res.ok) {
+          setData(res.data.data);
+        } else {
+          SimpleToast.show(res.error, SimpleToast.SHORT);
+        }
+      });
+    };
+    getNoti();
+  }, []);
+
+  const readNoti = item => {
+    setLoading(true);
+    const params = {
+      is_read: true,
+    };
+    put(
+      `${Const.API.baseURL + Const.API.Notification}/${item.id}`,
+      params,
+    ).then(res => {
+      if (res.ok) {
+        const newData = [...data];
+        newData.map(elm => {
+          if (elm.id === item.id) {
+            elm.is_read = true;
+          }
+          return elm;
+        });
+        setData(newData);
+        dispatch(NotificationRedux.Actions.getCountNotiUnread.request());
+        setLoading(false);
+      } else {
+        setLoading(false);
+        SimpleToast.show(res.error, SimpleToast.SHORT);
+      }
+    });
+  };
 
   const renderItem = ({item}) => {
     return (
@@ -40,10 +66,11 @@ const NotificationScreen = ({navigation}) => {
         style={[
           styles.item,
           ,
-          {backgroundColor: item.status ? null : '#e1f5fe'},
+          {
+            backgroundColor: item.is_read ? null : '#e1f5fe',
+          },
         ]}
-        // onPress={() => this.onGotoDetail(item)}
-      >
+        onPress={() => readNoti(item)}>
         <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
           <View
             style={{
@@ -65,10 +92,13 @@ const NotificationScreen = ({navigation}) => {
         </View>
         <View style={styles.box}>
           <AppText style={styles.title_text} numberOfLines={3}>
-            {item.message}
+            {item.notification_id.title}
+          </AppText>
+          <AppText style={styles.content} numberOfLines={3}>
+            {item.notification_id.content}
           </AppText>
           <AppText style={styles.time_text} numberOfLines={1}>
-            {moment(item.created_at).fromNow()}
+            {moment(item.createdAt).fromNow()}
           </AppText>
         </View>
       </TouchableOpacity>
@@ -77,6 +107,7 @@ const NotificationScreen = ({navigation}) => {
 
   return (
     <View style={container}>
+      <AppLoading isVisible={loading} />
       <Appbar.Header>
         <Appbar.BackAction color="white" onPress={() => navigation.goBack()} />
         <Appbar.Content color="white" title={trans('notification')} />

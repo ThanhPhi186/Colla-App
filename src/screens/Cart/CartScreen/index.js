@@ -18,8 +18,14 @@ import ModalChangeQuantity from '../../../components/molecules/ModalChangeQuanti
 const CartScreen = ({navigation}) => {
   const dispatch = useDispatch();
   const dataCart = useSelector(state => state.CartReducer.listPurchaseCart);
+
+  console.log('dataCart', dataCart);
   const totalPrice = sum(
     dataCart?.map(elm => elm?.product?.price * elm.amount),
+  );
+
+  const totalPoint = sum(
+    dataCart?.map(elm => elm.product.retail_bonus_point * elm.amount),
   );
 
   const [visibleModal, setVisibleModal] = useState(false);
@@ -97,6 +103,12 @@ const CartScreen = ({navigation}) => {
           {numeral(totalPrice).format()} đ
         </AppText>
       </View>
+      <View style={styles.showPoint}>
+        <AppText style={styles.textPay}>{trans('totalPoints')}</AppText>
+        <AppText style={styles.textPoint}>
+          {numeral(totalPoint).format()} đ
+        </AppText>
+      </View>
       <Button
         containerStyle={styles.btnPurchase}
         title={trans('payment')}
@@ -122,7 +134,14 @@ const styles = {
     alignItems: 'center',
     paddingHorizontal: 10,
     marginTop: 10,
-    paddingVertical: 3,
+    paddingVertical: 4,
+  },
+  showPoint: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    paddingHorizontal: 10,
+    paddingVertical: 4,
   },
   textPay: {
     fontSize: 17,
@@ -136,6 +155,9 @@ const styles = {
   },
   textPrice: {
     color: Colors.GREEN_1,
+  },
+  textPoint: {
+    color: Colors.RED,
   },
 };
 

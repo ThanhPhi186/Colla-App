@@ -41,6 +41,9 @@ export default {
     Blog: 'blog',
     BlogCategory: 'blogcategory',
     RechargeBank: 'recharge-bank',
+    Configs: 'configs',
+    NotiUnread: 'mynotification/unread',
+    Notification: 'mynotification',
   },
   RESPONSE_CODES: {
     SUCCESS: {

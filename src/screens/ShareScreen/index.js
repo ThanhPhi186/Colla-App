@@ -11,13 +11,14 @@ import {
   HEIGHT_MIDDLE_HOME_BTN,
   NAVIGATION_BOTTOM_TABS_HEIGHT,
 } from '../../styles/GlobalStyles';
-import {trans} from '../../utils';
+import {Const, trans} from '../../utils';
 import numeral from 'numeral';
 import {useSelector} from 'react-redux';
 import Share from 'react-native-share';
 
 const ShareScreen = () => {
   const userInfo = useSelector(state => state.AuthenOverallReducer.userAuthen);
+  const appConfig = useSelector(state => state.AppConfigReducer.appConfig);
 
   const shareOption = async () => {
     const shareOptions = {
@@ -46,7 +47,9 @@ const ShareScreen = () => {
           paddingBottom: NAVIGATION_BOTTOM_TABS_HEIGHT + HEIGHT_MIDDLE_HOME_BTN,
         }}>
         <FastImage
-          source={images.shareBG}
+          source={{
+            uri: Const.API.baseUrlImage + appConfig?.general?.shareBanner,
+          }}
           style={{width: '100%', height: 200}}
           resizeMode="contain"
         />

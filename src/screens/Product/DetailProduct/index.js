@@ -63,6 +63,22 @@ const DetailProduct = ({navigation, route}) => {
           <AppText>Số lượng trong kho:</AppText>
           <AppText>{item.quantity}</AppText>
         </View>
+        <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
+          <AppText>Thương hiệu:</AppText>
+          <AppText>{item.product_brand_id.name}</AppText>
+        </View>
+        <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
+          <AppText>Xuất xứ:</AppText>
+          <AppText>Việt Nam</AppText>
+        </View>
+        <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
+          <AppText>Danh mục sản phẩm:</AppText>
+          <AppText>
+            {item.categories
+              .map(elm => elm.product_category_id.name)
+              .join(' , ')}
+          </AppText>
+        </View>
       </View>
     );
   };

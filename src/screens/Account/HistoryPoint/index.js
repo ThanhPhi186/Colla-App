@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import {FlatList, Text, View} from 'react-native';
+import {FlatList, RefreshControl, Text, View} from 'react-native';
 import {Appbar} from 'react-native-paper';
 import {AppText, FormInput} from '../../../components/atoms';
 import {Colors} from '../../../styles';
@@ -13,24 +13,51 @@ import styles from './styles';
 import SelectDate from './component/SelectDate';
 
 const HistoryPoint = ({navigation}) => {
-  const [startDate, setStartDate] = useState(moment().format('DD/MM/YYYY'));
+  const [startDate, setStartDate] = useState(
+    moment().subtract(1, 'months').format('DD/MM/YYYY'),
+  );
   const [endDate, setEndDate] = useState(moment().format('DD/MM/YYYY'));
-  const [dataPoint, setDataPoint] = useState([
-    {
-      reason: 'Bán hàng online - Khách hàng 0376871280',
-      createdAt: '01/07/2021',
-      amount: '50000',
-      status: 'Chờ nhận',
-    },
-  ]);
+  const [dataPoint, setDataPoint] = useState([]);
+  const [refresh, setRefresh] = useState(false);
 
-  // useEffect(() => {
-  //   get(Const.API.baseURL + Const.API.Point).then(res => {
-  //     if (res.ok) {
-  //       setDataPoint(res.data.data);
-  //     }
-  //   });
-  // }, []);
+  useEffect(() => {
+    const getData = () => {
+      const params = {
+        startDate: moment(startDate, 'DD/MM/YYYY').format(),
+        endDate: moment(endDate, 'DD/MM/YYYY').format(),
+      };
+      get(Const.API.baseURL + Const.API.Point, params).then(res => {
+        if (res.ok) {
+          setDataPoint(res.data.data);
+        }
+      });
+    };
+    getData();
+  }, [startDate, endDate]);
+
+  const onRefresh = () => {
+    setRefresh(true);
+    const params = {
+      startDate: moment(startDate, 'DD/MM/YYYY').format(),
+      endDate: moment(endDate, 'DD/MM/YYYY').format(),
+    };
+    get(Const.API.baseURL + Const.API.Point, params).then(res => {
+      if (res.ok) {
+        setRefresh(false);
+        setDataPoint(res.data.data);
+      }
+    });
+  };
+
+  const renderStatus = item => {
+    if (item.status === 0) {
+      return 'Chờ nhận';
+    } else if (item.factor === 1) {
+      return 'Đã nhận';
+    } else {
+      return 'Đã trừ';
+    }
+  };
 
   const renderItem = ({item}) => {
     return (
@@ -49,9 +76,15 @@ const HistoryPoint = ({navigation}) => {
           padding: 8,
         }}>
         <Text>
-          <Text style={{color: Colors.GREEN_1}}>
-            + {numeral(item.amount).format()}{' '}
-          </Text>
+          {item.factor === 1 ? (
+            <Text style={{color: Colors.GREEN_1}}>
+              + {numeral(item.amount).format()}{' '}
+            </Text>
+          ) : (
+            <Text style={{color: Colors.RED}}>
+              - {numeral(item.amount).format()}{' '}
+            </Text>
+          )}
           {item.reason}
         </Text>
         <View
@@ -63,7 +96,13 @@ const HistoryPoint = ({navigation}) => {
           <AppText>{moment(item.createdAt).format('DD/MM/YYYY')}</AppText>
           <Text>
             Trạng thái:
-            <Text> {item.status}</Text>
+            <Text
+              style={{
+                color: item.status === 0 ? Colors.RED : Colors.GREEN_1,
+              }}>
+              {' '}
+              {renderStatus(item)}
+            </Text>
           </Text>
         </View>
       </View>
@@ -93,9 +132,19 @@ const HistoryPoint = ({navigation}) => {
           }}>
           <Text>Thời gian:</Text>
           <View style={{flexDirection: 'row'}}>
-            <SelectDate valueDate={startDate} />
+            <SelectDate
+              valueDate={startDate}
+              setValueDate={date =>
+                setStartDate(moment(date).format('DD/MM/YYYY'))
+              }
+            />
             <View style={styles.line} />
-            <SelectDate valueDate={endDate} />
+            <SelectDate
+              valueDate={endDate}
+              setValueDate={date =>
+                setEndDate(moment(date).format('DD/MM/YYYY'))
+              }
+            />
           </View>
         </View>
         <FlatList
@@ -104,6 +153,9 @@ const HistoryPoint = ({navigation}) => {
           ListEmptyComponent={renderEmptyComponent}
           keyExtractor={(item, index) => index.toString()}
           contentContainerStyle={{padding: 16}}
+          refreshControl={
+            <RefreshControl refreshing={refresh} onRefresh={onRefresh} />
+          }
         />
       </View>
     </View>

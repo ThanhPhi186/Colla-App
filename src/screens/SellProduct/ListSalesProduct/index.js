@@ -29,8 +29,6 @@ import styles from './styles';
 const ListSalesProduct = ({navigation, route}) => {
   const {type} = route.params;
 
-  console.log('typetypetype', route);
-
   const animationIsRunning = useRef(false);
 
   const [listProduct, setListProduct] = useState([]);

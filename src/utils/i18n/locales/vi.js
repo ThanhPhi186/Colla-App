@@ -87,4 +87,5 @@ export default {
   payingCustomers: 'Khách hàng thanh toán',
   youWillGet: 'Bạn sẽ nhận được',
   confirmOrder: 'Xác nhận đơn hàng',
+  totalPoints: 'Tổng tích điểm',
 };

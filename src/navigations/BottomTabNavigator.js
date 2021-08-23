@@ -34,6 +34,7 @@ import {
   Recharge,
   Withdrawal,
   ListBlog,
+  AddCustomerOffLine,
 } from '../screens';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import {CustomButtonTab} from '../components/molecules';
@@ -68,7 +69,8 @@ const BottomTabNavigator = () => {
       routeName === 'NotificationScreen' ||
       routeName === 'TopSales' ||
       routeName === 'PromotionScreen' ||
-      routeName === 'ListBlog'
+      routeName === 'ListBlog' ||
+      routeName === 'Recharge'
     ) {
       return false;
     }
@@ -105,7 +107,8 @@ const BottomTabNavigator = () => {
       routeName === 'SalesCart' ||
       routeName === 'PaymentOfSales' ||
       routeName === 'ListSalesCustomer' ||
-      routeName === 'AddNewCustomer'
+      routeName === 'AddNewCustomer' ||
+      routeName === 'AddCustomerOffLine'
     ) {
       return false;
     }
@@ -138,6 +141,7 @@ const BottomTabNavigator = () => {
         <Stack.Screen name="TopSales" component={TopSales} />
         <Stack.Screen name="PromotionScreen" component={PromotionScreen} />
         <Stack.Screen name="ListBlog" component={ListBlog} />
+        <Stack.Screen name="Recharge" component={Recharge} />
       </Stack.Navigator>
     );
   };
@@ -183,6 +187,10 @@ const BottomTabNavigator = () => {
         <Stack.Screen name="PaymentOfSales" component={PaymentOfSales} />
         <Stack.Screen name="ListSalesCustomer" component={ListSalesCustomer} />
         <Stack.Screen name="AddNewCustomer" component={AddNewCustomer} />
+        <Stack.Screen
+          name="AddCustomerOffLine"
+          component={AddCustomerOffLine}
+        />
       </Stack.Navigator>
     );
   };

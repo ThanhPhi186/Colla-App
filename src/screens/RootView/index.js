@@ -4,7 +4,7 @@ import {SafeAreaProvider} from 'react-native-safe-area-context';
 import {Colors, Mixin} from '../../styles';
 import Modal from 'react-native-modal';
 import {useDispatch, useSelector} from 'react-redux';
-import {CartRedux} from '../../redux';
+import {AppConfigRedux, CartRedux} from '../../redux';
 import * as RootNavigation from '../../navigations/RootNavigation';
 import BottomTabNavigator from '../../navigations/BottomTabNavigator';
 import LoginNavigator from '../../navigations/LoginNavigator';
@@ -25,7 +25,7 @@ const RootView = () => {
   const userInfo = useSelector(state => state.AuthenOverallReducer.userAuthen);
 
   const onDisplayNotification = async (title, body) => {
-    // Create a channel
+    //Create a channel
     const channelId = await notifee.createChannel({
       id: 'default',
       name: 'Default Channel',
@@ -76,6 +76,10 @@ const RootView = () => {
         // setLoading(false);
       });
   }, []);
+
+  useEffect(() => {
+    dispatch(AppConfigRedux.Actions.getAppConfig.request());
+  }, [dispatch]);
 
   const agentRequest = () => {
     const params = {member_type: 'agency'};

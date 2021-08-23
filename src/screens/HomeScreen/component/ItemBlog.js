@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useCallback, useState} from 'react';
 import {View, Text, TouchableOpacity} from 'react-native';
 import FastImage from 'react-native-fast-image';
 
@@ -9,9 +9,20 @@ import {Const} from '../../../utils';
 
 const ItemBlog = props => {
   const {item} = props;
+  const [textShown, setTextShown] = useState(false); //To show ur remaining Text
+  const [lengthMore, setLengthMore] = useState(false); //to show the "Read more & Less Line"
 
-  console.log('itemitem', item);
   const regex = /(<([^>]+)>)/gi;
+
+  const onTextLayout = useCallback(e => {
+    setLengthMore(e.nativeEvent.lines.length >= 4); //to check the text is more than 4 lines or not
+    // console.log(e.nativeEvent);
+  }, []);
+
+  const toggleNumberOfLines = () => {
+    //To toggle the show text or hide it
+    setTextShown(!textShown);
+  };
 
   return (
     <View style={styles.containerItem}>
@@ -34,9 +45,23 @@ const ItemBlog = props => {
             <AppText title style={styles.title}>
               {item.title}
             </AppText>
-            <AppText style={styles.content}>
+            <AppText
+              numberOfLines={textShown ? undefined : 4}
+              onTextLayout={onTextLayout}
+              style={styles.content}>
               {item?.content?.replace(regex, '')}
             </AppText>
+            {lengthMore ? (
+              <Text
+                onPress={toggleNumberOfLines}
+                style={{
+                  marginTop: 8,
+                  color: Colors.GREEN_1,
+                  textAlign: 'right',
+                }}>
+                {textShown ? 'Thu gọn' : 'Đọc tiếp'}
+              </Text>
+            ) : null}
           </View>
         </View>
       </View>

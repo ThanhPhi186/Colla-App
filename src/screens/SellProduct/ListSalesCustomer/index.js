@@ -20,19 +20,28 @@ import {device_width} from '../../../styles/Mixin';
 import {Const, trans} from '../../../utils';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import {useFocusEffect} from '@react-navigation/native';
+import {removeDiacritics} from '../../../helpers/collaHelper';
+import {isEmpty} from 'lodash';
 
 const ListSalesCustomer = ({navigation, route}) => {
   const dispatch = useDispatch();
 
   const [dataCustomer, setDataCustomer] = useState([]);
+  const [dataSearch, setDataSearch] = useState([]);
 
   const {chooseCustomer} = route.params;
+
+  const {type} = route.params;
 
   useFocusEffect(
     useCallback(() => {
       getCustomer();
     }, []),
   );
+
+  useEffect(() => {
+    setDataSearch(dataCustomer);
+  }, [dataCustomer]);
 
   const getCustomer = () => {
     get(Const.API.baseURL + Const.API.UserCustomer).then(res => {
@@ -45,6 +54,13 @@ const ListSalesCustomer = ({navigation, route}) => {
   };
 
   const selectCustomer = item => {
+    console.log('item', item);
+    if (type === 'online' && isEmpty(item.address_ship)) {
+      return SimpleToast.show(
+        'Khách hàng chưa có địa chỉ, vui lòng cập nhật',
+        SimpleToast.SHORT,
+      );
+    }
     chooseCustomer(item);
     navigation.goBack();
   };
@@ -60,7 +76,12 @@ const ListSalesCustomer = ({navigation, route}) => {
     );
   };
 
-  const onChangeSearch = () => {};
+  const onChangeSearch = txt => {
+    const searchData = dataCustomer.filter(elm => {
+      return removeDiacritics(elm.fullname).includes(removeDiacritics(txt));
+    });
+    setDataSearch(searchData);
+  };
 
   const renderItem = ({item}) => {
     return (
@@ -89,12 +110,15 @@ const ListSalesCustomer = ({navigation, route}) => {
           </View>
         </View>
 
-        <View style={{flexDirection: 'row', marginVertical: 5}}>
-          <Icon name="map-marker" size={24} color={Colors.GRAY} />
-          <View style={{width: '95%', justifyContent: 'center', marginLeft: 5}}>
-            <AppText style={{fontSize: 16}}>{item.address_ship}</AppText>
+        {type === 'online' && (
+          <View style={{flexDirection: 'row', marginVertical: 5}}>
+            <Icon name="map-marker" size={24} color={Colors.GRAY} />
+            <View
+              style={{width: '95%', justifyContent: 'center', marginLeft: 5}}>
+              <AppText style={{fontSize: 16}}>{item.address_ship}</AppText>
+            </View>
           </View>
-        </View>
+        )}
 
         <View style={{flexDirection: 'row', width: '100%', marginTop: 5}}>
           <TouchableOpacity
@@ -110,10 +134,13 @@ const ListSalesCustomer = ({navigation, route}) => {
           <TouchableOpacity
             style={styles.buttonEdit}
             onPress={() =>
-              navigation.navigate('AddNewCustomer', {
-                itemEdit: item,
-                type: 'EDIT',
-              })
+              navigation.navigate(
+                type === 'online' ? 'AddNewCustomer' : 'AddCustomerOffLine',
+                {
+                  itemEdit: item,
+                  type: 'EDIT',
+                },
+              )
             }>
             <AppText style={styles.textUnchoose}>{trans('edited')}</AppText>
           </TouchableOpacity>
@@ -131,7 +158,12 @@ const ListSalesCustomer = ({navigation, route}) => {
           color="white"
           icon="plus"
           size={28}
-          onPress={() => navigation.navigate('AddNewCustomer', {type: 'NEW'})}
+          onPress={() =>
+            navigation.navigate(
+              type === 'online' ? 'AddNewCustomer' : 'AddCustomerOffLine',
+              {type: 'NEW'},
+            )
+          }
         />
       </Appbar.Header>
       <View style={{flex: 1}}>
@@ -139,7 +171,7 @@ const ListSalesCustomer = ({navigation, route}) => {
           style={{
             flexDirection: 'row',
             justifyContent: 'space-around',
-            marginTop: 12,
+            marginVertical: 12,
           }}>
           <Searchbar
             placeholder={trans('search')}
@@ -147,13 +179,20 @@ const ListSalesCustomer = ({navigation, route}) => {
             inputStyle={styles.input}
             onChangeText={onChangeSearch}
           />
-          <TouchableOpacity style={styles.btnAddNew}>
+          <TouchableOpacity
+            style={styles.btnAddNew}
+            onPress={() =>
+              navigation.navigate(
+                type === 'online' ? 'AddNewCustomer' : 'AddCustomerOffLine',
+                {type: 'NEW'},
+              )
+            }>
             <AppText>{trans('addNew')}</AppText>
           </TouchableOpacity>
         </View>
 
         <FlatList
-          data={dataCustomer}
+          data={dataSearch}
           renderItem={renderItem}
           keyExtractor={(item, index) => index.toString()}
         />

@@ -35,6 +35,7 @@ import {
   SalesCart,
   ListSalesCustomer,
   AddNewCustomer,
+  AddCustomerOffLine,
 } from './SellProduct';
 import {ListImportProduct, ImportCart} from './ImportProduct';
 import ListBlog from './ListBlog';
@@ -78,4 +79,5 @@ export {
   Recharge,
   Withdrawal,
   ListBlog,
+  AddCustomerOffLine,
 };

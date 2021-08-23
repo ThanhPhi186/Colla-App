@@ -16,6 +16,9 @@ const styles = {
     marginTop: Mixin.moderateSize(8),
     color: Colors.GRAY,
   },
+  content: {
+    marginTop: Mixin.moderateSize(8),
+  },
   avatar: {
     width: 48,
     height: 48,
@@ -29,6 +32,8 @@ const styles = {
     width: device_width,
     justifyContent: 'center',
     paddingVertical: Mixin.moderateSize(8),
+    borderBottomWidth: 2,
+    borderColor: Colors.WHITE,
   },
   box: {
     marginLeft: 6,
