@@ -162,6 +162,7 @@ const DetailProduct = ({navigation, route}) => {
         )}
         <View style={styles.largeIndicate} />
         <ScrollView
+          showsVerticalScrollIndicator={false}
           contentContainerStyle={{paddingBottom: 48}}
           style={styles.boxTitleProduct}>
           {renderProductInfo()}

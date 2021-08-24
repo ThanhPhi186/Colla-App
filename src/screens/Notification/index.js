@@ -22,11 +22,16 @@ const NotificationScreen = ({navigation}) => {
 
   useEffect(() => {
     const getNoti = () => {
+      setLoading(true);
       get(Const.API.baseURL + Const.API.Notification).then(res => {
         if (res.ok) {
           setData(res.data.data);
+          setLoading(false);
         } else {
-          SimpleToast.show(res.error, SimpleToast.SHORT);
+          setLoading(false);
+          setTimeout(() => {
+            SimpleToast.show(res.error, SimpleToast.SHORT);
+          }, 700);
         }
       });
     };
@@ -52,6 +57,7 @@ const NotificationScreen = ({navigation}) => {
         });
         setData(newData);
         dispatch(NotificationRedux.Actions.getCountNotiUnread.request());
+        navigation.navigate('DetailNotification', {item});
         setLoading(false);
       } else {
         setLoading(false);
@@ -91,13 +97,13 @@ const NotificationScreen = ({navigation}) => {
           </View>
         </View>
         <View style={styles.box}>
-          <AppText style={styles.title_text} numberOfLines={3}>
+          <AppText style={styles.title_text} numberOfLines={2}>
             {item.notification_id.title}
           </AppText>
-          <AppText style={styles.content} numberOfLines={3}>
+          <AppText style={styles.content} numberOfLines={2}>
             {item.notification_id.content}
           </AppText>
-          <AppText style={styles.time_text} numberOfLines={1}>
+          <AppText style={styles.time_text}>
             {moment(item.createdAt).fromNow()}
           </AppText>
         </View>

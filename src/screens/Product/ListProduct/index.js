@@ -2,7 +2,7 @@ import React, {useEffect, useState} from 'react';
 import {FlatList, TouchableOpacity, View} from 'react-native';
 import FastImage from 'react-native-fast-image';
 import {Appbar} from 'react-native-paper';
-import {AppText} from '../../../components/atoms';
+import {AppLoading, AppText} from '../../../components/atoms';
 import {container} from '../../../styles/GlobalStyles';
 import {Const, trans} from '../../../utils';
 import {images} from '../../../assets';
@@ -20,12 +20,18 @@ const ListProduct = ({navigation, route}) => {
   );
   const dispatch = useDispatch();
   const [listProduct, setListProduct] = useState([]);
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     const getListProduct = () => {
+      setLoading(true);
       get(`${Const.API.baseURL + Const.API.Product}?type=retail`).then(res => {
         if (res.ok) {
           setListProduct(res.data.data);
+          setLoading(false);
+        } else {
+          setLoading(false);
+          SimpleToast.show(res.error, SimpleToast.SHORT);
         }
       });
     };
@@ -55,6 +61,7 @@ const ListProduct = ({navigation, route}) => {
 
   return (
     <View style={container}>
+      <AppLoading isVisible={loading} />
       <Appbar.Header>
         <Appbar.BackAction color="white" onPress={() => navigation.goBack()} />
         <Appbar.Content color="white" title={trans('listProduct')} />

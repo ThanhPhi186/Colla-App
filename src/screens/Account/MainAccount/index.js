@@ -19,6 +19,7 @@ import FastImage from 'react-native-fast-image';
 import ItemAccount from '../component/ItemAccount';
 import BannerBehind from '../component/BannerBehind';
 import {images} from '../../../assets';
+import numeral from 'numeral';
 
 const MainAccount = ({navigation}) => {
   const dispatch = useDispatch();
@@ -61,7 +62,7 @@ const MainAccount = ({navigation}) => {
       </View>
       <View style={{flex: 1}}>
         <View style={styles.largeIndicate} />
-        <ItemAccount point />
+        <ItemAccount point={numeral(userInfo.point).format()} />
         <View style={styles.largeIndicate} />
         <ScrollView
           showsVerticalScrollIndicator={false}

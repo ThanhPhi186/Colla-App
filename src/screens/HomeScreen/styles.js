@@ -27,6 +27,7 @@ const styles = {
   txtName: {
     color: Colors.WHITE,
     fontWeight: 'bold',
+    marginBottom: 4,
   },
   viewProduct: {
     height: 80,

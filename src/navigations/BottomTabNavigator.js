@@ -35,6 +35,8 @@ import {
   Withdrawal,
   ListBlog,
   AddCustomerOffLine,
+  DetailBlog,
+  DetailNotification,
 } from '../screens';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import {CustomButtonTab} from '../components/molecules';
@@ -70,7 +72,9 @@ const BottomTabNavigator = () => {
       routeName === 'TopSales' ||
       routeName === 'PromotionScreen' ||
       routeName === 'ListBlog' ||
-      routeName === 'Recharge'
+      routeName === 'Recharge' ||
+      routeName === 'DetailBlog' ||
+      routeName === 'DetailNotification'
     ) {
       return false;
     }
@@ -142,6 +146,11 @@ const BottomTabNavigator = () => {
         <Stack.Screen name="PromotionScreen" component={PromotionScreen} />
         <Stack.Screen name="ListBlog" component={ListBlog} />
         <Stack.Screen name="Recharge" component={Recharge} />
+        <Stack.Screen name="DetailBlog" component={DetailBlog} />
+        <Stack.Screen
+          name="DetailNotification"
+          component={DetailNotification}
+        />
       </Stack.Navigator>
     );
   };

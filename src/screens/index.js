@@ -39,6 +39,8 @@ import {
 } from './SellProduct';
 import {ListImportProduct, ImportCart} from './ImportProduct';
 import ListBlog from './ListBlog';
+import DetailNotification from './DetailNotification';
+import DetailBlog from './DetailBlog';
 
 export {
   LoginScreen,
@@ -80,4 +82,6 @@ export {
   Withdrawal,
   ListBlog,
   AddCustomerOffLine,
+  DetailBlog,
+  DetailNotification,
 };

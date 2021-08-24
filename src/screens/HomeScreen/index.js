@@ -27,7 +27,7 @@ import FastImage from 'react-native-fast-image';
 import {useDispatch, useSelector} from 'react-redux';
 import IconCart from '../../components/molecules/IconCart';
 import numeral from 'numeral';
-import {CartRedux, NotificationRedux} from '../../redux';
+import {AuthenOverallRedux, CartRedux, NotificationRedux} from '../../redux';
 import {device_width} from '../../styles/Mixin';
 import ItemCategory from './component/ItemCategory';
 import ItemBlog from './component/ItemBlog';
@@ -36,6 +36,7 @@ import LinearGradient from 'react-native-linear-gradient';
 import {ItemProduct} from '../../components/molecules';
 import {get} from '../../services/ServiceHandle';
 import ItemPopular from './component/ItemPopular';
+import AutoHeightImage from 'react-native-auto-height-image';
 
 const HomeScreen = ({navigation}) => {
   const countNotiUnread = useSelector(
@@ -87,7 +88,7 @@ const HomeScreen = ({navigation}) => {
 
   useEffect(() => {
     const getListProduct = () => {
-      get(`${Const.API.baseURL + Const.API.Product}?type=retail`).then(res => {
+      get(`${Const.API.baseURL + Const.API.Product}?type=online`).then(res => {
         if (res.ok) {
           setListProduct(res.data.data.slice(0, 7));
         }
@@ -95,6 +96,10 @@ const HomeScreen = ({navigation}) => {
     };
     getListProduct();
   }, []);
+
+  const refreshPoint = () => {
+    dispatch(AuthenOverallRedux.Actions.getProfile.request());
+  };
 
   const renderCategory = ({item}) => {
     return (
@@ -108,7 +113,12 @@ const HomeScreen = ({navigation}) => {
   };
 
   const renderBlog = ({item}) => {
-    return <ItemBlog item={item} />;
+    return (
+      <ItemBlog
+        onPress={() => navigation.navigate('DetailBlog', {item})}
+        item={item}
+      />
+    );
   };
 
   const renderProductPopular = ({item}) => {
@@ -141,41 +151,23 @@ const HomeScreen = ({navigation}) => {
                 <AppText title style={styles.txtName}>
                   {userInfo.fullname}
                 </AppText>
+                <AppText title style={styles.txtHello}>
+                  {userInfo.affiliateCode}
+                </AppText>
               </View>
             </View>
           </View>
           <View style={{flexDirection: 'row'}}>
             <IconCart
+              icon="cart"
               number={numberPurchaseCart}
               onPress={() => navigation.navigate('CartScreen')}
             />
-            <TouchableOpacity
+            <IconCart
+              icon="notifications"
+              number={countNotiUnread}
               onPress={() => navigation.navigate('NotificationScreen')}
-              style={{
-                justifyContent: 'center',
-                alignItems: 'center',
-              }}>
-              <View style={{padding: 4}}>
-                <Ionicons name="notifications" size={32} color={Colors.WHITE} />
-                <View
-                  style={{
-                    position: 'absolute',
-                    top: 6,
-                    right: 4,
-                    width: 16,
-                    aspectRatio: 1 / 1,
-                    backgroundColor: 'red',
-                    borderRadius: 50,
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                  }}>
-                  <Text
-                    style={{fontSize: 12, color: 'white', fontWeight: '600'}}>
-                    {countNotiUnread}
-                  </Text>
-                </View>
-              </View>
-            </TouchableOpacity>
+            />
           </View>
         </View>
       </View>
@@ -214,11 +206,20 @@ const HomeScreen = ({navigation}) => {
               source={images.logoTransparent}
               imageStyle={{width: 80, height: 40}}
             />
-            <View style={{flexDirection: 'row'}}>
-              <AppText style={{color: Colors.ORANGE, fontWeight: 'bold'}}>
-                {numeral(userInfo.point).format()}
-              </AppText>
-              <AppText style={{fontWeight: 'bold'}}> điểm</AppText>
+            <View style={{flexDirection: 'row', alignItems: 'center'}}>
+              <Text style={{fontWeight: 'bold', marginRight: 8}}>
+                <Text style={{color: Colors.ORANGE}}>
+                  {numeral(userInfo.point).format()}
+                </Text>{' '}
+                điểm
+              </Text>
+              <TouchableOpacity onPress={refreshPoint}>
+                <IconMaterialCommunityIcons
+                  name="refresh"
+                  size={28}
+                  color={Colors.PRIMARY}
+                />
+              </TouchableOpacity>
             </View>
           </View>
           <View
@@ -286,12 +287,18 @@ const HomeScreen = ({navigation}) => {
               scrollEnabled={false}
             />
           </ScrollView>
-          <FastImage
-            resizeMode="stretch"
+          {/* <FastImage
+            resizeMode="contain"
             source={{
               uri: Const.API.baseUrlImage + appConfig?.general?.homeBanners[0],
             }}
             style={styles.banner}
+          /> */}
+          <AutoHeightImage
+            width={device_width}
+            source={{
+              uri: Const.API.baseUrlImage + appConfig?.general?.homeBanners[0],
+            }}
           />
           <AppText
             containerStyle={{marginTop: 8}}

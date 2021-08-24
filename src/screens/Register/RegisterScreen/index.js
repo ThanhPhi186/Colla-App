@@ -46,10 +46,10 @@ const RegisterScreen = ({navigation}) => {
   };
 
   const checkPhone = () => {
-    setLoading(true);
     if (handelCheckValue()) {
       return;
     }
+    setLoading(true);
 
     const convertPhone = `+84${Number(phoneNumber)}`;
     const params = {

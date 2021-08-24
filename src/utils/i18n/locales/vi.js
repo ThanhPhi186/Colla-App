@@ -88,4 +88,6 @@ export default {
   youWillGet: 'Bạn sẽ nhận được',
   confirmOrder: 'Xác nhận đơn hàng',
   totalPoints: 'Tổng tích điểm',
+  detailBlog: 'Chi tiết Blog',
+  detailNoti: 'Chi tiết thông báo',
 };

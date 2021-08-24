@@ -9,23 +9,23 @@ import {Const} from '../../../utils';
 
 const ItemBlog = props => {
   const {item} = props;
-  const [textShown, setTextShown] = useState(false); //To show ur remaining Text
-  const [lengthMore, setLengthMore] = useState(false); //to show the "Read more & Less Line"
+  // const [textShown, setTextShown] = useState(false); //To show ur remaining Text
+  // const [lengthMore, setLengthMore] = useState(false); //to show the "Read more & Less Line"
 
   const regex = /(<([^>]+)>)/gi;
 
-  const onTextLayout = useCallback(e => {
-    setLengthMore(e.nativeEvent.lines.length >= 4); //to check the text is more than 4 lines or not
-    // console.log(e.nativeEvent);
-  }, []);
+  // const onTextLayout = useCallback(e => {
+  //   setLengthMore(e.nativeEvent.lines.length >= 4); //to check the text is more than 4 lines or not
+  //   // console.log(e.nativeEvent);
+  // }, []);
 
-  const toggleNumberOfLines = () => {
-    //To toggle the show text or hide it
-    setTextShown(!textShown);
-  };
+  // const toggleNumberOfLines = () => {
+  //   //To toggle the show text or hide it
+  //   setTextShown(!textShown);
+  // };
 
   return (
-    <View style={styles.containerItem}>
+    <TouchableOpacity {...props} style={styles.containerItem}>
       <View style={styles.left}>
         <FastImage
           source={{uri: Const.API.baseUrlImage + item.feature_image}}
@@ -45,13 +45,10 @@ const ItemBlog = props => {
             <AppText title style={styles.title}>
               {item.title}
             </AppText>
-            <AppText
-              numberOfLines={textShown ? undefined : 4}
-              onTextLayout={onTextLayout}
-              style={styles.content}>
+            <AppText numberOfLines={2} style={styles.content}>
               {item?.content?.replace(regex, '')}
             </AppText>
-            {lengthMore ? (
+            {/* {lengthMore ? (
               <Text
                 onPress={toggleNumberOfLines}
                 style={{
@@ -61,11 +58,11 @@ const ItemBlog = props => {
                 }}>
                 {textShown ? 'Thu gọn' : 'Đọc tiếp'}
               </Text>
-            ) : null}
+            ) : null} */}
           </View>
         </View>
       </View>
-    </View>
+    </TouchableOpacity>
   );
 };
 
