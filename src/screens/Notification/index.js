@@ -21,8 +21,8 @@ const NotificationScreen = ({navigation}) => {
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
+    setLoading(true);
     const getNoti = () => {
-      setLoading(true);
       get(Const.API.baseURL + Const.API.Notification).then(res => {
         if (res.ok) {
           setData(res.data.data);

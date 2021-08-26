@@ -295,13 +295,13 @@ const HomeScreen = ({navigation}) => {
             style={styles.banner}
           /> */}
           <AutoHeightImage
-            width={device_width}
+            width={device_width - 40}
             source={{
               uri: Const.API.baseUrlImage + appConfig?.general?.homeBanners[0],
             }}
           />
           <AppText
-            containerStyle={{marginTop: 8}}
+            containerStyle={{marginVertical: 8}}
             style={{color: Colors.PRIMARY}}
             title>
             Sản phẩm phân phối
@@ -314,8 +314,20 @@ const HomeScreen = ({navigation}) => {
             contentContainerStyle={{paddingHorizontal: 4}}
             keyExtractor={(item, index) => index.toString()}
           />
+          <AppText
+            containerStyle={{marginVertical: 8}}
+            style={{color: Colors.PRIMARY}}
+            title>
+            Bảng size sản phẩm
+          </AppText>
+          <AutoHeightImage
+            width={device_width - 40}
+            source={{
+              uri: Const.API.baseUrlImage + appConfig?.general?.homeBanners[1],
+            }}
+          />
 
-          <AppText style={{color: Colors.PRIMARY}} title>
+          <AppText style={{color: Colors.PRIMARY, marginVertical: 8}} title>
             Tin tức
           </AppText>
           <FlatList

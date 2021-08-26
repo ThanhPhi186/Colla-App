@@ -66,6 +66,7 @@ const ListProduct = ({navigation, route}) => {
         <Appbar.BackAction color="white" onPress={() => navigation.goBack()} />
         <Appbar.Content color="white" title={trans('listProduct')} />
         <IconCart
+          icon="cart"
           number={numberPurchaseCart}
           onPress={() => navigation.navigate('CartScreen')}
         />

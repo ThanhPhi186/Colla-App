@@ -70,7 +70,7 @@ const ContactScreen = ({navigation}) => {
   };
 
   const openFacebook = () => {
-    const pageID = 460699881054856;
+    const pageID = 101186448739325;
     const scheme = Platform.select({
       ios: 'fb://profile/',
       android: 'fb://page/',
@@ -79,11 +79,11 @@ const ContactScreen = ({navigation}) => {
   };
 
   const callPhone = () => {
-    Linking.openURL(`tel:0376871280`);
+    Linking.openURL(`tel:0981929986`);
   };
 
   const openzalo = () => {
-    Linking.openURL('https://zalo.me/0376871280');
+    Linking.openURL('https://zalo.me/0981830805');
   };
 
   return (

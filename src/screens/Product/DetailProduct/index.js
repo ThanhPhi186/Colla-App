@@ -19,6 +19,7 @@ import ModalChangeQuantity from '../../../components/molecules/ModalChangeQuanti
 import ImageSlider from 'react-native-image-slider';
 import CardItem from '../../../components/molecules/CardItem';
 import {images} from '../../../assets';
+import SimpleToast from 'react-native-simple-toast';
 
 const DetailProduct = ({navigation, route}) => {
   const numberPurchaseCart = useSelector(
@@ -33,8 +34,6 @@ const DetailProduct = ({navigation, route}) => {
   const [type, setType] = useState('');
   const refModal = useRef();
 
-  console.log('item', item);
-
   const addToCart = () => {
     const dataProduct = {
       product_id: item.id,
@@ -43,14 +42,18 @@ const DetailProduct = ({navigation, route}) => {
     };
     post(Const.API.baseURL + Const.API.Cart, dataProduct).then(res => {
       if (res.ok) {
+        setVisibleModal(false);
         dispatch(CartRedux.Actions.getPurchaseCart.request());
+        if (type === 'buyNow') {
+          navigation.navigate('CartScreen');
+        }
+      } else {
+        setVisibleModal(false);
+        setTimeout(() => {
+          SimpleToast.show(res.error, SimpleToast.SHORT);
+        }, 700);
       }
     });
-
-    setVisibleModal(false);
-    if (type === 'buyNow') {
-      navigation.navigate('CartScreen');
-    }
   };
 
   const renderProductInfo = () => {
@@ -89,6 +92,7 @@ const DetailProduct = ({navigation, route}) => {
         <Appbar.BackAction color="white" onPress={() => navigation.goBack()} />
         <Appbar.Content color="white" title={trans('detailProduct')} />
         <IconCart
+          icon="cart"
           number={numberPurchaseCart}
           onPress={() => navigation.navigate('CartScreen')}
         />

@@ -9,7 +9,6 @@ import numeral from 'numeral';
 
 const ProductPaymentItem = props => {
   const {item} = props;
-  console.log('itemitem', item);
 
   return (
     <View style={styles.containerItem}>
@@ -47,7 +46,7 @@ const ProductPaymentItem = props => {
               </AppText>
             </View>
             <AppText
-              containerStyle={{justifyContent: 'center'}}
+              containerStyle={{justifyContent: 'center', marginLeft: 8}}
               style={styles.textPrice}>
               X {item.amount}
             </AppText>
@@ -73,7 +72,7 @@ const ProductPaymentItem = props => {
             </View>
 
             <AppText
-              containerStyle={{justifyContent: 'center'}}
+              containerStyle={{justifyContent: 'center', marginLeft: 8}}
               style={styles.textPrice}>
               X {item.amount}
             </AppText>
@@ -107,14 +106,13 @@ const styles = {
     marginTop: 3,
   },
   right: {
-    width: '75%',
+    width: '66%',
     paddingVertical: 10,
     justifyContent: 'space-around',
   },
   textName: {
     fontSize: 16,
     flex: 1,
-    marginRight: 40,
   },
   icDelete: {
     width: '75%',

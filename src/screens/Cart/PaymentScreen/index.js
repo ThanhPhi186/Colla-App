@@ -63,7 +63,8 @@ const PaymentScreen = ({navigation, route}) => {
       phone: dataAddress.phone,
       address_ship: dataAddress.address,
       fullname: dataAddress.fullname,
-      payment_method: usePoint ? 'point' : 'cod',
+      payment_method:
+        type === 'retail' ? (usePoint ? 'point' : 'cod') : 'point',
       ship_method: '',
       type,
       district: dataAddress.district,
@@ -91,9 +92,19 @@ const PaymentScreen = ({navigation, route}) => {
         setTimeout(() => {
           SimpleToast.show(res.error, SimpleToast.SHORT);
         }, 700);
-        console.log('params', params);
       }
     });
+  };
+
+  const changePaymentMethod = () => {
+    if (userInfo.point < sumPrice) {
+      SimpleToast.show(
+        'Số điểm của bạn không đủ để thanh toán',
+        SimpleToast.SHORT,
+      );
+    } else {
+      setUsePoint(!usePoint);
+    }
   };
 
   const renderItem = item => {
@@ -188,7 +199,7 @@ const PaymentScreen = ({navigation, route}) => {
                   }}>
                   <AppText>Thanh toán khi nhận hàng (COD)</AppText>
                   <Switch
-                    onValueChange={() => setUsePoint(!usePoint)}
+                    onValueChange={changePaymentMethod}
                     value={!usePoint}
                     trackColor="#0187E0"
                     thumbColor={Colors.WHITE}
@@ -205,20 +216,12 @@ const PaymentScreen = ({navigation, route}) => {
                   }}>
                   <AppText>Thanh toán bằng điểm</AppText>
                   <Switch
-                    onValueChange={() => {
-                      if (userInfo.point < sumPrice) {
-                        SimpleToast.show(
-                          'Số điểm của bạn không đủ để thanh toán',
-                          SimpleToast.SHORT,
-                        );
-                      } else {
-                        setUsePoint(!usePoint);
-                      }
-                    }}
+                    onValueChange={changePaymentMethod}
                     value={usePoint}
                     trackColor="#0187E0"
                     thumbColor={Colors.WHITE}
                     ios_backgroundColor={Colors.WHITE_SMOKE}
+                    disabled
                   />
                 </View>
               </View>

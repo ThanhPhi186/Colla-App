@@ -24,7 +24,8 @@ import styles from './styles';
 import Modal from 'react-native-modal';
 import {launchCamera, launchImageLibrary} from 'react-native-image-picker';
 import FastImage from 'react-native-fast-image';
-import {images} from '../../../assets';
+import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
+import Clipboard from '@react-native-community/clipboard';
 
 const Recharge = ({navigation}) => {
   const [listBank, setListBank] = useState([]);
@@ -114,6 +115,11 @@ const Recharge = ({navigation}) => {
     }
   }, []);
 
+  const copyBankNumber = elm => {
+    Clipboard.setString(elm.bank_account_number);
+    SimpleToast.show('Sao chép số tài khoản thành công', SimpleToast.SHORT);
+  };
+
   return (
     <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
       <View style={container}>
@@ -155,10 +161,21 @@ const Recharge = ({navigation}) => {
                     <Text style={{fontWeight: 'bold'}}>Ngân hàng: </Text>
                     {elm.bank_name}
                   </Text>
-                  <Text style={{marginTop: 4}}>
-                    <Text style={{fontWeight: 'bold'}}>Số Tài Khoản: </Text>
-                    {elm.bank_account_number}
-                  </Text>
+                  <View
+                    style={{
+                      marginTop: 4,
+                      flexDirection: 'row',
+                      alignItems: 'center',
+                      justifyContent: 'space-between',
+                    }}>
+                    <Text>
+                      <Text style={{fontWeight: 'bold'}}>Số Tài Khoản: </Text>
+                      {elm.bank_account_number}
+                    </Text>
+                    <TouchableOpacity onPress={() => copyBankNumber(elm)}>
+                      <Icon name="content-copy" size={20} color={Colors.GRAY} />
+                    </TouchableOpacity>
+                  </View>
                 </View>
               );
             })}

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState} from 'react';
 import {ScrollView, Text, TouchableOpacity, View} from 'react-native';
 import FastImage from 'react-native-fast-image';
 import {Appbar} from 'react-native-paper';
@@ -15,6 +15,8 @@ import {Const, trans} from '../../utils';
 import numeral from 'numeral';
 import {useSelector} from 'react-redux';
 import Share from 'react-native-share';
+import Clipboard from '@react-native-community/clipboard';
+import SimpleToast from 'react-native-simple-toast';
 
 const ShareScreen = () => {
   const userInfo = useSelector(state => state.AuthenOverallReducer.userAuthen);
@@ -30,6 +32,11 @@ const ShareScreen = () => {
     };
 
     await Share.open(shareOptions);
+  };
+
+  const coppyText = () => {
+    Clipboard.setString(userInfo.affiliateCode);
+    SimpleToast.show('Sao chép mã giới thiệu thành công', SimpleToast.SHORT);
   };
 
   return (
@@ -86,20 +93,41 @@ const ShareScreen = () => {
             </TouchableOpacity>
           </View>
           <AppText style={{marginTop: 16}}>Mã giới thiệu của bạn</AppText>
-          <AppText
-            containerStyle={{
-              height: 40,
-              backgroundColor: Colors.GREEN_2,
-              justifyContent: 'center',
-              borderRadius: 12,
-              marginTop: 4,
-              width: '40%',
-              alignItems: 'center',
-            }}
-            style={{fontWeight: 'bold'}}>
-            {userInfo.affiliateCode}
-          </AppText>
+          <View
+            style={{flexDirection: 'row', alignItems: 'center', marginTop: 4}}>
+            <AppText
+              containerStyle={{
+                height: 40,
+                backgroundColor: Colors.GREEN_2,
+                justifyContent: 'center',
+                borderTopLeftRadius: 12,
+                borderBottomLeftRadius: 12,
+
+                width: '40%',
+                alignItems: 'center',
+              }}
+              style={{fontWeight: 'bold'}}>
+              {userInfo.affiliateCode}
+            </AppText>
+            <TouchableOpacity
+              onPress={coppyText}
+              style={{
+                height: 40,
+                width: '30%',
+                justifyContent: 'center',
+                backgroundColor: Colors.ORANGE,
+                alignItems: 'center',
+                borderTopRightRadius: 12,
+                borderBottomRightRadius: 12,
+              }}>
+              <AppText style={{color: Colors.WHITE, fontWeight: 'bold'}}>
+                {trans('copy')}
+              </AppText>
+            </TouchableOpacity>
+          </View>
+
           <AppText style={{marginTop: 16}}>Chia sẻ</AppText>
+
           <View
             style={{
               flexDirection: 'row',

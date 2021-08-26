@@ -64,7 +64,7 @@ const RegisterScreen = ({navigation}) => {
         setLoading(false);
         setTimeout(() => {
           SimpleToast.show(res.error, SimpleToast.SHORT);
-        }, 500);
+        }, 700);
       }
     });
   };
@@ -79,12 +79,12 @@ const RegisterScreen = ({navigation}) => {
         setConfirm('123456');
         setTimeout(() => {
           SimpleToast.show('Gửi mã OTP thành công!', SimpleToast.SHORT);
-        }, 500);
+        }, 700);
       } else {
         setLoading(false);
         setTimeout(() => {
           SimpleToast.show(res.error, SimpleToast.SHORT);
-        }, 500);
+        }, 700);
       }
     });
   };
@@ -104,7 +104,9 @@ const RegisterScreen = ({navigation}) => {
         setLoading(false);
       } else {
         setLoading(false);
-        SimpleToast.show(res.error, SimpleToast.SHORT);
+        setTimeout(() => {
+          SimpleToast.show(res.error, SimpleToast.SHORT);
+        }, 700);
       }
     });
   };
