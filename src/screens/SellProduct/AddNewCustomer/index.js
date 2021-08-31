@@ -75,7 +75,7 @@ const AddNewCustomer = ({navigation, route}) => {
       refAddress.current.province.name;
 
     const params = {
-      phone: `+84${Number(phone)}`,
+      phone: phone,
       fullname,
       address_ship: addressConvert,
       district: refAddress.current.districts.id,

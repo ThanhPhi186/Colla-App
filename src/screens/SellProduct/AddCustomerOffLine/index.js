@@ -97,7 +97,7 @@ const AddCustomerOffLine = ({navigation, route}) => {
     setLoading(true);
 
     const params = {
-      phone: `+84${Number(phone)}`,
+      phone: phone,
       fullname,
     };
     if (type === 'EDIT') {
@@ -124,8 +124,16 @@ const AddCustomerOffLine = ({navigation, route}) => {
     } else {
       post(Const.API.baseURL + Const.API.UserCustomer, params).then(res => {
         if (res.ok) {
-          setCustomerId(res.data.data.id);
-          sendOtp(res.data.data.id);
+          if (!res.data.data.is_verified) {
+            setCustomerId(res.data.data.id);
+            sendOtp(res.data.data.id);
+          } else {
+            setLoading(false);
+            setTimeout(() => {
+              SimpleToast.show('Thêm mới khách hàng thành công', SimpleToast.SHORT);
+              navigation.pop();
+            }, 700);
+          }
         } else {
           setLoading(false);
           setTimeout(() => {

@@ -35,6 +35,8 @@ const PaymentScreen = ({navigation, route}) => {
 
   const sumPrice = sum(dataCart.map(elm => elm.product.price * elm.amount));
 
+  const shippingFee = dataCart.reduce((total, elm) => total > elm.product.shipping_fee ? total : elm.product.shipping_fee, 0);
+
   const dispatch = useDispatch();
 
   const orderPayment = () => {
@@ -214,14 +216,21 @@ const PaymentScreen = ({navigation, route}) => {
                     alignItems: 'center',
                     marginTop: 8,
                   }}>
-                  <AppText>Thanh toán bằng điểm</AppText>
+                  <View>
+                    <AppText>
+                      Thanh toán bằng điểm
+                    </AppText>
+                    <AppText style={{fontSize:12}}>
+                      (Bạn đang có {numeral(userInfo.point).format()} điểm)
+                    </AppText>
+                  </View>
                   <Switch
                     onValueChange={changePaymentMethod}
                     value={usePoint}
                     trackColor="#0187E0"
                     thumbColor={Colors.WHITE}
                     ios_backgroundColor={Colors.WHITE_SMOKE}
-                    disabled
+                    disabled={userInfo.point < sumPrice}
                   />
                 </View>
               </View>
@@ -232,7 +241,14 @@ const PaymentScreen = ({navigation, route}) => {
                   justifyContent: 'space-between',
                   alignItems: 'center',
                 }}>
-                <AppText>Thanh toán bằng điểm</AppText>
+                <View>
+                  <AppText>
+                    Thanh toán bằng điểm
+                  </AppText>
+                  <AppText style={{fontSize:12}}>
+                    (Bạn đang có {numeral(userInfo.point).format()} điểm)
+                  </AppText>
+                </View>
                 <TouchableOpacity
                   onPress={() => navigation.navigate('Recharge')}
                   style={{
@@ -261,10 +277,24 @@ const PaymentScreen = ({navigation, route}) => {
       </View>
 
       <View style={styles.largeIndicate} />
+      <View style={[styles.showPrice, { paddingVertical: 1 }]}>
+        <AppText style={[styles.textPay, { fontSize: 14 }]}>Tổng tiền hàng</AppText>
+        <AppText style={[styles.textPrice, { fontSize: 12 }]}>
+          {numeral(sumPrice).format()} đ
+        </AppText>
+      </View>
+      {type != 'import' && (
+        <View style={[styles.showPrice, { paddingVertical: 1 }]}>
+          <AppText style={[styles.textPay, { fontSize: 14 }]}>Phí ship</AppText>
+          <AppText style={[styles.textPrice, { fontSize: 12 }]}>
+            {numeral(shippingFee).format()} đ
+          </AppText>
+        </View>
+      )}
       <View style={styles.showPrice}>
         <AppText style={styles.textPay}>{trans('totalPayment')}</AppText>
         <AppText style={styles.textPrice}>
-          {numeral(sumPrice).format()} đ
+          {numeral(sumPrice + shippingFee).format()} đ
         </AppText>
       </View>
       <Button

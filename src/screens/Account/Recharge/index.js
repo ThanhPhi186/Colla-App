@@ -48,8 +48,6 @@ const Recharge = ({navigation}) => {
       title: 'Chọn từ thư viện',
       type: 'library',
       options: {
-        maxHeight: 200,
-        maxWidth: 200,
         selectionLimit: 1,
         mediaType: 'photo',
         includeBase64: true,
@@ -113,6 +111,7 @@ const Recharge = ({navigation}) => {
     } else {
       launchImageLibrary(options, setImage);
     }
+    setModalImage(false);
   }, []);
 
   const copyBankNumber = elm => {
@@ -218,7 +217,7 @@ const Recharge = ({navigation}) => {
               justifyContent: 'center',
               alignItems: 'center',
             }}>
-            {image ? (
+            {image && image.assets && image.assets[0] ? (
               <FastImage
                 style={{height: 200, width: '100%'}}
                 source={{uri: image.assets[0].uri}}

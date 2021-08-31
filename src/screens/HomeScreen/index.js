@@ -27,7 +27,7 @@ import FastImage from 'react-native-fast-image';
 import {useDispatch, useSelector} from 'react-redux';
 import IconCart from '../../components/molecules/IconCart';
 import numeral from 'numeral';
-import {AuthenOverallRedux, CartRedux, NotificationRedux} from '../../redux';
+import {AuthenOverallRedux, CartRedux, NotificationRedux, AppConfigRedux} from '../../redux';
 import {device_width} from '../../styles/Mixin';
 import ItemCategory from './component/ItemCategory';
 import ItemBlog from './component/ItemBlog';
@@ -37,8 +37,21 @@ import {ItemProduct} from '../../components/molecules';
 import {get} from '../../services/ServiceHandle';
 import ItemPopular from './component/ItemPopular';
 import AutoHeightImage from 'react-native-auto-height-image';
+import {useFocusEffect} from '@react-navigation/native';
 
 const HomeScreen = ({navigation}) => {
+  useFocusEffect(
+    React.useCallback(() => {
+      const unsubscribe = () => {
+        dispatch(AppConfigRedux.Actions.getAppConfig.request());
+        dispatch(NotificationRedux.Actions.getCountNotiUnread.request());
+        dispatch(AuthenOverallRedux.Actions.updatePoint.request());
+      };
+
+      return () => unsubscribe();
+    }, [])
+  );
+
   const countNotiUnread = useSelector(
     state => state.NotificationReducer.countNotiUnread,
   );
@@ -151,7 +164,7 @@ const HomeScreen = ({navigation}) => {
                 <AppText title style={styles.txtName}>
                   {userInfo.fullname}
                 </AppText>
-                <AppText title style={styles.txtHello}>
+                <AppText title style={styles.txtAffiliateCode}>
                   {userInfo.affiliateCode}
                 </AppText>
               </View>
@@ -238,7 +251,7 @@ const HomeScreen = ({navigation}) => {
                   color={Colors.PRIMARY}
                 />
               </TouchableOpacity>
-              <AppText style={styles.txtProduct}>Top Saler</AppText>
+              <AppText style={styles.txtProduct}>Top Seller</AppText>
             </View>
             <TouchableOpacity
               onPress={() =>

@@ -1,27 +1,40 @@
-import React, {useState} from 'react';
-import {ScrollView, TouchableOpacity, View} from 'react-native';
-import {Appbar} from 'react-native-paper';
-import {useDispatch, useSelector} from 'react-redux';
-import {AppText} from '../../../components/atoms';
-import {AppDialog, Button} from '../../../components/molecules';
-import {AuthenOverallRedux} from '../../../redux';
-import {setToken} from '../../../services/ServiceHandle';
+import React, { useState } from 'react';
+import { ScrollView, TouchableOpacity, View } from 'react-native';
+import { Appbar } from 'react-native-paper';
+import { useDispatch, useSelector } from 'react-redux';
+import { AppText } from '../../../components/atoms';
+import { AppDialog, Button } from '../../../components/molecules';
+import { AuthenOverallRedux, AppConfigRedux, NotificationRedux } from '../../../redux';
+import { setToken } from '../../../services/ServiceHandle';
 import {
   container,
   HEIGHT_MIDDLE_HOME_BTN,
   NAVIGATION_BOTTOM_TABS_HEIGHT,
 } from '../../../styles/GlobalStyles';
-import {Const, trans} from '../../../utils';
+import { Const, trans } from '../../../utils';
 import auth from '@react-native-firebase/auth';
-import {Colors, Mixin} from '../../../styles';
-import {device_height, device_width} from '../../../styles/Mixin';
+import { Colors, Mixin } from '../../../styles';
+import { device_height, device_width } from '../../../styles/Mixin';
 import FastImage from 'react-native-fast-image';
 import ItemAccount from '../component/ItemAccount';
 import BannerBehind from '../component/BannerBehind';
-import {images} from '../../../assets';
+import { images } from '../../../assets';
 import numeral from 'numeral';
+import {useFocusEffect} from '@react-navigation/native';
 
-const MainAccount = ({navigation}) => {
+const MainAccount = ({ navigation }) => {
+  useFocusEffect(
+    React.useCallback(() => {
+      const unsubscribe = () => {
+        dispatch(AppConfigRedux.Actions.getAppConfig.request());
+        dispatch(NotificationRedux.Actions.getCountNotiUnread.request());
+        dispatch(AuthenOverallRedux.Actions.updatePoint.request());
+      };
+
+      return () => unsubscribe();
+    }, [])
+  );
+
   const dispatch = useDispatch();
 
   const userInfo = useSelector(state => state.AuthenOverallReducer.userAuthen);
@@ -48,7 +61,7 @@ const MainAccount = ({navigation}) => {
         backGround={images.ic_Background}
         avatar={
           userInfo.avatar
-            ? {uri: Const.API.baseUrlImage + userInfo.avatar}
+            ? { uri: Const.API.baseUrlImage + userInfo.avatar }
             : images.avatar
         }
         goAccountDetail={() => navigation.navigate('AccountDetail')}
@@ -58,9 +71,16 @@ const MainAccount = ({navigation}) => {
           {userInfo.fullname}
         </AppText>
         <AppText style={styles.txtInfo}>{userInfo.username}</AppText>
-        <AppText style={styles.txtInfo}>{userInfo.member_type}</AppText>
+        <AppText style={styles.txtInfo}>{
+          userInfo.member_type == 'member' ? 'Khách hàng' : (
+            userInfo.member_type == 'collaborator' ? 'Cộng tác viên' : (
+              userInfo.member_type == 'agency' ? 'Đại lý' : (
+                userInfo.member_type == 'gold-agency' ? 'Đại lý Gold' : ''
+              )
+            )
+          )}</AppText>
       </View>
-      <View style={{flex: 1}}>
+      <View style={{ flex: 1 }}>
         <View style={styles.largeIndicate} />
         <ItemAccount point={numeral(userInfo.point).format()} />
         <View style={styles.largeIndicate} />
@@ -109,7 +129,7 @@ const MainAccount = ({navigation}) => {
             icon="clock-outline"
             title="Lịch sử bán hàng"
             onPress={() =>
-              navigation.navigate('SalesHistory', {type: 'online'})
+              navigation.navigate('SalesHistory', { type: 'online' })
             }
           />
           <View style={styles.smallIndicate} />

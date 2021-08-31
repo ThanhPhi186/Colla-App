@@ -8,6 +8,7 @@ const styles = {
     borderBottomRightRadius: Mixin.moderateSize(40),
     paddingHorizontal: 20,
     paddingTop: Mixin.moderateSize(60),
+    paddingBottom: Mixin.moderateSize(20),
   },
   avatar: {
     width: 40,
@@ -24,10 +25,14 @@ const styles = {
   txtHello: {
     color: Colors.WHITE,
   },
+  txtAffiliateCode: {
+    color: Colors.WHITE,
+    fontSize: 14,
+  },
   txtName: {
     color: Colors.WHITE,
     fontWeight: 'bold',
-    marginBottom: 4,
+    // marginBottom: 4,
   },
   viewProduct: {
     height: 80,

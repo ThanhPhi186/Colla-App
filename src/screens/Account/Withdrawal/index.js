@@ -21,9 +21,9 @@ const Withdrawal = ({navigation}) => {
   const [bankCode, setBankCode] = useState(userInfo?.bankCode || '');
   const [bankBranch, setBankBranch] = useState(userInfo?.bankBranch || '');
   const [bankNumber, setBankNumber] = useState(userInfo?.bankNumber);
-  const [accountHolder, setAccountHolder] = useState('');
+  const [accountHolder, setAccountHolder] = useState(userInfo?.bankAccountName || '');
   const [amount, setAmount] = useState('');
-
+  console.log(userInfo);
   useEffect(() => {
     const getListBank = () => {
       get(Const.API.baseURL + Const.API.Bank).then(res => {

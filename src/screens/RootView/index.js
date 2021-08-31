@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, {useEffect, useState, useCallback} from 'react';
 import {Alert, View} from 'react-native';
 import {SafeAreaProvider} from 'react-native-safe-area-context';
 import {Colors, Mixin} from '../../styles';
@@ -82,7 +82,7 @@ const RootView = () => {
   }, [dispatch]);
 
   const agentRequest = () => {
-    const params = {member_type: 'agency'};
+    const params = {member_type: 'collaborator'};
     post(Const.API.baseURL + Const.API.AgencyRequest, params).then(res => {
       if (res.ok) {
         dispatch(CartRedux.Actions.handelModalTypeSales(false));

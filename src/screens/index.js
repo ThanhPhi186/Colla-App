@@ -1,4 +1,5 @@
 import LoginScreen from './Login';
+import LoginIntroductionCode from './Login/LoginIntroductionCode';
 import {IntroductionCode, NameRegister, RegisterScreen} from './Register';
 import StartLogin from './StartLogin';
 import HomeScreen from './HomeScreen';
@@ -45,6 +46,7 @@ import DetailBlog from './DetailBlog';
 export {
   LoginScreen,
   IntroductionCode,
+  LoginIntroductionCode,
   NameRegister,
   RegisterScreen,
   StartLogin,

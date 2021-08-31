@@ -51,7 +51,7 @@ const RegisterScreen = ({navigation}) => {
     }
     setLoading(true);
 
-    const convertPhone = `+84${Number(phoneNumber)}`;
+    const convertPhone = phoneNumber;
     const params = {
       username: convertPhone,
       password: password,
@@ -71,7 +71,7 @@ const RegisterScreen = ({navigation}) => {
 
   const sendOtp = () => {
     const params = {
-      phoneNumber: `+84${Number(phoneNumber)}`,
+      phoneNumber: phoneNumber,
     };
     post(Const.API.baseURL + Const.API.SendOtp, params).then(res => {
       if (res.ok) {
@@ -92,7 +92,7 @@ const RegisterScreen = ({navigation}) => {
   const confirmOTP = () => {
     setLoading(true);
     const params = {
-      phoneNumber: `+84${Number(phoneNumber)}`,
+      phoneNumber: phoneNumber,
       otp: code,
     };
     post(Const.API.baseURL + Const.API.VerifyOtp, params).then(res => {

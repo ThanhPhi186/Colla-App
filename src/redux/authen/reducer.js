@@ -27,6 +27,13 @@ const overallReducer = createReducer(initialState, {
     state.userAuthen = action.payload;
   },
 
+  [Actions.updatePoint.success]: (state, action) => {
+    state.errorMessage = '';
+    if (state.userAuthen) {
+      state.userAuthen.point = action.payload.point;
+    }
+  },
+
   [Actions.setToken]: (state, action) => {
     state.loading = false;
     state.idToken = action.payload;

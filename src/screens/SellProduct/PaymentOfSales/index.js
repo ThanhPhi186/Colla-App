@@ -1,27 +1,29 @@
-import React, {useState} from 'react';
-import {FlatList, TouchableOpacity, View} from 'react-native';
-import {Appbar} from 'react-native-paper';
-import {container} from '../../../styles/GlobalStyles';
-import {Const, trans} from '../../../utils';
+import React, { useState } from 'react';
+import { FlatList, TouchableOpacity, View } from 'react-native';
+import { Appbar } from 'react-native-paper';
+import { container } from '../../../styles/GlobalStyles';
+import { Const, trans } from '../../../utils';
 import styles from './styles';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
-import {Colors} from '../../../styles';
-import {AppLoading, AppText} from '../../../components/atoms';
+import { Colors } from '../../../styles';
+import { AppLoading, AppText } from '../../../components/atoms';
 
 import numeral from 'numeral';
-import {Button} from '../../../components/molecules';
-import {sum} from 'lodash';
+import { Button } from '../../../components/molecules';
+import { sum } from 'lodash';
 import SimpleToast from 'react-native-simple-toast';
-import {post} from '../../../services/ServiceHandle';
+import { post, put } from '../../../services/ServiceHandle';
 import PaymentItem from '../component/PaymentItem';
-import {useSelector} from 'react-redux';
+import { useSelector } from 'react-redux';
 
-const PaymentOfSales = ({navigation, route}) => {
+const PaymentOfSales = ({ navigation, route }) => {
   const userInfo = useSelector(state => state.AuthenOverallReducer.userAuthen);
-  const {type} = route.params;
-  const {dataProducts} = route.params;
+  const { type } = route.params;
+  const { dataProducts } = route.params;
 
   const totalPrice = sum(dataProducts?.map(elm => elm.price * elm.amount));
+
+  const shippingFee = dataProducts?.reduce((total, elm) => total > elm.shipping_fee ? total : elm.shipping_fee, 0);
 
   const [customer, setCustomer] = useState();
   const [loading, setLoading] = useState(false);
@@ -60,7 +62,7 @@ const PaymentOfSales = ({navigation, route}) => {
       };
     });
     const params = {
-      phone: `+84${Number(customer.phone)}`,
+      phone: customer.phone,
       address_ship: customer.address_ship,
       fullname: customer.fullname,
       payment_method: 'cod',
@@ -73,14 +75,36 @@ const PaymentOfSales = ({navigation, route}) => {
     };
     post(Const.API.baseURL + Const.API.Order, params).then(res => {
       if (res.ok) {
-        setLoading(false);
-        setTimeout(() => {
-          SimpleToast.show('Lên đơn thành công', SimpleToast.SHORT);
-          navigation.navigate(trans('personal'), {
-            screen: 'SalesHistory',
-            params: {type},
+        if (res.data.data && res.data.data.id) {
+          put(`${Const.API.baseURL + Const.API.Order}/${res.data.data.id}`, {
+            status: 'finish',
+          }).then(res => {
+            if (res.ok) {
+              setLoading(false);
+              setTimeout(() => {
+                SimpleToast.show('Lên đơn thành công', SimpleToast.SHORT);
+                navigation.navigate(trans('personal'), {
+                  screen: 'SalesHistory',
+                  params: { type },
+                });
+              }, 700);
+            } else {
+              setLoading(false);
+              setTimeout(() => {
+                SimpleToast.show(res.error, SimpleToast.SHORT);
+              }, 700);
+            }
           });
-        }, 700);
+        } else {
+          setLoading(false);
+          setTimeout(() => {
+            SimpleToast.show('Lên đơn thành công', SimpleToast.SHORT);
+            navigation.navigate(trans('personal'), {
+              screen: 'SalesHistory',
+              params: { type },
+            });
+          }, 700);
+        }
       } else {
         setLoading(false);
         setTimeout(() => {
@@ -100,14 +124,14 @@ const PaymentOfSales = ({navigation, route}) => {
       <Appbar.Header>
         <Appbar.BackAction color="white" onPress={() => navigation.goBack()} />
         <Appbar.Content
-          style={{alignItems: 'center'}}
+          style={{ alignItems: 'center' }}
           color="white"
           title={trans('confirmOrder')}
         />
       </Appbar.Header>
-      <View style={{flex: 1}}>
+      <View style={{ flex: 1 }}>
         <View style={styles.locationArea}>
-          <View style={{flex: 1, paddingVertical: 10}}>
+          <View style={{ flex: 1, paddingVertical: 10 }}>
             <TouchableOpacity
               onPress={() =>
                 navigation.navigate('ListSalesCustomer', {
@@ -120,7 +144,7 @@ const PaymentOfSales = ({navigation, route}) => {
                 justifyContent: 'space-between',
                 flexDirection: 'row',
               }}>
-              <View style={{flexDirection: 'row'}}>
+              <View style={{ flexDirection: 'row' }}>
                 <View>
                   <AppText
                     style={{
@@ -132,14 +156,14 @@ const PaymentOfSales = ({navigation, route}) => {
                   </AppText>
                   {customer && (
                     <>
-                      <AppText style={{marginRight: 10, marginTop: 3}}>
+                      <AppText style={{ marginRight: 10, marginTop: 3 }}>
                         {customer?.fullname}
                       </AppText>
-                      <AppText style={{marginRight: 10, marginTop: 3}}>
+                      <AppText style={{ marginRight: 10, marginTop: 3 }}>
                         {customer?.phone}
                       </AppText>
                       {type === 'online' && (
-                        <AppText style={{marginRight: 10, marginTop: 3}}>
+                        <AppText style={{ marginRight: 10, marginTop: 3 }}>
                           {customer?.address_ship}
                         </AppText>
                       )}
@@ -171,16 +195,39 @@ const PaymentOfSales = ({navigation, route}) => {
 
         <FlatList
           data={dataProducts}
-          renderItem={({item}) => renderItem(item)}
+          renderItem={({ item }) => renderItem(item)}
           keyExtractor={(item, index) => index.toString()}
         />
       </View>
-      <View style={styles.showPrice}>
-        <AppText style={styles.textPay}>{trans('payingCustomers')}</AppText>
-        <AppText style={styles.textPrice}>
-          {numeral(totalPrice).format()} đ
-        </AppText>
-      </View>
+      {type === 'online' ? (
+        <>
+          <View style={styles.showPrice}>
+            <AppText style={[styles.textPay, { fontSize: 14 }]}>Tổng tiền hàng</AppText>
+            <AppText style={styles.textPrice}>
+              {numeral(totalPrice).format()} đ
+            </AppText>
+          </View>
+          <View style={[styles.showPrice, { paddingVertical: 1 }]}>
+            <AppText style={[styles.textPay, { fontSize: 14 }]}>Phí ship</AppText>
+            <AppText style={[styles.textPrice, { fontSize: 12 }]}>
+              {numeral(shippingFee).format()} đ
+            </AppText>
+          </View>
+          <View style={styles.showPrice}>
+            <AppText style={styles.textPay}>{trans('payingCustomers')}</AppText>
+            <AppText style={styles.textPrice}>
+              {numeral(totalPrice + shippingFee).format()} đ
+            </AppText>
+          </View>
+        </>
+      ) : (
+        <View style={styles.showPrice}>
+          <AppText style={styles.textPay}>{trans('payingCustomers')}</AppText>
+          <AppText style={styles.textPrice}>
+            {numeral(totalPrice).format()} đ
+          </AppText>
+        </View>
+      )}
       <View style={styles.showPrice}>
         <AppText style={styles.textPay}>{trans('youWillGet')}</AppText>
         <AppText style={styles.textPrice}>
@@ -189,7 +236,7 @@ const PaymentOfSales = ({navigation, route}) => {
       </View>
       {type === 'online' && (
         <AppText
-          style={{paddingHorizontal: 10, color: 'red', fontStyle: 'italic'}}>
+          style={{ paddingHorizontal: 10, color: 'red', fontStyle: 'italic' }}>
           Lưu ý: Trường hợp khách hàng không nhận hàng bạn có thể bị trừ 10.000đ
           trong quỹ điểm của bạn. Hãy liên hệ khách hàng và chắc chắn khách hàng
           sẽ nhận hàng

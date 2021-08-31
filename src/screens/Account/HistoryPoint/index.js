@@ -74,6 +74,7 @@ const HistoryPoint = ({navigation}) => {
           elevation: 5,
           borderRadius: 8,
           padding: 8,
+          marginBottom: 12,
         }}>
         <Text>
           {item.factor === 1 ? (

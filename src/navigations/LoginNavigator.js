@@ -3,6 +3,7 @@ import * as React from 'react';
 import {createStackNavigator} from '@react-navigation/stack';
 
 import {
+  LoginIntroductionCode,
   IntroductionCode,
   LoginScreen,
   NameRegister,
@@ -41,6 +42,7 @@ const LoginNavigator = () => {
       <Stack.Screen name="StartLogin" component={StartLogin} />
       <Stack.Screen name="LoginScreen" component={LoginScreen} />
       <Stack.Screen name="ForgotPassword" component={ForgotPassword} />
+      <Stack.Screen name="LoginIntroductionCode" component={LoginIntroductionCode} />
       <Stack.Screen name="RegisterStack" component={RegisterStack} />
     </Stack.Navigator>
   );

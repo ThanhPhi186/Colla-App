@@ -1,14 +1,20 @@
 import React from 'react';
-import {View} from 'react-native';
-import {Appbar} from 'react-native-paper';
-import {AppText} from '../../components/atoms';
-import {Colors} from '../../styles';
+import { View, Dimensions, ScrollView } from 'react-native';
+import { Appbar } from 'react-native-paper';
+import AutoHeightWebView from 'react-native-autoheight-webview'
+import AutoHeightImage from 'react-native-auto-height-image';
+import moment from 'moment';
 
-import {container} from '../../styles/GlobalStyles';
-import {trans} from '../../utils';
+import { AppText } from '../../components/atoms';
+import { Colors } from '../../styles';
 
-const DetailBlog = ({navigation, route}) => {
-  const {item} = route.params;
+import { container } from '../../styles/GlobalStyles';
+import { trans } from '../../utils';
+import {device_width} from '../../styles/Mixin';
+import {Const} from '../../utils';
+
+const DetailBlog = ({ navigation, route }) => {
+  const { item } = route.params;
 
   const regex = /(<([^>]+)>)/gi;
 
@@ -18,15 +24,31 @@ const DetailBlog = ({navigation, route}) => {
         <Appbar.BackAction color="white" onPress={() => navigation.goBack()} />
         <Appbar.Content color="white" title={trans('detailBlog')} />
       </Appbar.Header>
-      <View style={{flex: 1, marginTop: 8}}>
-        <AppText style={{marginBottom: 8, paddingHorizontal: 16}} title>
+      <ScrollView style={{ flex: 1, marginTop: 0 }}>
+        <AppText style={{ marginTop: 18, marginBottom: 8, paddingHorizontal: 15, fontWeight: 'bold', fontSize: 20,}}>
           {item.title}
         </AppText>
-        <View style={styles.largeIndicate} />
-        <AppText title style={{marginTop: 8, paddingHorizontal: 16}}>
-          {item?.content?.replace(regex, '')}
+        <AppText style={{ paddingBottom: 10, paddingHorizontal: 15, }}>
+          {moment(item.createdAt).format('DD/MM/YYYY')}
         </AppText>
-      </View>
+        <AutoHeightImage
+          width={device_width}
+          source={{
+            uri: Const.API.baseUrlImage + item.feature_image,
+          }}
+        />
+        <AutoHeightWebView
+          style={{ width: Dimensions.get('window').width - 30, marginTop: 10, marginBottom: 15, marginHorizontal: 15, }}
+          source={{ html: item?.content }}
+          scalesPageToFit={false}
+          customStyle={`
+            img {
+              max-width: 100%;
+            }
+          `}
+          viewportContent={'width=device-width, user-scalable=no'}
+        />
+      </ScrollView>
     </View>
   );
 };

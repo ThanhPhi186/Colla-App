@@ -60,13 +60,13 @@ const ItemOrder = props => {
 
   const renderTitleBtn = () => {
     switch (item.status) {
+      // case 'verifing':
+      //   return 'Xác nhận';
+      // case 'verified':
+      //   return 'Giao hàng';
+      // case 'shipping':
+      //   return 'Đã giao hàng';
       case 'verifing':
-        return 'Xác nhận';
-      case 'verified':
-        return 'Giao hàng';
-      case 'shipping':
-        return 'Đã giao hàng';
-      case 'shipped':
         return 'Đã hoàn thành';
       default:
         return null;
@@ -75,13 +75,13 @@ const ItemOrder = props => {
 
   const handleStatus = () => {
     switch (item.status) {
+      // case 'verifing':
+      //   return 'verified';
+      // case 'verified':
+      //   return 'shipping';
+      // case 'shipping':
+      //   return 'shipped';
       case 'verifing':
-        return 'verified';
-      case 'verified':
-        return 'shipping';
-      case 'shipping':
-        return 'shipped';
-      case 'shipped':
         return 'finish';
       default:
         return null;
@@ -157,10 +157,10 @@ const ItemOrder = props => {
         ) : (
           <View />
         )}
-        {renderBtnCancel() && (
+        {renderBtnCancel() && (type !== 'SALES_ONLINE' || item.type != 'retail') && (
           <TouchableOpacity style={styles.btnCancel} onPress={cancelOrder}>
             <AppText style={{color: Colors.GREEN_1, fontWeight: 'bold'}}>
-              Huỷ
+              Huỷ {item.type}
             </AppText>
           </TouchableOpacity>
         )}

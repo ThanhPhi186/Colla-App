@@ -1,10 +1,12 @@
 export default {
   LIST_CHIP: [1, 5, 10, 25, 100, 500, 1000, 5000],
   API: {
-    baseURL: 'https://colla-api-v2.playtime.work/api/',
-    baseUrlImage: 'https://colla-api-v2.playtime.work/',
+    // baseURL: 'https://colla-api-v2.playtime.work/api/',
+    // baseUrlImage: 'https://colla-api-v2.playtime.work/',
     // baseURL: 'https://colla-api.playtime.work/api/',
     // baseUrlImage: 'https://colla-api.playtime.work/',
+    baseURL: 'http://192.168.1.7:1337/api/',
+    baseUrlImage: 'http://192.168.1.7:1337/',
     CheckPhone: 'auth/check-phone',
     VerifyPhone: 'auth/verify-phone',
     CheckAuth: 'auth/me',
@@ -38,6 +40,7 @@ export default {
     Recharge: 'recharge',
     Contact: 'contact',
     Revenue: 'statistics/revenue',
+    TopSaler: 'statistics/top-saler',
     Blog: 'blog',
     BlogCategory: 'blogcategory',
     RechargeBank: 'recharge-bank',

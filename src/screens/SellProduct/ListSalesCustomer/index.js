@@ -70,7 +70,7 @@ const ListSalesCustomer = ({navigation, route}) => {
       res => {
         if (res.ok) {
           getCustomer();
-          SimpleToast.show('Xoá địa chỉ thành công', SimpleToast.SHORT);
+          SimpleToast.show('Xoá khách hàng thành công', SimpleToast.SHORT);
         }
       },
     );

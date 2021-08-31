@@ -39,14 +39,9 @@ const PaymentItem = props => {
                 </Text>
               )}
               <AppText style={styles.textPrice}>
-                {numeral(item.price).format()} đ
+                {item.amount} x {numeral(item.price).format()} đ
               </AppText>
             </View>
-            <AppText
-              containerStyle={{justifyContent: 'center'}}
-              style={styles.textPrice}>
-              X {item.amount}
-            </AppText>
           </View>
         </View>
       ) : (
@@ -64,15 +59,9 @@ const PaymentItem = props => {
               }}>
               <AppText style={styles.textName}>{item.name}</AppText>
               <AppText style={styles.textPrice}>
-                {numeral(item.price).format()} đ
+                {item.amount} x {numeral(item.price).format()} đ
               </AppText>
             </View>
-
-            <AppText
-              containerStyle={{justifyContent: 'center'}}
-              style={styles.textPrice}>
-              X {item.amount}
-            </AppText>
           </View>
         </View>
       )}

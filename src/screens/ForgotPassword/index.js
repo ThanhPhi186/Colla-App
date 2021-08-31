@@ -56,7 +56,7 @@ const ForgotPassword = ({navigation}) => {
       return;
     }
 
-    const convertPhone = `+84${Number(phoneNumber)}`;
+    const convertPhone = phoneNumber;
     const params = {
       phoneNumber: convertPhone,
     };
@@ -75,7 +75,7 @@ const ForgotPassword = ({navigation}) => {
       return;
     }
     const params = {
-      phoneNumber: `+84${Number(phoneNumber)}`,
+      phoneNumber: phoneNumber,
       otp: otp,
       newPassword: password,
     };

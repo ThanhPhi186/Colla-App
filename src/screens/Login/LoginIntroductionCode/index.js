@@ -11,14 +11,16 @@ import {AuthenOverallRedux} from '../../../redux';
 import {post} from '../../../services/ServiceHandle';
 import {container} from '../../../styles/GlobalStyles';
 import {Const, trans} from '../../../utils';
-import styles from '../styles';
+import styles from './styles';
 
-const IntroductionCode = ({navigation, route}) => {
+const LoginIntroductionCode = ({navigation, route}) => {
   const [phoneNumber, setPhoneNumber] = useState('');
 
   const {tokenState} = route.params;
 
   const dispatch = useDispatch();
+
+  console.log('LoginIntroductionCode');
 
   // useEffect(() => {
   //   dispatch(AuthenOverallRedux.Actions.getProfile.request());
@@ -49,7 +51,7 @@ const IntroductionCode = ({navigation, route}) => {
     <View style={container}>
       <Appbar.Header>
         <Appbar.BackAction color="white" onPress={() => navigation.goBack()} />
-        <Appbar.Content color="white" title={trans('register')} />
+        <Appbar.Content color="white" title={trans('login')} />
       </Appbar.Header>
       <View style={styles.viewContent}>
         <View style={styles.viewLogo}>
@@ -83,12 +85,13 @@ const IntroductionCode = ({navigation, route}) => {
       <Button
         containerStyle={styles.btnContinue}
         title={trans('ignore').toUpperCase()}
-        onPress={() =>
-          dispatch(AuthenOverallRedux.Actions.setToken(''))
-        }
+        onPress={() => {
+          dispatch(AuthenOverallRedux.Actions.setToken(''));
+          navigation.navigate('IntroScreen');
+        }}
       />
     </View>
   );
 };
 
-export default IntroductionCode;
+export default LoginIntroductionCode;

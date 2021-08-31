@@ -90,7 +90,7 @@ const LoginScreen = ({navigation}) => {
     }
     setLoading(true);
 
-    const convertPhone = `+84${Number(phoneNumber)}`;
+    const convertPhone = phoneNumber;
     const params = {
       username: convertPhone,
       password: password,
@@ -102,6 +102,14 @@ const LoginScreen = ({navigation}) => {
     };
     post(Const.API.baseURL + Const.API.SignIn, params).then(res => {
       if (res.ok) {
+        if (!res.data.data.affiliateFrom) {
+          setLoading(false);
+          navigation.navigate('LoginIntroductionCode', {
+            tokenState: res.data.data.access_token,
+          });
+          dispatch(AuthenOverallRedux.Actions.loginSuccess(res.data.data));
+          return;
+        }
         dispatch(
           AuthenOverallRedux.Actions.setToken(res.data.data.access_token),
         );

@@ -52,6 +52,10 @@ const CardItem = props => {
             </Text>
           </Text>
         )}
+
+        <AppText style={styles.txtPrice}>
+          Số lượng hàng trong kho: {numeral(showProduct.quantity).format()}
+        </AppText>
       </View>
       {type === 'choose' && (
         <View style={styles.viewQuantity}>
