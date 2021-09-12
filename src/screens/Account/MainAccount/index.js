@@ -133,24 +133,24 @@ const MainAccount = ({ navigation }) => {
             }
           />
           <View style={styles.smallIndicate} />
-          <ItemAccount
+          {/* <ItemAccount
             icon="gift-outline"
             title="Ưu đãi của tôi"
             onPress={() => navigation.navigate('PromotionScreen')}
-          />
-          <View style={styles.smallIndicate} />
+          /> */}
+          {/* <View style={styles.smallIndicate} /> */}
           <ItemAccount
             icon="card-account-details-outline"
             title="Danh sách Khách Hàng"
             onPress={() => navigation.navigate('ListCustomer')}
           />
           <View style={styles.smallIndicate} />
-          <ItemAccount
+          {/* <ItemAccount
             icon="message-reply-text"
             title="Chính sách Đại Lý"
             onPress={() => navigation.navigate('Policy')}
-          />
-          <View style={styles.smallIndicate} />
+          /> */}
+          {/* <View style={styles.smallIndicate} /> */}
           <ItemAccount
             icon="logout"
             title="Đăng xuất"

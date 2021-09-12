@@ -59,7 +59,10 @@ const ListBlog = ({navigation, route}) => {
   };
 
   const renderBlog = ({item}) => {
-    return <ItemBlog item={item} />;
+    return <ItemBlog
+      onPress={() => navigation.navigate('DetailBlog', {item})}
+      item={item}
+    />;
   };
 
   return (

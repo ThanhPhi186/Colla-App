@@ -61,7 +61,7 @@ const ShareScreen = () => {
           resizeMode="contain"
         />
         <View style={{paddingHorizontal: 16, marginTop: 16}}>
-          <AppText>Link chia sẻ</AppText>
+          {/* <AppText>Link chia sẻ</AppText>
           <View style={{flexDirection: 'row', marginTop: 4}}>
             <View
               style={{
@@ -91,8 +91,10 @@ const ShareScreen = () => {
                 {trans('copy')}
               </AppText>
             </TouchableOpacity>
-          </View>
+          </View> */}
+
           <AppText style={{marginTop: 16}}>Mã giới thiệu của bạn</AppText>
+          
           <View
             style={{flexDirection: 'row', alignItems: 'center', marginTop: 4}}>
             <AppText
@@ -126,7 +128,7 @@ const ShareScreen = () => {
             </TouchableOpacity>
           </View>
 
-          <AppText style={{marginTop: 16}}>Chia sẻ</AppText>
+          {/* <AppText style={{marginTop: 16}}>Chia sẻ</AppText>
 
           <View
             style={{
@@ -163,7 +165,8 @@ const ShareScreen = () => {
                 style={{width: 50, height: 50}}
               />
             </TouchableOpacity>
-          </View>
+          </View> */}
+
           <View
             style={{
               flexDirection: 'row',

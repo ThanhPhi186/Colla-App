@@ -104,12 +104,15 @@ const PromotionScreen = ({navigation}) => {
         <Appbar.BackAction color="white" onPress={() => navigation.goBack()} />
         <Appbar.Content color="white" title={trans('myOffer')} />
       </Appbar.Header>
-      <FlatList
+      {/* <FlatList
         data={data}
         keyExtractor={(item, index) => index.toString()}
         renderItem={renderItem}
         contentContainerStyle={{padding: 12}}
-      />
+      /> */}
+      <Text style={{paddingHorizontal: 15, paddingVertical: 20}}>
+        Chức năng đang được phát triển
+      </Text>
     </View>
   );
 };
