@@ -34,6 +34,12 @@ const IntroductionCode = ({navigation, route}) => {
     //     SimpleToast.LONG,
     //   );
     // }
+    if (!phoneNumber) {
+      return SimpleToast.show(
+        'Bạn cần nhập mã giới thiệu',
+        SimpleToast.LONG,
+      );
+    }
     const params = {
       affiliateCode: phoneNumber,
     };
@@ -80,13 +86,13 @@ const IntroductionCode = ({navigation, route}) => {
           </AppText>
         </View>
       </View>
-      <Button
+      {/* <Button
         containerStyle={styles.btnContinue}
         title={trans('ignore').toUpperCase()}
         onPress={() =>
           dispatch(AuthenOverallRedux.Actions.setToken(''))
         }
-      />
+      /> */}
     </View>
   );
 };

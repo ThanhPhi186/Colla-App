@@ -36,6 +36,12 @@ const LoginIntroductionCode = ({navigation, route}) => {
     //     SimpleToast.LONG,
     //   );
     // }
+    if (!phoneNumber) {
+      return SimpleToast.show(
+        'Bạn cần nhập mã giới thiệu',
+        SimpleToast.LONG,
+      );
+    }
     const params = {
       affiliateCode: phoneNumber,
     };
@@ -43,6 +49,7 @@ const LoginIntroductionCode = ({navigation, route}) => {
       if (res.ok) {
         dispatch(AuthenOverallRedux.Actions.setToken(tokenState));
       } else {
+        console.log(res.error);
         SimpleToast.show(res.error, SimpleToast.SHORT);
       }
     });
