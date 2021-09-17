@@ -1,6 +1,6 @@
 import React, {useEffect, useState, useCallback} from 'react';
-import {Alert, View} from 'react-native';
-import {SafeAreaProvider} from 'react-native-safe-area-context';
+import {Alert, View, StatusBar} from 'react-native';
+import {SafeAreaProvider, SafeAreaView, useSafeAreaInsets} from 'react-native-safe-area-context';
 import {Colors, Mixin} from '../../styles';
 import Modal from 'react-native-modal';
 import {useDispatch, useSelector} from 'react-redux';
@@ -103,7 +103,11 @@ const RootView = () => {
 
   return (
     <SafeAreaProvider>
-      {idToken ? <BottomTabNavigator /> : <LoginNavigator />}
+      <SafeAreaView style={{ flex: 1 }}>
+        <View style={{ flex: 1 }}>
+          {idToken ? <BottomTabNavigator /> : <LoginNavigator />}
+        </View>
+      </SafeAreaView>
       <Modal
         isVisible={isVisibleModal}
         onBackdropPress={() =>

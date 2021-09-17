@@ -8,7 +8,7 @@ import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import numeral from 'numeral';
 
 const ProductPaymentItem = props => {
-  const {item} = props;
+  const {item, showRetailPrice} = props;
 
   return (
     <View style={styles.containerItem}>
@@ -41,9 +41,16 @@ const ProductPaymentItem = props => {
                   </Text>
                 </Text>
               )}
-              <AppText style={styles.textPrice}>
-                {item.amount} x {numeral(item.product.price).format()} đ
-              </AppText>
+              <View style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', justifyContent: 'flex-start' }}>
+                <AppText style={styles.textPrice}>
+                  {item.amount} x {numeral(item.product.price).format()} đ
+                </AppText>
+                {showRetailPrice && (
+                  <AppText style={{ ...styles.textPrice, fontWeight: 'normal', textDecorationLine: 'line-through', textDecorationStyle: 'solid', color: 'grey', marginLeft: 5 }}>
+                    {numeral(item.product.retail_price).format()} đ
+                  </AppText>
+                )}
+              </View>
             </View>
           </View>
         </View>
@@ -61,9 +68,16 @@ const ProductPaymentItem = props => {
                 justifyContent: 'space-around',
               }}>
               <AppText style={styles.textName}>{item.product.name}</AppText>
-              <AppText style={styles.textPrice}>
-                {item.amount} x {numeral(item.product.price).format()} đ
-              </AppText>
+              <View style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', justifyContent: 'flex-start' }}>
+                <AppText style={styles.textPrice}>
+                  {item.amount} x {numeral(item.product.price).format()} đ
+                </AppText>
+                {showRetailPrice && (
+                  <AppText style={{ ...styles.textPrice, fontWeight: 'normal', textDecorationLine: 'line-through', textDecorationStyle: 'solid', color: 'grey', marginLeft: 5 }}>
+                    {numeral(item.product.retail_price).format()} đ
+                  </AppText>
+                )}
+              </View>
             </View>
           </View>
         </View>

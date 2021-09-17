@@ -66,7 +66,7 @@ export default {
   chooseBank: 'Chọn ngân hàng',
   branch: 'Chi nhánh',
   searchProduct: 'Tìm kiếm sản phẩm',
-  chooseProduct: 'Chọn sản phẩm',
+  chooseProduct: 'Bấm để chọn sản phẩm',
   customer: 'Khách hàng',
   chooseCustomer: 'Chọn khách hàng',
   withdrawal: 'Rút tiền',

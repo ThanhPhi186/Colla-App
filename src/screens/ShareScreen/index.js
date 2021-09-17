@@ -193,7 +193,7 @@ const ShareScreen = () => {
               }}>
               <Text style={{fontWeight: 'bold'}}>
                 <Text style={{color: Colors.ORANGE}}>
-                  {numeral(50).format()}{' '}
+                  {numeral(userInfo.affiliateCount || 0).format()}{' '}
                 </Text>
                 Người
               </Text>

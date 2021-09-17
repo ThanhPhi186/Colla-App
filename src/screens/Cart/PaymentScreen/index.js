@@ -34,6 +34,7 @@ const PaymentScreen = ({navigation, route}) => {
   const dataAddress = userInfo?.addresses?.filter(elm => elm.is_default)[0];
 
   const sumPrice = sum(dataCart.map(elm => elm.product.price * elm.amount));
+  const sumRetailPrice = sum(dataCart.map(elm => elm.product.retail_price * elm.amount));
 
   const shippingFee = dataCart.reduce((total, elm) => total > elm.product.shipping_fee ? total : elm.product.shipping_fee, 0);
 
@@ -110,7 +111,7 @@ const PaymentScreen = ({navigation, route}) => {
   };
 
   const renderItem = item => {
-    return <ProductPaymentItem item={item} />;
+    return <ProductPaymentItem item={item} showRetailPrice={type == 'import'} />;
   };
 
   return (
@@ -280,7 +281,7 @@ const PaymentScreen = ({navigation, route}) => {
       <View style={[styles.showPrice, { paddingVertical: 1 }]}>
         <AppText style={[styles.textPay, { fontSize: 14 }]}>Tổng tiền hàng</AppText>
         <AppText style={[styles.textPrice, { fontSize: 12 }]}>
-          {numeral(sumPrice).format()} đ
+          {numeral(type != 'import' ? sumPrice : sumRetailPrice).format()} đ
         </AppText>
       </View>
       {type != 'import' && (
@@ -291,10 +292,18 @@ const PaymentScreen = ({navigation, route}) => {
           </AppText>
         </View>
       )}
+      {type == 'import' && (
+        <View style={[styles.showPrice, { paddingVertical: 1 }]}>
+          <AppText style={[styles.textPay, { fontSize: 14 }]}>Chiết khấu</AppText>
+          <AppText style={[styles.textPrice, { fontSize: 12 }]}>
+            - {numeral(sumRetailPrice - sumPrice).format()} đ
+          </AppText>
+        </View>
+      )}
       <View style={styles.showPrice}>
         <AppText style={styles.textPay}>{trans('totalPayment')}</AppText>
         <AppText style={styles.textPrice}>
-          {numeral(sumPrice + shippingFee).format()} đ
+          {numeral(sumPrice + (type != 'import' ? shippingFee : 0)).format()} đ
         </AppText>
       </View>
       <Button

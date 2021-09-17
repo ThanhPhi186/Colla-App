@@ -73,28 +73,40 @@ const PaymentOfSales = ({ navigation, route }) => {
       province: customer.province,
       ward: customer.ward,
     };
+
     post(Const.API.baseURL + Const.API.Order, params).then(res => {
       if (res.ok) {
         if (res.data.data && res.data.data.id) {
-          put(`${Const.API.baseURL + Const.API.Order}/${res.data.data.id}`, {
-            status: 'finish',
-          }).then(res => {
-            if (res.ok) {
-              setLoading(false);
-              setTimeout(() => {
-                SimpleToast.show('Lên đơn thành công', SimpleToast.SHORT);
-                navigation.navigate(trans('personal'), {
-                  screen: 'SalesHistory',
-                  params: { type },
-                });
-              }, 700);
-            } else {
-              setLoading(false);
-              setTimeout(() => {
-                SimpleToast.show(res.error, SimpleToast.SHORT);
-              }, 700);
-            }
-          });
+          if (type == 'offline') {
+            put(`${Const.API.baseURL + Const.API.Order}/${res.data.data.id}`, {
+              status: 'finish',
+            }).then(res => {
+              if (res.ok) {
+                setLoading(false);
+                setTimeout(() => {
+                  SimpleToast.show('Lên đơn thành công', SimpleToast.SHORT);
+                  navigation.navigate(trans('personal'), {
+                    screen: 'SalesHistory',
+                    params: { type },
+                  });
+                }, 700);
+              } else {
+                setLoading(false);
+                setTimeout(() => {
+                  SimpleToast.show(res.error, SimpleToast.SHORT);
+                }, 700);
+              }
+            });
+          } else {
+            setLoading(false);
+            setTimeout(() => {
+              SimpleToast.show('Lên đơn thành công', SimpleToast.SHORT);
+              navigation.navigate(trans('personal'), {
+                screen: 'SalesHistory',
+                params: { type },
+              });
+            }, 700);
+          }
         } else {
           setLoading(false);
           setTimeout(() => {

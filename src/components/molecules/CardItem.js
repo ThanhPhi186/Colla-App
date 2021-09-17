@@ -17,6 +17,7 @@ const CardItem = props => {
     lessAmountProps,
     styleProps,
     changeAmountProps,
+    showRetailPrice,
   } = props;
 
   const showProduct = item.product ? item.product : item;
@@ -41,9 +42,16 @@ const CardItem = props => {
           {showProduct.name}
         </AppText>
 
-        <AppText style={styles.txtPrice}>
-          {numeral(showProduct.price).format()} đ
-        </AppText>
+        <View style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', justifyContent: 'flex-start' }}>
+          <AppText style={styles.txtPrice}>
+            {numeral(showProduct.price).format()} đ
+          </AppText>
+          {showRetailPrice && (
+            <AppText style={{ ...styles.txtPrice, fontWeight: 'normal', textDecorationLine: 'line-through', textDecorationStyle: 'solid', color: 'grey', marginLeft: 5 }}>
+              {numeral(showProduct.retail_price).format()} đ
+            </AppText>
+          )}
+        </View>
         {showProduct.combo_products.length > 0 && (
           <Text style={{marginTop: Mixin.moderateSize(4)}}>
             Tặng kèm:{' '}

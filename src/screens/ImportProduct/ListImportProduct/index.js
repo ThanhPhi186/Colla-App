@@ -277,6 +277,7 @@ const ListImportProduct = ({navigation, route}) => {
           lessAmountProps={lessAmount}
           onPress={() => addAmount(item)}
           changeAmountProps={changeAmount}
+          showRetailPrice={true}
         />
       </Animated.View>
     );
